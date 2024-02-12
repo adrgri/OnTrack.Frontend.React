@@ -33,3 +33,6 @@ typings/
 
 # Yarn Integrity file
 .yarn-integrity
+
+# DS_Store files
+.DS_STORE
