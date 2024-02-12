@@ -1,0 +1,74 @@
+{
+  "tasks": [
+    {
+      "id": "1",
+      "name": "Design the new landing page",
+      "status": "todo",
+      "startDate": "2022-12-30T00:00:00.000Z",
+      "dueDate": "2022-12-31T00:00:00.000Z",
+      "members": [
+        {
+          "id": "1",
+          "name": "John Doe",
+          "avatar": "https://randomuser.me/api/port"
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Implement authentication logic",
+      "status": "inProgress",
+      "startDate": "2022-11-30T00:00:00.000Z",
+      "dueDate": "2022-11-31T00:00:00.000Z",
+      "members": [
+        {
+          "id": "1",
+          "name": "John Doe",
+          "avatar": "https://randomuser.me/api/port"
+        }
+      ]
+    },
+    {
+      "id": "4",
+      "name": "Deploy the application to production",
+      "status": "todo",
+      "startDate": "2022-12-02T00:00:00.000Z",
+      "dueDate": "2022-12-07T00:00:00.000Z",
+      "members": [
+        {
+          "id": "1",
+          "name": "John Doe",
+          "avatar": "https://randomuser.me/api/port"
+        }
+      ]
+    },
+    {
+      "id": "5",
+      "name": "Fix the layout bug on the settings page",
+      "status": "done",
+      "startDate": "2022-12-10T00:00:00.000Z",
+      "dueDate": "2022-12-13T00:00:00.000Z",
+      "members": [
+        {
+          "id": "1",
+          "name": "John Doe",
+          "avatar": "https://randomuser.me/api/port"
+        }
+      ]
+    },
+    {
+      "id": "6",
+      "name": "Add a new feature 2",
+      "status": "inProgress",
+      "startDate": "2022-12-13T00:00:00.000Z",
+      "dueDate": "2022-12-15T00:00:00.000Z",
+      "members": [
+        {
+          "id": "1",
+          "name": "John Doe",
+          "avatar": "https://randomuser.me/api/port"
+        }
+      ]
+    }
+  ]
+}
