@@ -1,10 +1,10 @@
 import { useFormik } from "formik";
 
-type FormikHookProps {
+type FormikHookProps = {
   initialValues: any;
   validationSchema: any;
   onSubmit: (email: string, password: string) => void;
-}
+};
 
 export const useFormikHook = ({
   initialValues,
