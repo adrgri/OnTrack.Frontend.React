@@ -51,7 +51,7 @@ const TasksBoard = () => {
         spacing={2}
         alignItems="baseline"
         justifyContent="space-between"
-        sx={{ padding: 1 }}
+        // sx={{ padding: 1 }}
       >
         <Grid item>
           <TaskBoardNavigation />
@@ -81,10 +81,10 @@ const TasksBoard = () => {
           sx={{
             flexDirection: isMobile ? "column" : "row",
             [theme.breakpoints.up("md")]: {
-              alignItems: "flex-start", // For md screens and larger, use "flex-start" or another appropriate value
+              alignItems: "flex-start",
             },
             [theme.breakpoints.down("md")]: {
-              alignItems: "center", // For screens smaller than md, align items to center
+              alignItems: "center",
             },
           }}
         >

@@ -14,7 +14,7 @@ export const Column = ({ columnId, title, tasks }) => {
             backgroundColor: snapshot.isDraggingOver
               ? "#EEEFF6"
               : "transparent",
-            padding: 2,
+            // padding: 2,
             width: {
               xs: 320, // Adjust width for extra-small screens
               md: 230, // Adjust width for small screens

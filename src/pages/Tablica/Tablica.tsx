@@ -6,7 +6,7 @@ export default function Tablica() {
   return (
     <>
       <MainLayout>
-        <TaskBoardNavigation />
+        {/* <TaskBoardNavigation /> */}
         <GanttChart />
       </MainLayout>
     </>
