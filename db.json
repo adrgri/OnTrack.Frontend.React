@@ -15,6 +15,20 @@
       ]
     },
     {
+      "id": "1fefe",
+      "name": "Design the new landing page",
+      "status": "todo",
+      "startDate": "2022-12-30T00:00:00.000Z",
+      "dueDate": "2022-12-31T00:00:00.000Z",
+      "members": [
+        {
+          "id": "1",
+          "name": "John Doe",
+          "avatar": "https://randomuser.me/api/port"
+        }
+      ]
+    },
+    {
       "id": "2",
       "name": "Implement authentication logic",
       "status": "inProgress",
@@ -55,18 +69,6 @@
           "avatar": "https://randomuser.me/api/port"
         }
       ]
-    },
-    {
-      "id": "65cb",
-      "name": "sdsdsdsdsds",
-      "description": "",
-      "members": [],
-      "dueDate": null,
-      "icon": null,
-      "attachments": [],
-      "taskList": [],
-      "resources": [],
-      "status": "todo"
     },
     {
       "id": "040c",

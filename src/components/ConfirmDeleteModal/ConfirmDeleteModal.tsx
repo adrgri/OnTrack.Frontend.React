@@ -1,33 +1,55 @@
 import SmallButton from "../../styledComponents/SmallButton";
 import CloseButton from "../CloseButton/CloseButton";
-import { Dialog, Typography } from "@mui/material";
+import { Box, Dialog, DialogContent, Typography } from "@mui/material";
 
 const ConfirmDeleteModal = ({ isOpen, onDeleteConfirm, onClose }) => {
   return (
-    <Dialog fullWidth maxWidth="md" open={isOpen} onClose={onClose}>
-      <CloseButton onClick={onClose} right={20} top={20} />
-      <Typography
+    <Dialog maxWidth="md" open={isOpen} onClose={onClose}>
+      <CloseButton onClick={onClose} right={10} top={10} />
+      <DialogContent
         sx={{
-          fontWeight: "bold",
-          fontSize: "24px",
-          lineHeight: "28px",
-          textAlign: "center",
-          color: "#000000",
+          padding: "0",
+          display: "flex",
+          flexDirection: "column",
+          width: "450px",
         }}
       >
-        Czy na pewno chcesz usunąć to zadanie?
-      </Typography>
-      <SmallButton
-        variant="contained"
-        type="button"
-        onClick={onDeleteConfirm}
-        sx={{ m: 1 }}
-      >
-        Usuń
-      </SmallButton>
-      <SmallButton variant="contained" onClick={onClose} sx={{ m: 1 }}>
-        Anuluj
-      </SmallButton>
+        <Typography
+          sx={{
+            textAlign: "center",
+            mt: 7,
+            mb: 3,
+          }}
+        >
+          Czy na pewno chcesz usunąć to zadanie?
+        </Typography>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            mt: 2,
+            mb: 2,
+          }}
+        >
+          <SmallButton
+            variant="contained"
+            type="button"
+            onClick={onDeleteConfirm}
+            sx={{ m: 1 }}
+          >
+            Usuń
+          </SmallButton>
+          <SmallButton
+            variant="contained"
+            onClick={onClose}
+            sx={{ m: 1, backgroundColor: "#5E5F7D" }}
+          >
+            Anuluj
+          </SmallButton>
+        </Box>
+      </DialogContent>
     </Dialog>
   );
 };

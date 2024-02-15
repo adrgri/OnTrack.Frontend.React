@@ -152,12 +152,11 @@ const AddTaskModal = ({
       deleteTask(selectedTask.id)
         .then(() => {
           console.log("Task deleted successfully");
-          setIsConfirmDeleteModalOpen(false); // Close the ConfirmDeleteModal
-          handleClose(); // Optionally close the AddTaskModal if needed
+          setIsConfirmDeleteModalOpen(false);
+          handleClose();
         })
         .catch((error) => {
           console.error("Failed to delete task:", error);
-          // Handle any error UI feedback here
         });
     }
   };
