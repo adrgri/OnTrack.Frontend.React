@@ -13,9 +13,10 @@ import { useTaskStore } from "../../store/TaskStore";
 
 type TaskCardProps = {
   task: Task;
+  handleTaskClick: () => void;
 };
 
-const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
+const TaskCard: React.FC<TaskCardProps> = ({ task, handleTaskClick }) => {
   const formatDate = (dateString: string) => {
     const options: Intl.DateTimeFormatOptions = {
       day: "numeric",
@@ -37,6 +38,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ task }) => {
           borderColor: "primary.main",
         },
       }}
+      onClick={handleTaskClick}
     >
       <CardContent>
         <Grid container direction="column" spacing={1}>

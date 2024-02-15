@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid, Button } from "@mui/material";
 import { Add as AddIcon } from "@mui/icons-material";
 import AddTaskModal from "../AddTaskModal/AddTaskModal";
@@ -19,7 +19,8 @@ const TasksBoard = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { tasks, fetchTasks, addTask, updateTaskStatus } = useTaskStore();
-  const [isAddTaskModalOpen, setIsAddTaskModalOpen] = React.useState(false);
+  const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(false);
+  const [selectedTask, setSelectedTask] = useState(null);
 
   useEffect(() => {
     fetchTasks();
@@ -42,6 +43,14 @@ const TasksBoard = () => {
         updateTaskStatus(task.id, destination.droppableId);
       }
     }
+  };
+
+  const handleTaskClick = (taskId) => {
+    // Find the task by id and set it as the selected task
+    const task = tasks.find((task) => task.id === taskId);
+    setSelectedTask(task);
+    setIsAddTaskModalOpen(true);
+    console.log("Selected task:", task);
   };
 
   return (
@@ -94,6 +103,7 @@ const TasksBoard = () => {
                 columnId={columnKey}
                 title={title}
                 tasks={tasks.filter((task) => task.status === columnKey)}
+                handleTaskClick={handleTaskClick}
               />
             </Grid>
           ))}
@@ -102,8 +112,12 @@ const TasksBoard = () => {
 
       <AddTaskModal
         isOpen={isAddTaskModalOpen}
-        handleClose={() => setIsAddTaskModalOpen(false)}
+        handleClose={() => {
+          setIsAddTaskModalOpen(false);
+          setSelectedTask(null); // Reset selected task on close
+        }}
         onAddTask={addTask}
+        selectedTask={selectedTask}
       />
     </>
   );

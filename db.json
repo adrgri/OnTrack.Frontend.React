@@ -3,7 +3,7 @@
     {
       "id": "1",
       "name": "Design the new landing page",
-      "status": "inProgress",
+      "status": "todo",
       "startDate": "2022-12-30T00:00:00.000Z",
       "dueDate": "2022-12-31T00:00:00.000Z",
       "members": [
@@ -31,7 +31,7 @@
     {
       "id": "4",
       "name": "Deploy the application to production",
-      "status": "todo",
+      "status": "inProgress",
       "startDate": "2022-12-02T00:00:00.000Z",
       "dueDate": "2022-12-07T00:00:00.000Z",
       "members": [
@@ -57,18 +57,28 @@
       ]
     },
     {
-      "id": "6",
-      "name": "Add a new feature 2",
-      "status": "todo",
-      "startDate": "2022-12-13T00:00:00.000Z",
-      "dueDate": "2022-12-15T00:00:00.000Z",
-      "members": [
-        {
-          "id": "1",
-          "name": "John Doe",
-          "avatar": "https://randomuser.me/api/port"
-        }
-      ]
+      "id": "65cb",
+      "name": "sdsdsdsdsds",
+      "description": "",
+      "members": [],
+      "dueDate": null,
+      "icon": null,
+      "attachments": [],
+      "taskList": [],
+      "resources": [],
+      "status": "todo"
+    },
+    {
+      "id": "040c",
+      "name": "sdsdsds",
+      "description": "",
+      "members": [],
+      "dueDate": null,
+      "icon": null,
+      "attachments": [],
+      "taskList": [],
+      "resources": [],
+      "status": "todo"
     }
   ]
 }

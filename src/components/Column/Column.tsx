@@ -3,7 +3,7 @@ import { Droppable, Draggable } from "react-beautiful-dnd";
 import TaskCard from "../TaskCard/TaskCard";
 import { Typography, Box } from "@mui/material";
 
-export const Column = ({ columnId, title, tasks }) => {
+export const Column = ({ columnId, title, tasks, handleTaskClick }) => {
   return (
     <Droppable droppableId={columnId}>
       {(provided, snapshot) => (
@@ -36,7 +36,10 @@ export const Column = ({ columnId, title, tasks }) => {
                   {...provided.draggableProps}
                   {...provided.dragHandleProps}
                 >
-                  <TaskCard task={task} />
+                  <TaskCard
+                    task={task}
+                    handleTaskClick={() => handleTaskClick(task.id)}
+                  />
                 </div>
               )}
             </Draggable>
