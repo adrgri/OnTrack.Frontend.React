@@ -60,7 +60,7 @@ const AddTaskModal = ({
   const [tasksList, setTasksList] = useState([]);
   const [resources, setResources] = useState<Resource[]>([]);
   const [selectedMembers, setSelectedMembers] = useState<User[]>([]);
-  const [selectedIcon, setSelectedIcon] = useState<Icon | null>(null);
+  const [selectedIcon, setSelectedIcon] = useState<Icon>();
   const [attachment, setAttachment] = useState<File | null>(null);
   const { addTask, updateTask, deleteTask } = useTaskStore();
   const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(
@@ -74,8 +74,9 @@ const AddTaskModal = ({
     setAttachment(file);
   };
 
-  const handleIconSelect = (icon: Icon | null) => {
+  const handleIconSelect = (icon: Icon) => {
     setSelectedIcon(icon);
+    onIconSelect(icon);
   };
 
   const handleMemberSelect = (selectedMember: User) => {
@@ -97,21 +98,21 @@ const AddTaskModal = ({
     setResources([...resources, newResource]);
   };
 
-  useEffect(() => {
-    if (selectedTask) {
-      // Pre-populate the states if editing an existing task
-      setSelectedMembers(selectedTask.members || []);
-      // setTasksList(selectedTask.taskList || []);
-      // setResources(selectedTask.resources || []);
-      // setAttachment(selectedTask.attachments?.[0] || null); // Assuming only one attachment for simplicity
-    } else {
-      // Reset states for a new task
-      setTasksList([]);
-      setResources([]);
-      setSelectedMembers([]);
-      setAttachment(null);
-    }
-  }, [selectedTask, isOpen]);
+  // useEffect(() => {
+  //   if (selectedTask) {
+  //     // Pre-populate the states if editing an existing task
+  //     setSelectedMembers(selectedTask.members || []);
+  //     // setTasksList(selectedTask.taskList || []);
+  //     // setResources(selectedTask.resources || []);
+  //     // setAttachment(selectedTask.attachments?.[0] || null); // Assuming only one attachment for simplicity
+  //   } else {
+  //     // Reset states for a new task
+  //     setTasksList([]);
+  //     setResources([]);
+  //     setSelectedMembers([]);
+  //     setAttachment(null);
+  //   }
+  // }, [selectedTask, isOpen]);
 
   const formik = useFormik({
     initialValues: {
@@ -141,7 +142,7 @@ const AddTaskModal = ({
         members: selectedMembers,
         startDate: startDate ? dayjs(startDate).toISOString() : null,
         endDate: endDate ? dayjs(endDate).toISOString() : null,
-        icon: selectedTask?.icon ?? null,
+        icon: selectedIcon ?? null,
         attachments: attachment ? [attachment] : [],
         taskList: tasksList,
         resources: resources,
@@ -202,6 +203,10 @@ const AddTaskModal = ({
   useEffect(() => {
     console.log("Selected task from useEffect:", selectedTask); // For debugging
   }, [selectedTask]);
+
+  useEffect(() => {
+    console.log("Selected icon from useEffect:", selectedIcon); // For debugging
+  }, [selectedIcon]);
 
   return (
     <>

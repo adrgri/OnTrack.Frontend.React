@@ -27,6 +27,8 @@ const TasksBoard = () => {
     fetchTasks();
   }, [fetchTasks]);
 
+  const { getTaskById } = useTaskStore();
+
   const onDragEnd = (result: any) => {
     const { source, destination } = result;
 
@@ -45,17 +47,18 @@ const TasksBoard = () => {
       }
     }
   };
+
   const handleTaskClick = (taskId: string) => {
-    const taskToEdit = tasks.find((task) => task.id === taskId);
+    // Use getTaskById to fetch the task data
+    const taskToEdit = getTaskById(taskId);
+
     if (taskToEdit) {
       setSelectedTask(taskToEdit);
       setIsAddTaskModalOpen(true);
-    }
 
-    console.log(
-      "Selected task:",
-      tasks.find((task) => task.id === taskId)
-    );
+      // Log the task data retrieved by getTaskById
+      console.log("Selected task data:", taskToEdit);
+    }
   };
 
   return (

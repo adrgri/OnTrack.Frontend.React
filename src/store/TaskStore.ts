@@ -1,17 +1,15 @@
 import { create } from "zustand";
 import axios from "axios";
-import { Task, Status, Icon } from "../types";
+import { Task, Status } from "../types";
 
 interface TaskState {
   tasks: Task[];
   fetchTasks: () => Promise<void>;
-  setTaskIcon: (taskId: string, icon: Icon) => void;
   addTask: (newTaskData: Task) => Promise<void>;
   updateTask: (taskId: string, updates: Partial<Task>) => Promise<void>;
   deleteTask: (taskId: string) => Promise<void>;
   updateTaskStatus: (taskId: string, newStatus: Status) => Promise<void>;
   getTasksByStatus: (status: string) => Task[];
-  setIconForTask: (taskId: string, icon: Icon) => void;
   getTaskById: (id: string) => Task | undefined;
 }
 
@@ -28,13 +26,6 @@ export const useTaskStore = create<TaskState>((set, get) => ({
       console.error("Failed to fetch tasks:", error);
     }
   },
-
-  setTaskIcon: (taskId, icon) =>
-    set((state) => ({
-      tasks: state.tasks.map((task) =>
-        task.id === taskId ? { ...task, icon: icon } : task
-      ),
-    })),
 
   addTask: async (newTaskData) => {
     try {
@@ -90,20 +81,4 @@ export const useTaskStore = create<TaskState>((set, get) => ({
       }));
     }
   },
-
-  updateTaskIcon: (taskId: string, icon: Icon) => {
-    console.log("Updating task icon:", taskId, icon);
-    set((state) => ({
-      tasks: state.tasks.map((task) =>
-        task.id === taskId ? { ...task, icon } : task
-      ),
-    }));
-  },
-
-  setIconForTask: (taskId: string, icon: Icon) =>
-    set((state) => ({
-      tasks: state.tasks.map((task) =>
-        task.id === taskId ? { ...task, icon } : task
-      ),
-    })),
 }));

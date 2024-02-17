@@ -20,7 +20,7 @@ import IconsIcon from "../../assets/icons/TaskIcons/IconsIcon.svg";
 import AttachmentIcon from "../../assets/icons/TaskIcons/AttachmentIcon.svg";
 import TaskListIcon from "../../assets/icons/TaskIcons/TaskslistIcon.svg";
 import ResourcesIcon from "../../assets/icons/TaskIcons/ResourcesIcon.svg";
-import { Resource, User, IconSelection } from "../../types";
+import { Resource, User, Icon } from "../../types";
 import dayjs from "dayjs";
 
 type ListItemType = {
@@ -42,8 +42,8 @@ type AddTaskSidebarButtonsProps = {
   addTaskList: (taskText: string) => void;
   handleAddResource: (resource: Resource) => void;
   onMemberSelect: (member: User) => void;
-  selectedIcon: string | null;
-  onIconSelect: (icon: IconSelection | null) => void;
+  selectedIcon: Icon;
+  onIconSelect: (icon: Icon) => void;
   onAttachmentSelect: (attachment: File) => void;
   startDate: dayjs.Dayjs | null;
   endDate: dayjs.Dayjs | null;
@@ -163,9 +163,7 @@ const AddTaskSidebarButtons = ({
             open={openModal === "icons"}
             anchorEl={anchorEl}
             onClose={handleCloseModal}
-            selectedIcon={
-              selectedIcon ? { iconName: selectedIcon, imageUrl: "" } : null
-            }
+            selectedIcon={selectedIcon}
             onIconSelect={onIconSelect}
           />
         );

@@ -79,152 +79,52 @@
       ]
     },
     {
-      "id": "a82e",
-      "name": "",
+      "id": "c0db",
+      "name": "bvn",
       "description": "",
+      "members": [],
+      "startDate": null,
+      "endDate": null,
+      "icon": {
+        "iconName": "heart",
+        "imageUrl": "/src/assets/icons/IconsIcons/HeartIcon.svg"
+      },
+      "attachments": [],
+      "taskList": [],
+      "resources": [],
+      "status": "todo"
+    },
+    {
+      "id": "994a",
+      "name": "new task",
+      "description": "new",
       "members": [
         {
-          "id": 1,
-          "firstName": "Alice",
-          "lastName": "Johnson",
-          "email": "Alice@me.com",
-          "avatar": "https://i.pravatar.cc/150?img=3"
+          "id": 2,
+          "firstName": "Bob",
+          "lastName": "Smith",
+          "email": "Bob@me.com",
+          "avatar": "https://i.pravatar.cc/150?img=5"
         }
       ],
-      "startDate": null,
-      "endDate": null,
-      "icon": null,
-      "attachments": [],
+      "startDate": "2024-02-15T15:24:41.000Z",
+      "endDate": "2024-02-23T15:24:46.000Z",
+      "icon": {
+        "iconName": "sensorfire",
+        "imageUrl": "/src/assets/icons/IconsIcons/SensorFireIcon.svg"
+      },
+      "attachments": [
+        {}
+      ],
       "taskList": [],
-      "resources": [],
-      "status": "todo"
-    },
-    {
-      "id": "655a",
-      "name": "asdf",
-      "description": "",
-      "members": [],
-      "startDate": null,
-      "endDate": "2024-02-24T12:34:45.000Z",
-      "icon": null,
-      "attachments": [],
-      "taskList": [],
-      "resources": [],
-      "status": "todo"
-    },
-    {
-      "id": "5aff",
-      "name": "",
-      "description": "",
-      "members": [],
-      "startDate": null,
-      "endDate": "2024-02-24T12:34:45.000Z",
-      "icon": null,
-      "attachments": [],
-      "taskList": [],
-      "resources": [],
-      "status": "todo"
-    },
-    {
-      "id": "81ae",
-      "name": "icon",
-      "description": "",
-      "members": [],
-      "startDate": null,
-      "endDate": null,
-      "icon": null,
-      "attachments": [],
-      "taskList": [],
-      "resources": [],
-      "status": "todo"
-    },
-    {
-      "id": "cb28",
-      "name": "",
-      "description": "",
-      "members": [
+      "resources": [
         {
-          "id": 1,
-          "firstName": "Alice",
-          "lastName": "Johnson",
-          "email": "Alice@me.com",
-          "avatar": "https://i.pravatar.cc/150?img=3"
+          "id": "1708183523185",
+          "resourceName": "sff",
+          "quantity": 1,
+          "unit": "v"
         }
       ],
-      "startDate": null,
-      "endDate": null,
-      "icon": null,
-      "attachments": [],
-      "taskList": [],
-      "resources": [],
-      "status": "todo"
-    },
-    {
-      "id": "139a",
-      "name": "",
-      "description": "",
-      "members": [
-        {
-          "id": 1,
-          "firstName": "Alice",
-          "lastName": "Johnson",
-          "email": "Alice@me.com",
-          "avatar": "https://i.pravatar.cc/150?img=3"
-        }
-      ],
-      "startDate": null,
-      "endDate": null,
-      "icon": null,
-      "attachments": [],
-      "taskList": [],
-      "resources": [],
-      "status": "todo"
-    },
-    {
-      "id": "f952",
-      "name": "bbbb",
-      "description": "",
-      "members": [],
-      "startDate": null,
-      "endDate": null,
-      "icon": null,
-      "attachments": [],
-      "taskList": [],
-      "resources": [],
-      "status": "todo"
-    },
-    {
-      "id": "aaf3",
-      "name": "vbc",
-      "description": "",
-      "members": [],
-      "startDate": null,
-      "endDate": null,
-      "icon": null,
-      "attachments": [],
-      "taskList": [],
-      "resources": [],
-      "status": "todo"
-    },
-    {
-      "id": "785c",
-      "name": "",
-      "description": "",
-      "members": [
-        {
-          "id": 1,
-          "firstName": "Alice",
-          "lastName": "Johnson",
-          "email": "Alice@me.com",
-          "avatar": "https://i.pravatar.cc/150?img=3"
-        }
-      ],
-      "startDate": null,
-      "endDate": null,
-      "icon": null,
-      "attachments": [],
-      "taskList": [],
-      "resources": [],
       "status": "todo"
     }
   ]

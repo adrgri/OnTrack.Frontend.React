@@ -47,15 +47,16 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskId, handleTaskClick }) => {
     >
       <CardContent>
         <Grid container direction="column" spacing={1}>
-          <Grid item xs={12} mb={2}>
+          <Grid item xs={12} mb={2} container alignItems="center">
             <Typography>{task?.name}</Typography>
             {task?.icon && (
               <img
-                src={task.icon.filePath}
+                src={task.icon.imageUrl}
                 alt={task.icon.iconName}
                 style={{
-                  width: "20px",
-                  height: "20px",
+                  width: "15px",
+                  height: "15px",
+                  marginLeft: "5px",
                 }}
               />
             )}
