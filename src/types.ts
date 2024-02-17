@@ -5,12 +5,6 @@ export type UserProfileProps = {
   avatar: string;
 };
 
-// export type Task = {
-//   text: string;
-//   endDate?: string;
-//   assigneeAvatar?: string;
-// };
-
 export type Icon = {
   iconName: string;
   imageUrl: string;
@@ -46,13 +40,13 @@ export type Resource = {
 export type Status = "todo" | "inProgress" | "done";
 
 export type Task = {
-  id: string;
+  id?: string;
   name: string;
   description?: string;
   members?: User[];
   startDate?: dayjs.Dayjs | null | undefined | string;
   endDate?: dayjs.Dayjs | null | undefined | string;
-  icon?: Icon;
+  icon?: Icon | null;
   attachments?: Attachment[];
   taskList?: TaskListItem[];
   resources?: Resource[];

@@ -6,6 +6,10 @@
       "status": "todo",
       "startDate": "2022-12-30T00:00:00.000Z",
       "endDate": "2022-12-31T00:00:00.000Z",
+      "icon": {
+        "iconName": "heart",
+        "imageUrl": "/src/assets/icons/IconsIcons/HeartIcon.svg"
+      },
       "members": [
         {
           "id": "1",
@@ -92,39 +96,6 @@
       "attachments": [],
       "taskList": [],
       "resources": [],
-      "status": "todo"
-    },
-    {
-      "id": "994a",
-      "name": "new task",
-      "description": "new",
-      "members": [
-        {
-          "id": 2,
-          "firstName": "Bob",
-          "lastName": "Smith",
-          "email": "Bob@me.com",
-          "avatar": "https://i.pravatar.cc/150?img=5"
-        }
-      ],
-      "startDate": "2024-02-15T15:24:41.000Z",
-      "endDate": "2024-02-23T15:24:46.000Z",
-      "icon": {
-        "iconName": "sensorfire",
-        "imageUrl": "/src/assets/icons/IconsIcons/SensorFireIcon.svg"
-      },
-      "attachments": [
-        {}
-      ],
-      "taskList": [],
-      "resources": [
-        {
-          "id": "1708183523185",
-          "resourceName": "sff",
-          "quantity": 1,
-          "unit": "v"
-        }
-      ],
       "status": "todo"
     }
   ]

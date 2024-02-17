@@ -18,7 +18,7 @@ import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import AddTaskSidebarButtons from "../AddTaskSidebarButtons/AddTaskSidebarButtons";
 import { useTheme } from "@mui/material/styles";
 import SmallButton from "../../styledComponents/SmallButton";
-import { TaskListItem, Resource, User, Icon } from "../../types";
+import { TaskListItem, Resource, User, Icon, Attachment } from "../../types";
 import EditableText from "../EditableText/EditableText";
 import AttachmentIcon from "../../assets/icons/TaskIcons/AttachmentIcon.svg";
 import { Task } from "../../types";
@@ -57,11 +57,11 @@ const AddTaskModal = ({
   onIconSelect,
   selectedTask,
 }: AddTaskModalProps) => {
-  const [tasksList, setTasksList] = useState([]);
+  const [tasksList, setTasksList] = useState<TaskListItem[]>([]);
   const [resources, setResources] = useState<Resource[]>([]);
   const [selectedMembers, setSelectedMembers] = useState<User[]>([]);
   const [selectedIcon, setSelectedIcon] = useState<Icon>();
-  const [attachment, setAttachment] = useState<File | null>(null);
+  const [attachment, setAttachment] = useState<Attachment>();
   const { addTask, updateTask, deleteTask } = useTaskStore();
   const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(
     selectedTask ? dayjs(selectedTask.startDate) : null
@@ -70,7 +70,7 @@ const AddTaskModal = ({
     selectedTask ? dayjs(selectedTask.endDate) : null
   );
 
-  const handleAttachmentSelect = (file: File) => {
+  const handleAttachmentSelect = (file: Attachment) => {
     setAttachment(file);
   };
 
@@ -98,21 +98,29 @@ const AddTaskModal = ({
     setResources([...resources, newResource]);
   };
 
-  // useEffect(() => {
-  //   if (selectedTask) {
-  //     // Pre-populate the states if editing an existing task
-  //     setSelectedMembers(selectedTask.members || []);
-  //     // setTasksList(selectedTask.taskList || []);
-  //     // setResources(selectedTask.resources || []);
-  //     // setAttachment(selectedTask.attachments?.[0] || null); // Assuming only one attachment for simplicity
-  //   } else {
-  //     // Reset states for a new task
-  //     setTasksList([]);
-  //     setResources([]);
-  //     setSelectedMembers([]);
-  //     setAttachment(null);
-  //   }
-  // }, [selectedTask, isOpen]);
+  useEffect(() => {
+    if (selectedTask) {
+      // Pre-populate the states if editing an existing task
+      setStartDate(
+        selectedTask.startDate ? dayjs(selectedTask.startDate) : null
+      );
+      setEndDate(selectedTask.endDate ? dayjs(selectedTask.endDate) : null);
+      setSelectedIcon(selectedTask.icon ?? undefined);
+      setSelectedMembers(selectedTask.members ?? []);
+      setTasksList(selectedTask.taskList ?? []);
+      setResources(selectedTask.resources ?? []);
+      setAttachment(selectedTask.attachments?.[0] ?? undefined); // Assuming only one attachment for simplicity
+    } else {
+      // Reset states for a new task
+      setStartDate(null);
+      setEndDate(null);
+      setSelectedIcon(undefined);
+      setTasksList([]);
+      setResources([]);
+      setSelectedMembers([]);
+      setAttachment(undefined);
+    }
+  }, [selectedTask, isOpen]);
 
   const formik = useFormik({
     initialValues: {
@@ -128,17 +136,18 @@ const AddTaskModal = ({
     },
 
     validationSchema: taskValidationSchema,
-    onSubmit: (values, { resetForm, setErrors }) => {
-      if (!formik.isValid) {
-        toast.error("Please fix the validation errors.");
-        setErrors(formik.errors);
+    onSubmit: (values, { setSubmitting, resetForm }) => {
+      const { name } = values;
+      if (!name.trim()) {
+        toast.error("Task name is required.");
+        resetForm();
+        setSubmitting(false);
         return;
       }
 
-      toast.success("Task added successfully!");
-
       const taskData = {
-        ...values,
+        name: values.name,
+        description: values.description,
         members: selectedMembers,
         startDate: startDate ? dayjs(startDate).toISOString() : null,
         endDate: endDate ? dayjs(endDate).toISOString() : null,
@@ -150,20 +159,23 @@ const AddTaskModal = ({
       };
 
       if (selectedTask?.id) {
-        // Update existing task
         updateTask(selectedTask.id, taskData)
-          .then(() => toast.success("Task updated successfully!"))
+          .then(() => {
+            toast.success("Task updated successfully!");
+            handleClose();
+          })
           .catch((error) => toast.error(`Update failed: ${error.message}`));
       } else {
-        // Add new task
         addTask(taskData)
-          .then(() => toast.success("Task added successfully!"))
+          .then(() => {
+            toast.success("Task added successfully!");
+            handleClose();
+          })
           .catch((error) => toast.error(`Add failed: ${error.message}`));
       }
 
       resetForm();
-      handleClose();
-
+      setSubmitting(false);
       onIconSelect(null);
     },
     enableReinitialize: true,
@@ -174,7 +186,7 @@ const AddTaskModal = ({
   const addTaskList = (taskText: string) => {
     setTasksList((currentTasks: TaskListItem[]) => [
       ...currentTasks,
-      { id: Date.now(), text: taskText, checked: false },
+      { id: Date.now().toString(), text: taskText, isChecked: false },
     ]);
   };
 
@@ -201,11 +213,11 @@ const AddTaskModal = ({
   };
 
   useEffect(() => {
-    console.log("Selected task from useEffect:", selectedTask); // For debugging
+    console.log("Selected task from useEffect:", selectedTask);
   }, [selectedTask]);
 
   useEffect(() => {
-    console.log("Selected icon from useEffect:", selectedIcon); // For debugging
+    console.log("Selected icon from useEffect:", selectedIcon);
   }, [selectedIcon]);
 
   return (
@@ -442,20 +454,24 @@ const AddTaskModal = ({
                 <Typography variant="subtitle1">Lista zadań</Typography>
               )}
 
-              {tasksList.map((task) => (
-                <Box key={task}>
+              {tasksList.map((task, index) => (
+                <Box key={task.id}>
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={task}
-                        // onChange={(e) => {
-                        //   const newTasksList = [...tasksList];
-                        //   newTasksList[index].isChecked = e.target.checked;
-                        //   setTasksList(newTasksList);
-                        // }}
+                        checked={task.isChecked}
+                        onChange={(e) => {
+                          const newTasksList = tasksList.map(
+                            (item, itemIndex) =>
+                              index === itemIndex
+                                ? { ...item, isChecked: e.target.checked }
+                                : item
+                          );
+                          setTasksList(newTasksList);
+                        }}
                       />
                     }
-                    label={task}
+                    label={task.text}
                   />
                 </Box>
               ))}
@@ -476,7 +492,7 @@ const AddTaskModal = ({
                 addTaskList={addTaskList}
                 handleAddResource={handleAddResource}
                 onMemberSelect={handleMemberSelect}
-                selectedIcon={selectedIcon ? selectedIcon.iconName : null}
+                selectedIcon={selectedIcon ? selectedIcon : null}
                 onIconSelect={handleIconSelect}
                 onAttachmentSelect={handleAttachmentSelect}
                 startDate={startDate}

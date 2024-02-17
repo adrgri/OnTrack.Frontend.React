@@ -43,33 +43,33 @@ function App() {
               <Route
                 path="/settings"
                 element={
-                  <ProtectedRoute>
-                    <Settings />
-                  </ProtectedRoute>
+                  // <ProtectedRoute>
+                  <Settings />
+                  // </ProtectedRoute>
                 }
               />
               <Route
                 path="/tablica"
                 element={
-                  <ProtectedRoute>
-                    <Tablica />
-                  </ProtectedRoute>
+                  // <ProtectedRoute>
+                  <Tablica />
+                  // </ProtectedRoute>
                 }
               />
               <Route
                 path="/home"
                 element={
-                  <ProtectedRoute>
-                    <Home />
-                  </ProtectedRoute>
+                  // <ProtectedRoute>
+                  <Home />
+                  // </ProtectedRoute>
                 }
               />
               <Route
                 path="/"
                 element={
-                  <ProtectedRoute>
-                    <Home />
-                  </ProtectedRoute>
+                  // <ProtectedRoute>
+                  <Home />
+                  // </ProtectedRoute>
                 }
               />
               <Route path="*" element={<div>404</div>} />
