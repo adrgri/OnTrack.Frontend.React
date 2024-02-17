@@ -17,6 +17,7 @@ interface CalendarModalProps {
   onClose: () => void;
   value: dayjs.Dayjs | null;
   onChange: (date: dayjs.Dayjs | null) => void;
+  title: string;
 }
 
 const CalendarModal: React.FC<CalendarModalProps> = ({
@@ -25,6 +26,7 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
   onClose,
   value,
   onChange,
+  title,
 }) => {
   const [selectedDate, setSelectedDate] = useState(value || dayjs());
 
@@ -32,8 +34,6 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
     setSelectedDate(newDate || dayjs());
     onChange(newDate);
   };
-
-  // console.log(selectedDate.format("YYYY-MM-DD:HH:mm"));
 
   return (
     <Popover
@@ -70,7 +70,7 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
             width: "100%",
           }}
         >
-          Daty
+          {title}
         </Typography>
 
         <IconButton

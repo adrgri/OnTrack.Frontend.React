@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Box, Typography } from "@mui/material";
 import PopupLayout from "../../layout/PopupLayout";
 import SmallButton from "../../../styledComponents/SmallButton";
-import { Task, TaskListItem } from "../../../types";
+import { TaskListItem } from "../../../types";
 import StyledSidebarModalInput from "../../../styledComponents/StyledSidebarModalInput";
 
 interface TaskListModalProps {
@@ -19,10 +19,10 @@ const TaskListModal: React.FC<TaskListModalProps> = ({
   addTaskList,
 }) => {
   const [tasksList, setTasksList] = useState<TaskListItem[]>([
-    { id: Date.now(), text: "", isChecked: false },
+    { id: Date.now().toString(), text: "", isChecked: false },
   ]);
 
-  const handleInputChange = (id: number, text: string) => {
+  const handleInputChange = (id: string, text: string) => {
     setTasksList(
       tasksList.map((task) => (task.id === id ? { ...task, text } : task))
     );
@@ -34,19 +34,19 @@ const TaskListModal: React.FC<TaskListModalProps> = ({
         addTaskList(task.text, task.isChecked);
       }
     });
-    setTasksList([{ id: Date.now(), text: "", isChecked: false }]);
+    setTasksList([{ id: Date.now().toString(), text: "", isChecked: false }]);
   };
 
   const handleAddMoreTasks = () => {
     setTasksList([
       ...tasksList,
-      { id: Date.now(), text: "", isChecked: false },
+      { id: Date.now().toString(), text: "", isChecked: false },
     ]);
   };
 
-  const handleKeyPress = (e: React.KeyboardEvent, task: Task) => {
-    if (e.key === "Enter" && task.name.trim()) {
-      handleAddTask(); // Add the current task
+  const handleKeyPress = (e: React.KeyboardEvent, task: TaskListItem) => {
+    if (e.key === "Enter" && task.text.trim()) {
+      handleAddTask();
     }
   };
 

@@ -1,3 +1,5 @@
+import dayjs from "dayjs";
+
 export type UserProfileProps = {
   name: string;
   avatar: string;
@@ -5,11 +7,11 @@ export type UserProfileProps = {
 
 // export type Task = {
 //   text: string;
-//   dueDate?: string;
+//   endDate?: string;
 //   assigneeAvatar?: string;
 // };
 
-export type IconSelection = {
+export type Icon = {
   iconName: string;
   imageUrl: string;
 };
@@ -29,13 +31,13 @@ export type Attachment = {
 };
 
 export type TaskListItem = {
-  id: number;
+  id: string;
   text: string;
   isChecked: boolean;
 };
 
 export type Resource = {
-  id: number;
+  id: string;
   resourceName: string;
   quantity: string;
   unit: string;
@@ -48,9 +50,9 @@ export type Task = {
   name: string;
   description?: string;
   members?: User[];
-  startDate?: Date;
-  dueDate?: Date;
-  icon?: IconSelection;
+  startDate?: dayjs.Dayjs | null | undefined | string;
+  endDate?: dayjs.Dayjs | null | undefined | string;
+  icon?: Icon;
   attachments?: Attachment[];
   taskList?: TaskListItem[];
   resources?: Resource[];
@@ -58,7 +60,7 @@ export type Task = {
 };
 
 export type User = {
-  id: number;
+  id: string;
   firstName: string;
   lastName: string;
   email: string;

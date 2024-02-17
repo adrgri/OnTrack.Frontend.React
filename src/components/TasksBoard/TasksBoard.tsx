@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Grid, Button } from "@mui/material";
 import { Add as AddIcon } from "@mui/icons-material";
 import AddTaskModal from "../AddTaskModal/AddTaskModal";
@@ -8,6 +8,7 @@ import { DragDropContext } from "react-beautiful-dnd";
 import { Column } from "../Column/Column";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
+import { Task } from "../../types";
 
 const columnTitles = {
   todo: "Do zrobienia",
@@ -20,13 +21,13 @@ const TasksBoard = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { tasks, fetchTasks, addTask, updateTaskStatus } = useTaskStore();
   const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(false);
-  const [selectedTask, setSelectedTask] = useState(null);
+  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
 
   useEffect(() => {
     fetchTasks();
   }, [fetchTasks]);
 
-  const onDragEnd = (result) => {
+  const onDragEnd = (result: any) => {
     const { source, destination } = result;
 
     if (!destination) {
@@ -44,13 +45,17 @@ const TasksBoard = () => {
       }
     }
   };
+  const handleTaskClick = (taskId: string) => {
+    const taskToEdit = tasks.find((task) => task.id === taskId);
+    if (taskToEdit) {
+      setSelectedTask(taskToEdit);
+      setIsAddTaskModalOpen(true);
+    }
 
-  const handleTaskClick = (taskId) => {
-    // Find the task by id and set it as the selected task
-    const task = tasks.find((task) => task.id === taskId);
-    setSelectedTask(task);
-    setIsAddTaskModalOpen(true);
-    console.log("Selected task:", task);
+    console.log(
+      "Selected task:",
+      tasks.find((task) => task.id === taskId)
+    );
   };
 
   return (
@@ -60,7 +65,6 @@ const TasksBoard = () => {
         spacing={2}
         alignItems="baseline"
         justifyContent="space-between"
-        // sx={{ padding: 1 }}
       >
         <Grid item>
           <TaskBoardNavigation />
@@ -114,7 +118,7 @@ const TasksBoard = () => {
         isOpen={isAddTaskModalOpen}
         handleClose={() => {
           setIsAddTaskModalOpen(false);
-          setSelectedTask(null); // Reset selected task on close
+          setSelectedTask(null);
         }}
         onAddTask={addTask}
         selectedTask={selectedTask}

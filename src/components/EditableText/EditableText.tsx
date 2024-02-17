@@ -42,11 +42,7 @@ const EditableText: React.FC<EditableTextProps> = ({
           inputRef={inputRef}
         />
       ) : (
-        <Typography
-          variant="body1"
-          //   fontSize={"32px"}
-          sx={{ marginY: "8px", paddingLeft: "5px" }}
-        >
+        <Typography variant="body1" sx={{ marginY: "8px" }}>
           {text || placeholder}
         </Typography>
       )}

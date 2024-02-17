@@ -48,8 +48,8 @@ const ResetPasswordModal: FC<ResetPasswordModalProps> = ({
       try {
         await changePassword(
           values.email,
-          values.resetCode,
-          values.newPassword
+          values.resetCode
+          // values.newPassword
         );
         console.log("Password has been reset successfully");
         handleClose();

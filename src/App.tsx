@@ -1,5 +1,4 @@
-import 'devextreme/dist/css/dx.light.css';
-// App.js
+import "devextreme/dist/css/dx.light.css";
 import { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
@@ -8,6 +7,12 @@ import { AuthProvider } from "./contexts/AuthContext";
 import ProtectedRoute from "./ProtectedRoute";
 import "./App.css";
 import Loading from "./components/Loading/Loading";
+import "dayjs/locale/pl";
+import dayjs from "dayjs";
+import "react-toastify/dist/ReactToastify.css";
+import { ToastContainer } from "react-toastify";
+
+dayjs.locale("pl");
 
 const Login = lazy(() => import("./pages/Login/Login"));
 const Register = lazy(() => import("./pages/Register/Register"));
@@ -20,6 +25,17 @@ function App() {
     <ThemeProvider theme={theme}>
       <AuthProvider>
         <BrowserRouter>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
           <Suspense fallback={<Loading />}>
             <Routes>
               <Route path="/login" element={<Login />} />

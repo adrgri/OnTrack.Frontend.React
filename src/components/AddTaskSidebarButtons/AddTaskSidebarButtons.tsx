@@ -21,6 +21,7 @@ import AttachmentIcon from "../../assets/icons/TaskIcons/AttachmentIcon.svg";
 import TaskListIcon from "../../assets/icons/TaskIcons/TaskslistIcon.svg";
 import ResourcesIcon from "../../assets/icons/TaskIcons/ResourcesIcon.svg";
 import { Resource, User, IconSelection } from "../../types";
+import dayjs from "dayjs";
 
 type ListItemType = {
   text: string;
@@ -30,7 +31,8 @@ type ListItemType = {
 };
 type ModalName =
   | "members"
-  | "dates"
+  | "startDate"
+  | "endDate"
   | "icons"
   | "attachment"
   | "taskList"
@@ -43,6 +45,10 @@ type AddTaskSidebarButtonsProps = {
   selectedIcon: string | null;
   onIconSelect: (icon: IconSelection | null) => void;
   onAttachmentSelect: (attachment: File) => void;
+  startDate: dayjs.Dayjs | null;
+  endDate: dayjs.Dayjs | null;
+  onStartDateChange: (date: dayjs.Dayjs | null) => void;
+  onEndDateChange: (date: dayjs.Dayjs | null) => void;
 };
 
 const AddTaskSidebarButtons = ({
@@ -52,6 +58,10 @@ const AddTaskSidebarButtons = ({
   selectedIcon,
   onIconSelect,
   onAttachmentSelect,
+  startDate,
+  endDate,
+  onStartDateChange,
+  onEndDateChange,
 }: AddTaskSidebarButtonsProps) => {
   const resourcesItem = {
     text: "Dodaj zasoby",
@@ -86,9 +96,14 @@ const AddTaskSidebarButtons = ({
       modal: "members",
     },
     {
-      text: "Daty",
+      text: "Data rozpoczęcia",
       icon: <img src={CalendarIcon} alt="Calendar" />,
-      modal: "dates",
+      modal: "startDate",
+    },
+    {
+      text: "Data zakończenia",
+      icon: <img src={CalendarIcon} alt="Calendar" />,
+      modal: "endDate",
     },
     {
       text: "Ikonki",
@@ -120,14 +135,26 @@ const AddTaskSidebarButtons = ({
             onMemberSelect={onMemberSelect}
           />
         );
-      case "dates":
+      case "startDate":
         return (
           <CalendarModal
-            open={openModal === "dates"}
+            open={openModal === "startDate"}
             anchorEl={anchorEl}
             onClose={handleCloseModal}
-            value={null}
-            onChange={() => null}
+            value={startDate}
+            onChange={onStartDateChange}
+            title="Data rozpoczęcia"
+          />
+        );
+      case "endDate":
+        return (
+          <CalendarModal
+            open={openModal === "endDate"}
+            anchorEl={anchorEl}
+            onClose={handleCloseModal}
+            value={endDate}
+            onChange={onEndDateChange}
+            title="Data zakończenia"
           />
         );
       case "icons":

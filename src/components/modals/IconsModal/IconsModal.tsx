@@ -11,14 +11,14 @@ import HeartIcon from "../../../assets/icons/IconsIcons/HeartIcon.svg";
 import AlarmIcon from "../../../assets/icons/IconsIcons/AlarmIcon.svg";
 import SensorFireIcon from "../../../assets/icons/IconsIcons/SensorFireIcon.svg";
 import PeopleIcon from "../../../assets/icons/IconsIcons/PeopleIcon.svg";
-import { IconSelection } from "../../../types";
+import { Icon } from "../../../types";
 
 interface IconsModalProps {
   open: boolean;
   anchorEl: HTMLButtonElement | null;
   onClose: () => void;
-  selectedIcon: IconSelection | null;
-  onIconSelect: (icon: IconSelection | null) => void;
+  selectedIcon: Icon | null;
+  onIconSelect: (icon: Icon | null) => void;
 }
 
 const IconsModal: React.FC<IconsModalProps> = ({
@@ -41,7 +41,7 @@ const IconsModal: React.FC<IconsModalProps> = ({
     { iconName: "people", imageUrl: PeopleIcon },
   ];
 
-  const handleIconSelect = (icon: IconSelection) => {
+  const handleIconSelect = (icon: Icon) => {
     onIconSelect(icon);
   };
 

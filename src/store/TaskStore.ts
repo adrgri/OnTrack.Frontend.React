@@ -1,18 +1,24 @@
 import { create } from "zustand";
 import axios from "axios";
-import { Task } from "../types";
+import { Task, Status, Icon } from "../types";
 
 interface TaskState {
   tasks: Task[];
   fetchTasks: () => Promise<void>;
+  setTaskIcon: (taskId: string, icon: Icon) => void;
   addTask: (newTaskData: Task) => Promise<void>;
-  updateTask: (taskId: number, updates: Partial<Task>) => Promise<void>;
-  deleteTask: (taskId: number) => Promise<void>;
+  updateTask: (taskId: string, updates: Partial<Task>) => Promise<void>;
+  deleteTask: (taskId: string) => Promise<void>;
+  updateTaskStatus: (taskId: string, newStatus: Status) => Promise<void>;
   getTasksByStatus: (status: string) => Task[];
+  setIconForTask: (taskId: string, icon: Icon) => void;
+  getTaskById: (id: string) => Task | undefined;
 }
 
 export const useTaskStore = create<TaskState>((set, get) => ({
   tasks: [],
+
+  getTaskById: (id) => get().tasks.find((task) => task.id === id),
 
   fetchTasks: async () => {
     try {
@@ -23,13 +29,20 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     }
   },
 
+  setTaskIcon: (taskId, icon) =>
+    set((state) => ({
+      tasks: state.tasks.map((task) =>
+        task.id === taskId ? { ...task, icon: icon } : task
+      ),
+    })),
+
   addTask: async (newTaskData) => {
     try {
       const response = await axios.post(
         "http://localhost:3001/tasks",
         newTaskData
       );
-      const newTask = response.data; // Assuming the response includes the full task, ID included
+      const newTask = response.data;
       set((state) => ({ tasks: [...state.tasks, newTask] }));
     } catch (error) {
       console.error("Failed to add task:", error);
@@ -61,11 +74,11 @@ export const useTaskStore = create<TaskState>((set, get) => ({
   },
 
   getTasksByStatus: (status) => {
-    const allTasks = get().tasks; // Use get() to access the current state
+    const allTasks = get().tasks;
     return allTasks.filter((task) => task.status === status);
   },
 
-  updateTaskStatus: async (taskId: string, newStatus: string) => {
+  updateTaskStatus: async (taskId: string, newStatus: Status) => {
     const taskToUpdate = get().tasks.find((task) => task.id === taskId);
     if (taskToUpdate) {
       const updatedTask = { ...taskToUpdate, status: newStatus };
@@ -77,4 +90,20 @@ export const useTaskStore = create<TaskState>((set, get) => ({
       }));
     }
   },
+
+  updateTaskIcon: (taskId: string, icon: Icon) => {
+    console.log("Updating task icon:", taskId, icon);
+    set((state) => ({
+      tasks: state.tasks.map((task) =>
+        task.id === taskId ? { ...task, icon } : task
+      ),
+    }));
+  },
+
+  setIconForTask: (taskId: string, icon: Icon) =>
+    set((state) => ({
+      tasks: state.tasks.map((task) =>
+        task.id === taskId ? { ...task, icon } : task
+      ),
+    })),
 }));

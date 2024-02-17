@@ -73,7 +73,7 @@ export const theme = createTheme({
     MuiDateCalendar: {
       styleOverrides: {
         root: {
-          height: "250px",
+          height: "300px",
         },
       },
     },

@@ -18,43 +18,63 @@ import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import AddTaskSidebarButtons from "../AddTaskSidebarButtons/AddTaskSidebarButtons";
 import { useTheme } from "@mui/material/styles";
 import SmallButton from "../../styledComponents/SmallButton";
-import { TaskListItem, Resource, User, IconSelection } from "../../types";
+import { TaskListItem, Resource, User, Icon } from "../../types";
 import EditableText from "../EditableText/EditableText";
 import AttachmentIcon from "../../assets/icons/TaskIcons/AttachmentIcon.svg";
 import { Task } from "../../types";
 import { useTaskStore } from "../../store/TaskStore";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
+import dayjs from "dayjs";
+import "dayjs/locale/pl";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import * as Yup from "yup";
+import { toast } from "react-toastify";
 
 type AddTaskModalProps = {
   isOpen: boolean;
   handleClose: () => void;
   onAddTask: (task: { id: string; name: string; description?: string }) => void;
   handleAddResource: (resource: Resource) => void;
-  selectedIcon: IconSelection | null;
-  onIconSelect: (icon: IconSelection | null) => void;
+  selectedIcon: Icon | null;
+  onIconSelect: (icon: Icon | null) => void;
   onAttachmentSelect: (attachment: File) => void;
   selectedTask?: Task;
 };
 
+const taskValidationSchema = Yup.object({
+  name: Yup.string()
+    .trim() // Trims whitespace from both ends of the string
+    .min(1, "Task name must contain at least 1 character.") // Ensures at least one character is present
+    .required("Task name is required."),
+  // Include other fields and validation rules as needed
+});
+
 const AddTaskModal = ({
   isOpen,
   handleClose,
-  // onAddTask,
   onIconSelect,
   selectedTask,
 }: AddTaskModalProps) => {
   const [tasksList, setTasksList] = useState([]);
   const [resources, setResources] = useState<Resource[]>([]);
   const [selectedMembers, setSelectedMembers] = useState<User[]>([]);
-  const [selectedIcon, setSelectedIcon] = useState<IconSelection | null>(null);
+  const [selectedIcon, setSelectedIcon] = useState<Icon | null>(null);
   const [attachment, setAttachment] = useState<File | null>(null);
   const { addTask, updateTask, deleteTask } = useTaskStore();
+  const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(
+    selectedTask ? dayjs(selectedTask.startDate) : null
+  );
+  const [endDate, setEndDate] = useState<dayjs.Dayjs | null>(
+    selectedTask ? dayjs(selectedTask.endDate) : null
+  );
 
   const handleAttachmentSelect = (file: File) => {
     setAttachment(file);
   };
 
-  const handleIconSelect = (icon: IconSelection | null) => {
+  const handleIconSelect = (icon: Icon | null) => {
     setSelectedIcon(icon);
   };
 
@@ -81,9 +101,9 @@ const AddTaskModal = ({
     if (selectedTask) {
       // Pre-populate the states if editing an existing task
       setSelectedMembers(selectedTask.members || []);
-      setTasksList(selectedTask.taskList || []);
-      setResources(selectedTask.resources || []);
-      setAttachment(selectedTask.attachments?.[0] || null); // Assuming only one attachment for simplicity
+      // setTasksList(selectedTask.taskList || []);
+      // setResources(selectedTask.resources || []);
+      // setAttachment(selectedTask.attachments?.[0] || null); // Assuming only one attachment for simplicity
     } else {
       // Reset states for a new task
       setTasksList([]);
@@ -95,21 +115,33 @@ const AddTaskModal = ({
 
   const formik = useFormik({
     initialValues: {
-      name: selectedTask?.name || "",
-      description: selectedTask?.description || "",
-      // members: selectedTask?.members || [],
-      // dueDate: selectedTask?.dueDate || null,
-      // icon: selectedTask?.icon || null,
-      // attachments: selectedTask?.attachments || [],
-      // taskList: selectedTask?.taskList || [],
-      // resources: selectedTask?.resources || [],
+      name: selectedTask?.name ?? "",
+      description: selectedTask?.description ?? "",
+      members: selectedTask?.members ?? [],
+      startDate: selectedTask?.startDate ?? null,
+      endDate: selectedTask?.endDate ?? null,
+      icon: selectedTask?.icon ?? null,
+      attachments: selectedTask?.attachments ?? [],
+      taskList: selectedTask?.taskList ?? [],
+      resources: selectedTask?.resources ?? [],
     },
-    onSubmit: (values, { resetForm }) => {
+
+    validationSchema: taskValidationSchema,
+    onSubmit: (values, { resetForm, setErrors }) => {
+      if (!formik.isValid) {
+        toast.error("Please fix the validation errors.");
+        setErrors(formik.errors);
+        return;
+      }
+
+      toast.success("Task added successfully!");
+
       const taskData = {
         ...values,
         members: selectedMembers,
-        dueDate: values.dueDate ? new Date(values.dueDate).toISOString() : null,
-        icon: selectedTask?.icon || null,
+        startDate: startDate ? dayjs(startDate).toISOString() : null,
+        endDate: endDate ? dayjs(endDate).toISOString() : null,
+        icon: selectedTask?.icon ?? null,
         attachments: attachment ? [attachment] : [],
         taskList: tasksList,
         resources: resources,
@@ -118,16 +150,22 @@ const AddTaskModal = ({
 
       if (selectedTask?.id) {
         // Update existing task
-        updateTask(selectedTask.id, taskData); // Assuming updateTask is a function you've defined
+        updateTask(selectedTask.id, taskData)
+          .then(() => toast.success("Task updated successfully!"))
+          .catch((error) => toast.error(`Update failed: ${error.message}`));
       } else {
         // Add new task
-        addTask(taskData); // Assuming addTask is a function you've defined
+        addTask(taskData)
+          .then(() => toast.success("Task added successfully!"))
+          .catch((error) => toast.error(`Add failed: ${error.message}`));
       }
+
       resetForm();
       handleClose();
 
       onIconSelect(null);
     },
+    enableReinitialize: true,
   });
 
   const theme = useTheme();
@@ -160,6 +198,10 @@ const AddTaskModal = ({
         });
     }
   };
+
+  useEffect(() => {
+    console.log("Selected task from useEffect:", selectedTask); // For debugging
+  }, [selectedTask]);
 
   return (
     <>
@@ -274,6 +316,60 @@ const AddTaskModal = ({
                 </Stack>
               )}
 
+              <Box sx={{ display: "flex", alignItems: "center" }}>
+                {startDate && (
+                  <Stack spacing={2}>
+                    <Typography variant="subtitle1">
+                      Data rozpoczęcia
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        position: "relative",
+                      }}
+                    >
+                      <LocalizationProvider
+                        dateAdapter={AdapterDayjs}
+                        adapterLocale="pl"
+                      >
+                        <DateTimePicker
+                          sx={{ width: "80%" }}
+                          value={startDate}
+                          onChange={(newValue) => setStartDate(newValue)}
+                        />
+                      </LocalizationProvider>
+                    </Box>
+                  </Stack>
+                )}
+
+                {endDate && (
+                  <Stack spacing={2}>
+                    <Typography variant="subtitle1">
+                      Data zakończenia
+                    </Typography>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        // position: "relative",
+                      }}
+                    >
+                      <LocalizationProvider
+                        dateAdapter={AdapterDayjs}
+                        adapterLocale="pl"
+                      >
+                        <DateTimePicker
+                          sx={{ width: "80%" }}
+                          value={endDate}
+                          onChange={(newValue) => setEndDate(newValue)}
+                        />
+                      </LocalizationProvider>
+                    </Box>
+                  </Stack>
+                )}
+              </Box>
+
               {attachment && (
                 <>
                   <Typography variant="subtitle1">Załącznik</Typography>
@@ -311,6 +407,8 @@ const AddTaskModal = ({
                     </Typography>
                   </Box>
                 }
+                value={formik.values.description}
+                onChange={formik.handleChange}
                 multiline
                 rows={4}
                 placeholder="Dodaj bardziej szczegółowy opis..."
@@ -334,24 +432,25 @@ const AddTaskModal = ({
                   mt: 5,
                 }}
               />
+
               {tasksList.length > 0 && (
                 <Typography variant="subtitle1">Lista zadań</Typography>
               )}
 
-              {tasksList.map((task, index) => (
-                <Box key={task.id}>
+              {tasksList.map((task) => (
+                <Box key={task}>
                   <FormControlLabel
                     control={
                       <Checkbox
-                        checked={task.isChecked}
-                        onChange={(e) => {
-                          const newTasksList = [...tasksList];
-                          newTasksList[index].isChecked = e.target.checked;
-                          setTasksList(newTasksList);
-                        }}
+                        checked={task}
+                        // onChange={(e) => {
+                        //   const newTasksList = [...tasksList];
+                        //   newTasksList[index].isChecked = e.target.checked;
+                        //   setTasksList(newTasksList);
+                        // }}
                       />
                     }
-                    label={task.text}
+                    label={task}
                   />
                 </Box>
               ))}
@@ -375,6 +474,11 @@ const AddTaskModal = ({
                 selectedIcon={selectedIcon ? selectedIcon.iconName : null}
                 onIconSelect={handleIconSelect}
                 onAttachmentSelect={handleAttachmentSelect}
+                startDate={startDate}
+                endDate={endDate}
+                onStartDateChange={setStartDate}
+                onEndDateChange={setEndDate}
+                taskId={selectedTask?.id}
               />
             </Box>
           </DialogContent>

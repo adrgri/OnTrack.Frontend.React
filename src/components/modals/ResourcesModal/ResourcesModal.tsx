@@ -28,7 +28,7 @@ const ResourcesModal: React.FC<ResourcesModalProps> = ({
       unit: "",
     },
     onSubmit: (values) => {
-      handleAddResource({ ...values, id: Date.now() });
+      handleAddResource({ ...values, id: Date.now().toString() });
 
       onClose();
     },

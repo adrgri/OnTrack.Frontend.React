@@ -1,4 +1,3 @@
-import React from "react";
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import TaskCard from "../TaskCard/TaskCard";
 import { Typography, Box } from "@mui/material";
@@ -14,11 +13,10 @@ export const Column = ({ columnId, title, tasks, handleTaskClick }) => {
             backgroundColor: snapshot.isDraggingOver
               ? "#EEEFF6"
               : "transparent",
-            // padding: 2,
             width: {
-              xs: 320, // Adjust width for extra-small screens
-              md: 230, // Adjust width for small screens
-              lg: 320, // Keep original width for large screens and above
+              xs: 320,
+              md: 230,
+              lg: 320,
             },
             minHeight: 500,
           }}
@@ -37,7 +35,7 @@ export const Column = ({ columnId, title, tasks, handleTaskClick }) => {
                   {...provided.dragHandleProps}
                 >
                   <TaskCard
-                    task={task}
+                    taskId={task.id}
                     handleTaskClick={() => handleTaskClick(task.id)}
                   />
                 </div>

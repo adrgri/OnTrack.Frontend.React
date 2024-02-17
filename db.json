@@ -2,10 +2,10 @@
   "tasks": [
     {
       "id": "1",
-      "name": "Design the new landing page",
+      "name": "Design the new landing page 2",
       "status": "todo",
       "startDate": "2022-12-30T00:00:00.000Z",
-      "dueDate": "2022-12-31T00:00:00.000Z",
+      "endDate": "2022-12-31T00:00:00.000Z",
       "members": [
         {
           "id": "1",
@@ -17,14 +17,16 @@
     {
       "id": "1fefe",
       "name": "Design the new landing page",
-      "status": "todo",
+      "status": "done",
       "startDate": "2022-12-30T00:00:00.000Z",
-      "dueDate": "2022-12-31T00:00:00.000Z",
+      "endDate": "2022-12-31T00:00:00.000Z",
       "members": [
         {
-          "id": "1",
-          "name": "John Doe",
-          "avatar": "https://randomuser.me/api/port"
+          "id": 1,
+          "firstName": "Alice",
+          "lastName": "Johnson",
+          "email": "Alice@me.com",
+          "avatar": "https://i.pravatar.cc/150?img=3"
         }
       ]
     },
@@ -33,12 +35,14 @@
       "name": "Implement authentication logic",
       "status": "inProgress",
       "startDate": "2022-11-30T00:00:00.000Z",
-      "dueDate": "2022-11-31T00:00:00.000Z",
+      "endDate": "2022-11-31T00:00:00.000Z",
       "members": [
         {
-          "id": "1",
-          "name": "John Doe",
-          "avatar": "https://randomuser.me/api/port"
+          "id": 1,
+          "firstName": "Alice",
+          "lastName": "Johnson",
+          "email": "Alice@me.com",
+          "avatar": "https://i.pravatar.cc/150?img=3"
         }
       ]
     },
@@ -47,35 +51,176 @@
       "name": "Deploy the application to production",
       "status": "inProgress",
       "startDate": "2022-12-02T00:00:00.000Z",
-      "dueDate": "2022-12-07T00:00:00.000Z",
+      "endDate": "2022-12-07T00:00:00.000Z",
       "members": [
         {
-          "id": "1",
-          "name": "John Doe",
-          "avatar": "https://randomuser.me/api/port"
+          "id": 1,
+          "firstName": "Alice",
+          "lastName": "Johnson",
+          "email": "Alice@me.com",
+          "avatar": "https://i.pravatar.cc/150?img=3"
         }
       ]
     },
     {
       "id": "5",
       "name": "Fix the layout bug on the settings page",
-      "status": "done",
+      "status": "todo",
       "startDate": "2022-12-10T00:00:00.000Z",
-      "dueDate": "2022-12-13T00:00:00.000Z",
+      "endDate": "2022-12-13T00:00:00.000Z",
       "members": [
         {
-          "id": "1",
-          "name": "John Doe",
-          "avatar": "https://randomuser.me/api/port"
+          "id": 1,
+          "firstName": "Alice",
+          "lastName": "Johnson",
+          "email": "Alice@me.com",
+          "avatar": "https://i.pravatar.cc/150?img=3"
         }
       ]
     },
     {
-      "id": "040c",
-      "name": "sdsdsds",
+      "id": "a82e",
+      "name": "",
+      "description": "",
+      "members": [
+        {
+          "id": 1,
+          "firstName": "Alice",
+          "lastName": "Johnson",
+          "email": "Alice@me.com",
+          "avatar": "https://i.pravatar.cc/150?img=3"
+        }
+      ],
+      "startDate": null,
+      "endDate": null,
+      "icon": null,
+      "attachments": [],
+      "taskList": [],
+      "resources": [],
+      "status": "todo"
+    },
+    {
+      "id": "655a",
+      "name": "asdf",
       "description": "",
       "members": [],
-      "dueDate": null,
+      "startDate": null,
+      "endDate": "2024-02-24T12:34:45.000Z",
+      "icon": null,
+      "attachments": [],
+      "taskList": [],
+      "resources": [],
+      "status": "todo"
+    },
+    {
+      "id": "5aff",
+      "name": "",
+      "description": "",
+      "members": [],
+      "startDate": null,
+      "endDate": "2024-02-24T12:34:45.000Z",
+      "icon": null,
+      "attachments": [],
+      "taskList": [],
+      "resources": [],
+      "status": "todo"
+    },
+    {
+      "id": "81ae",
+      "name": "icon",
+      "description": "",
+      "members": [],
+      "startDate": null,
+      "endDate": null,
+      "icon": null,
+      "attachments": [],
+      "taskList": [],
+      "resources": [],
+      "status": "todo"
+    },
+    {
+      "id": "cb28",
+      "name": "",
+      "description": "",
+      "members": [
+        {
+          "id": 1,
+          "firstName": "Alice",
+          "lastName": "Johnson",
+          "email": "Alice@me.com",
+          "avatar": "https://i.pravatar.cc/150?img=3"
+        }
+      ],
+      "startDate": null,
+      "endDate": null,
+      "icon": null,
+      "attachments": [],
+      "taskList": [],
+      "resources": [],
+      "status": "todo"
+    },
+    {
+      "id": "139a",
+      "name": "",
+      "description": "",
+      "members": [
+        {
+          "id": 1,
+          "firstName": "Alice",
+          "lastName": "Johnson",
+          "email": "Alice@me.com",
+          "avatar": "https://i.pravatar.cc/150?img=3"
+        }
+      ],
+      "startDate": null,
+      "endDate": null,
+      "icon": null,
+      "attachments": [],
+      "taskList": [],
+      "resources": [],
+      "status": "todo"
+    },
+    {
+      "id": "f952",
+      "name": "bbbb",
+      "description": "",
+      "members": [],
+      "startDate": null,
+      "endDate": null,
+      "icon": null,
+      "attachments": [],
+      "taskList": [],
+      "resources": [],
+      "status": "todo"
+    },
+    {
+      "id": "aaf3",
+      "name": "vbc",
+      "description": "",
+      "members": [],
+      "startDate": null,
+      "endDate": null,
+      "icon": null,
+      "attachments": [],
+      "taskList": [],
+      "resources": [],
+      "status": "todo"
+    },
+    {
+      "id": "785c",
+      "name": "",
+      "description": "",
+      "members": [
+        {
+          "id": 1,
+          "firstName": "Alice",
+          "lastName": "Johnson",
+          "email": "Alice@me.com",
+          "avatar": "https://i.pravatar.cc/150?img=3"
+        }
+      ],
+      "startDate": null,
+      "endDate": null,
       "icon": null,
       "attachments": [],
       "taskList": [],
