@@ -41,11 +41,11 @@ import { toast } from "react-toastify";
 type AddTaskModalProps = {
   isOpen: boolean;
   handleClose: () => void;
-  onAddTask: (task: { id: string; name: string; description?: string }) => void;
-  handleAddResource: (resource: Resource) => void;
-  selectedIcon: Icon | null;
+  // onAddTask: (task: { id: string; name: string; description?: string }) => void;
+  // handleAddResource: (resource: Resource) => void;
+  // selectedIcon: Icon;
   onIconSelect: (icon: Icon | null) => void;
-  onAttachmentSelect: (attachment: Attachment[]) => void;
+  // onAttachmentSelect: (attachment: Attachment[]) => void;
   selectedTask?: Task;
 };
 
@@ -78,7 +78,7 @@ const AddTaskModal = ({
 
   const handleAttachmentSelect = (newAttachments: Attachment[]) => {
     setAttachments((prevAttachments) => [
-      ...(prevAttachments || []),
+      ...(prevAttachments ?? []),
       ...newAttachments,
     ]);
   };
@@ -161,7 +161,7 @@ const AddTaskModal = ({
         members: selectedMembers,
         startDate: startDate ? dayjs(startDate).toISOString() : null,
         endDate: endDate ? dayjs(endDate).toISOString() : null,
-        icon: selectedIcon ?? null,
+        icon: selectedIcon,
         attachments: attachments ?? [],
         taskList: tasksList,
         resources: resources,
@@ -527,14 +527,14 @@ const AddTaskModal = ({
                 addTaskList={addTaskList}
                 handleAddResource={handleAddResource}
                 onMemberSelect={handleMemberSelect}
-                selectedIcon={selectedIcon ? selectedIcon : null}
+                selectedIcon={selectedIcon}
                 onIconSelect={handleIconSelect}
                 onAttachmentSelect={handleAttachmentSelect}
                 startDate={startDate}
                 endDate={endDate}
                 onStartDateChange={setStartDate}
                 onEndDateChange={setEndDate}
-                taskId={selectedTask?.id}
+                // taskId={selectedTask?.id}
               />
             </Box>
           </DialogContent>

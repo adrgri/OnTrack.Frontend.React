@@ -17,7 +17,7 @@ interface IconsModalProps {
   open: boolean;
   anchorEl: HTMLButtonElement | null;
   onClose: () => void;
-  selectedIcon: Icon;
+  selectedIcon?: Icon | undefined;
   onIconSelect: (icon: Icon) => void;
 }
 
