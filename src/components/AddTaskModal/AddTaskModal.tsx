@@ -18,10 +18,16 @@ import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import AddTaskSidebarButtons from "../AddTaskSidebarButtons/AddTaskSidebarButtons";
 import { useTheme } from "@mui/material/styles";
 import SmallButton from "../../styledComponents/SmallButton";
-import { TaskListItem, Resource, User, Icon, Attachment } from "../../types";
+import {
+  Task,
+  TaskListItem,
+  Resource,
+  User,
+  Icon,
+  Attachment,
+} from "../../types";
 import EditableText from "../EditableText/EditableText";
 import AttachmentIcon from "../../assets/icons/TaskIcons/AttachmentIcon.svg";
-import { Task } from "../../types";
 import { useTaskStore } from "../../store/TaskStore";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import dayjs from "dayjs";
@@ -39,7 +45,7 @@ type AddTaskModalProps = {
   handleAddResource: (resource: Resource) => void;
   selectedIcon: Icon | null;
   onIconSelect: (icon: Icon | null) => void;
-  onAttachmentSelect: (attachment: File) => void;
+  onAttachmentSelect: (attachment: Attachment[]) => void;
   selectedTask?: Task;
 };
 
@@ -61,7 +67,7 @@ const AddTaskModal = ({
   const [resources, setResources] = useState<Resource[]>([]);
   const [selectedMembers, setSelectedMembers] = useState<User[]>([]);
   const [selectedIcon, setSelectedIcon] = useState<Icon>();
-  const [attachment, setAttachment] = useState<Attachment>();
+  const [attachments, setAttachments] = useState<Attachment[]>();
   const { addTask, updateTask, deleteTask } = useTaskStore();
   const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(
     selectedTask ? dayjs(selectedTask.startDate) : null
@@ -70,8 +76,11 @@ const AddTaskModal = ({
     selectedTask ? dayjs(selectedTask.endDate) : null
   );
 
-  const handleAttachmentSelect = (file: Attachment) => {
-    setAttachment(file);
+  const handleAttachmentSelect = (newAttachments: Attachment[]) => {
+    setAttachments((prevAttachments) => [
+      ...(prevAttachments || []),
+      ...newAttachments,
+    ]);
   };
 
   const handleIconSelect = (icon: Icon) => {
@@ -109,7 +118,8 @@ const AddTaskModal = ({
       setSelectedMembers(selectedTask.members ?? []);
       setTasksList(selectedTask.taskList ?? []);
       setResources(selectedTask.resources ?? []);
-      setAttachment(selectedTask.attachments?.[0] ?? undefined); // Assuming only one attachment for simplicity
+      // Ensure attachments is always an array, even if empty
+      setAttachments(selectedTask.attachments ?? []);
     } else {
       // Reset states for a new task
       setStartDate(null);
@@ -118,7 +128,7 @@ const AddTaskModal = ({
       setTasksList([]);
       setResources([]);
       setSelectedMembers([]);
-      setAttachment(undefined);
+      setAttachments([]); // Initialize as an empty array for new task
     }
   }, [selectedTask, isOpen]);
 
@@ -152,7 +162,7 @@ const AddTaskModal = ({
         startDate: startDate ? dayjs(startDate).toISOString() : null,
         endDate: endDate ? dayjs(endDate).toISOString() : null,
         icon: selectedIcon ?? null,
-        attachments: attachment ? [attachment] : [],
+        attachments: attachments ?? [],
         taskList: tasksList,
         resources: resources,
         status: selectedTask ? selectedTask.status : "todo",
@@ -211,6 +221,18 @@ const AddTaskModal = ({
         });
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (attachments !== undefined) {
+        attachments.forEach((attachment) => {
+          if (attachment.url) {
+            URL.revokeObjectURL(attachment.url);
+          }
+        });
+      }
+    };
+  }, [attachments]);
 
   useEffect(() => {
     console.log("Selected task from useEffect:", selectedTask);
@@ -387,27 +409,40 @@ const AddTaskModal = ({
                 )}
               </Box>
 
-              {attachment && (
+              {attachments && attachments.length > 0 && (
                 <>
-                  <Typography variant="subtitle1">Załącznik</Typography>
+                  <Typography variant="subtitle1">Załączniki</Typography>
                   <Box
                     sx={{
                       display: "flex",
-                      alignItems: "center",
+                      flexDirection: "column",
                       gap: 1,
                       mt: 2,
                     }}
                   >
-                    <Typography
-                      component="a"
-                      href={URL.createObjectURL(attachment)} // Creates a URL for the file object
-                      download={attachment.name}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <img src={AttachmentIcon} alt="Załącznik" />{" "}
-                      {attachment.name}
-                    </Typography>
+                    {attachments.map((file, index) => (
+                      <Box
+                        key={index}
+                        sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                      >
+                        <img
+                          src={AttachmentIcon}
+                          alt="Attachment"
+                          style={{ width: 24, height: 24 }}
+                        />
+                        <Typography>
+                          <a
+                            href={
+                              file.url ? file.url : URL.createObjectURL(file)
+                            }
+                            download={file.name}
+                            style={{ textDecoration: "none", color: "inherit" }}
+                          >
+                            {file.name}
+                          </a>
+                        </Typography>
+                      </Box>
+                    ))}
                   </Box>
                 </>
               )}

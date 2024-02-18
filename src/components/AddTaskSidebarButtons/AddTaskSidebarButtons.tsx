@@ -15,12 +15,13 @@ import TaskListModal from "../modals/TaskListModal/TaskListModal";
 import { useTheme } from "@mui/material/styles";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import MembersIcon from "../../assets/icons/TaskIcons/MembersIcon.svg";
-import CalendarIcon from "../../assets/icons/TaskIcons/CalendarIcon.svg";
+import StartDateIcon from "../../assets/icons/TaskIcons/StartDateIcon.svg";
+import EndDateIcon from "../../assets/icons/TaskIcons/EndDateIcon.svg";
 import IconsIcon from "../../assets/icons/TaskIcons/IconsIcon.svg";
 import AttachmentIcon from "../../assets/icons/TaskIcons/AttachmentIcon.svg";
 import TaskListIcon from "../../assets/icons/TaskIcons/TaskslistIcon.svg";
 import ResourcesIcon from "../../assets/icons/TaskIcons/ResourcesIcon.svg";
-import { Resource, User, Icon } from "../../types";
+import { Resource, User, Icon, Attachment } from "../../types";
 import dayjs from "dayjs";
 
 type ListItemType = {
@@ -44,7 +45,7 @@ type AddTaskSidebarButtonsProps = {
   onMemberSelect: (member: User) => void;
   selectedIcon: Icon;
   onIconSelect: (icon: Icon) => void;
-  onAttachmentSelect: (attachment: File) => void;
+  onAttachmentSelect: (attachments: Attachment[]) => void;
   startDate: dayjs.Dayjs | null;
   endDate: dayjs.Dayjs | null;
   onStartDateChange: (date: dayjs.Dayjs | null) => void;
@@ -97,12 +98,12 @@ const AddTaskSidebarButtons = ({
     },
     {
       text: "Data rozpoczęcia",
-      icon: <img src={CalendarIcon} alt="Calendar" />,
+      icon: <img src={StartDateIcon} alt="Calendar" />,
       modal: "startDate",
     },
     {
       text: "Data zakończenia",
-      icon: <img src={CalendarIcon} alt="Calendar" />,
+      icon: <img src={EndDateIcon} alt="Calendar" />,
       modal: "endDate",
     },
     {

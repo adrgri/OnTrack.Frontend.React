@@ -3,12 +3,13 @@ import PopupLayout from "../../layout/PopupLayout";
 import SmallButton from "../../../styledComponents/SmallButton";
 import FolderIcon from "../../../assets/icons/FolderIcon.svg";
 import StyledSidedbarModalBox from "../../../styledComponents/StyledSidebarModalBox";
+import { Attachment } from "../../../types";
 
 interface AttachmentModalProps {
   open: boolean;
   anchorEl: HTMLButtonElement | null;
   onClose: () => void;
-  onAttachmentSelect: (attachment: File) => void;
+  onAttachmentSelect: (attachments: Attachment[]) => void;
 }
 
 const AttachmentModal: React.FC<AttachmentModalProps> = ({
@@ -17,15 +18,19 @@ const AttachmentModal: React.FC<AttachmentModalProps> = ({
   onClose,
   onAttachmentSelect,
 }) => {
-  const [file, setFile] = useState<File | null>(null);
+  const [files, setFiles] = useState<Attachment[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      setFile(file); // Set the selected file in the state
-      onAttachmentSelect(file); // Pass the File object to the parent's handler
+    const selectedFiles = event.target.files;
+    if (selectedFiles) {
+      const newFiles: Attachment[] = Array.from(selectedFiles).map((file) => ({
+        ...file,
+        url: URL.createObjectURL(file),
+        name: file.name,
+      }));
+
+      setFiles((prevFiles) => [...prevFiles, ...newFiles]);
     }
   };
 
@@ -34,9 +39,10 @@ const AttachmentModal: React.FC<AttachmentModalProps> = ({
   };
 
   const handleAddClick = () => {
-    if (file) {
-      onAttachmentSelect(file); // Assuming you want to pass the file name
+    if (files.length > 0) {
+      onAttachmentSelect(files);
       onClose();
+      console.log("Selected files:", files);
     }
   };
 
@@ -52,12 +58,15 @@ const AttachmentModal: React.FC<AttachmentModalProps> = ({
         icon={<img src={FolderIcon} alt="folder" />}
         showIcon={true}
       >
-        {file ? file.name : "Wybierz dokument lub zdjęcie"}
+        {files.length > 0
+          ? files.map((file) => <div key={file.url}>{file.name}</div>)
+          : "Wybierz dokumenty lub zdjęcia"}
       </StyledSidedbarModalBox>
 
       <input
         ref={fileInputRef}
         type="file"
+        multiple
         onChange={handleFileChange}
         style={{ display: "none" }}
       />

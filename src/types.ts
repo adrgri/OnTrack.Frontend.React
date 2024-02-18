@@ -18,11 +18,11 @@ export type Member = {
   avatar: string;
 };
 
-export type Attachment = {
-  id: string;
+export interface Attachment extends File {
+  id?: string;
   url: string;
   name: string;
-};
+}
 
 export type TaskListItem = {
   id: string;
