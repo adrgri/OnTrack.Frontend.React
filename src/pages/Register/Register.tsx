@@ -1,5 +1,5 @@
 import RegisterForm from "../../components/RegisterForm/RegisterForm";
-import OnTrackLogo from "../../assets/logos/OnTrackLogo.png";
+import Logo from "../../assets/logos/Logo.svg";
 
 const Register = () => {
   return (
@@ -11,12 +11,12 @@ const Register = () => {
       }}
     >
       <img
-        src={OnTrackLogo}
+        src={Logo}
         alt="OnTrack Logo"
         style={{
           position: "absolute",
           top: "50px",
-          maxWidth: "200px",
+          width: "240px",
           left: "50%",
           transform: "translateX(-50%)",
         }}

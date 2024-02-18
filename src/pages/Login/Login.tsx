@@ -2,8 +2,8 @@ import { useState } from "react";
 import LoginForm from "../../components/LoginForm/LoginForm";
 import ForgotPasswordModal from "../../components/ForgotPasswordModal/ForgotPasswordModal";
 import ResetPasswordModal from "../../components/ResetPasswordModal/ResetpasswordModal";
-import OnTrackLogo from "../../assets/logos/OnTrackLogo.png";
 import { useAuth } from "../../contexts/AuthContext";
+import Logo from "../../assets/logos/Logo.svg";
 
 const Login = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -35,12 +35,12 @@ const Login = () => {
       }}
     >
       <img
-        src={OnTrackLogo}
+        src={Logo}
         alt="OnTrack Logo"
         style={{
           position: "absolute",
           top: "50px",
-          maxWidth: "200px",
+          width: "240px",
           left: "50%",
           transform: "translateX(-50%)",
         }}

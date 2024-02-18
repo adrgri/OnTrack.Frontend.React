@@ -9,7 +9,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
 import Avatar from "@mui/material/Avatar";
 import MenuItem from "@mui/material/MenuItem";
-import OnTrackLogo from "../../assets/logos/OnTrackLogo.png";
+import Logo from "../../assets/logos/Logo.svg";
 import { useTheme } from "@mui/material/styles";
 
 import ExitIcon from "../../assets/icons/NavbarIcons/ExitIcon.svg";
@@ -76,7 +76,7 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            <img src={OnTrackLogo} alt="Logo" height={"30px"} />
+            <img src={Logo} alt="Logo" height={"30px"} />
           </Typography>
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
@@ -157,7 +157,7 @@ function ResponsiveAppBar() {
               textDecoration: "none",
             }}
           >
-            <img src={OnTrackLogo} alt="Logo" height={"30px"} />
+            <img src={Logo} alt="Logo" height={"30px"} />
           </Typography>
           <Box
             sx={{
