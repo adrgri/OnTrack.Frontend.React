@@ -9,7 +9,7 @@ import Gantt, {
 } from "devextreme-react/gantt";
 
 import { tasks, dependencies, resources, resourceAssignments } from "./data.ts";
-import TaskBoardNavigation from "../TaskBoardNavigation/TaskBoardNavigation.tsx";
+import TaskBoardNavigation from "../BoardNavigation/BoardNavigation.tsx";
 
 function App() {
   return (

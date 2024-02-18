@@ -1,7 +1,20 @@
+import React from "react";
 import { Box, ButtonGroup, Button } from "@mui/material";
 import { Link } from "react-router-dom";
 
-const TaskBoardNavigation = () => {
+interface BoardNavigationProps {
+  leftButtonLabel: string;
+  rightButtonLabel: string;
+  leftButtonLink: string;
+  rightButtonLink: string;
+}
+
+const BoardNavigation: React.FC<BoardNavigationProps> = ({
+  leftButtonLabel,
+  rightButtonLabel,
+  leftButtonLink,
+  rightButtonLink,
+}) => {
   return (
     <Box
       sx={{
@@ -23,7 +36,7 @@ const TaskBoardNavigation = () => {
       >
         <Button
           component={Link}
-          to="/home"
+          to={leftButtonLink}
           sx={{
             borderRadius: "5px 0 0 5px",
             boxShadow: "none",
@@ -34,11 +47,11 @@ const TaskBoardNavigation = () => {
             textTransform: "none",
           }}
         >
-          Moje zadania
+          {leftButtonLabel}
         </Button>
         <Button
           component={Link}
-          to="/tablica"
+          to={rightButtonLink}
           sx={{
             borderRadius: "0 5px 5px 0",
             boxShadow: "none",
@@ -47,17 +60,14 @@ const TaskBoardNavigation = () => {
             fontWeight: "500",
             padding: "5px 40px",
             width: "200px",
-            // "&:hover": {
-            //   backgroundColor: "#50557F", // Keep the same color on hover
-            // },
             textTransform: "none",
           }}
         >
-          Tablica
+          {rightButtonLabel}
         </Button>
       </ButtonGroup>
     </Box>
   );
 };
 
-export default TaskBoardNavigation;
+export default BoardNavigation;

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Grid, Button } from "@mui/material";
 import { Add as AddIcon } from "@mui/icons-material";
 import AddTaskModal from "../AddTaskModal/AddTaskModal";
-import TaskBoardNavigation from "../TaskBoardNavigation/TaskBoardNavigation";
+import BoardNavigation from "../BoardNavigation/BoardNavigation";
 import { useTaskStore } from "../../store/TaskStore";
 import { DragDropContext } from "react-beautiful-dnd";
 import { Column } from "../Column/Column";
@@ -70,7 +70,12 @@ const TasksBoard = () => {
         justifyContent="space-between"
       >
         <Grid item>
-          <TaskBoardNavigation />
+          <BoardNavigation
+            leftButtonLabel="Moje zadania"
+            rightButtonLabel="Tablica"
+            leftButtonLink="/home"
+            rightButtonLink="/tablica"
+          />
         </Grid>
         <Grid item>
           <Button
