@@ -13,7 +13,7 @@ import Logo from "../../assets/logos/Logo.svg";
 import { useTheme } from "@mui/material/styles";
 
 import ExitIcon from "../../assets/icons/NavbarIcons/ExitIcon.svg";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
 
 const navigationItems = [
@@ -159,41 +159,41 @@ function ResponsiveAppBar() {
           >
             <img src={Logo} alt="Logo" height={"30px"} />
           </Typography>
+
           <Box
             sx={{
               flexGrow: 1,
               display: { xs: "none", md: "flex" },
               justifyContent: "flex-end",
-
               paddingRight: 4,
             }}
           >
             {navigationItems.map((item) => (
-              <MenuItem
-                key={item.text}
-                sx={{
-                  my: 2.5,
-                  display: "block",
-                  color:
-                    item.text === "Wyjście"
-                      ? "#5E5F7D"
-                      : theme.palette.primary.main,
-                  ...(item.text === "Wyjście" && {
-                    ml: 6,
-                  }),
-                }}
-              >
-                <Link
+              <MenuItem key={item.text} onClick={handleCloseNavMenu}>
+                <NavLink
                   to={item.to}
-                  style={{ textDecoration: "none", color: "inherit" }}
+                  style={({ isActive }) => ({
+                    textDecoration: "none",
+                    color:
+                      item.text === "Wyjście"
+                        ? "#5E5F7D"
+                        : theme.palette.primary.main,
+                    borderBottom: isActive
+                      ? `2px solid ${theme.palette.primary.main}`
+                      : "none",
+                    marginLeft: item.text === "Wyjście" ? "50px" : 0,
+                  })}
+                  onClick={item.text === "Wyjście" ? handleLogout : undefined}
                 >
                   <div style={{ display: "flex", alignItems: "center" }}>
                     {item.icon}
-                    <Typography marginLeft={1} textAlign="center">
-                      {item.text}
-                    </Typography>
+                    {item.icon ? (
+                      <Typography marginLeft={1}>{item.text}</Typography>
+                    ) : (
+                      <Typography>{item.text}</Typography>
+                    )}
                   </div>
-                </Link>
+                </NavLink>
               </MenuItem>
             ))}
           </Box>
