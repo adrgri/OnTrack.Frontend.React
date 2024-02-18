@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
 import { useFormik } from "formik";
 
-import StyledDescriptionField from "../../styledComponents/StyledDescriptionField";
 import {
-  DialogContent,
   Dialog,
+  DialogContent,
   Typography,
   TextareaAutosize,
   Box,
@@ -13,11 +12,14 @@ import {
   Avatar,
   Stack,
 } from "@mui/material";
-import CloseButton from "../CloseButton/CloseButton";
+
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
+
 import AddTaskSidebarButtons from "../AddTaskSidebarButtons/AddTaskSidebarButtons";
 import { useTheme } from "@mui/material/styles";
 import SmallButton from "../../styledComponents/SmallButton";
+import StyledDescriptionField from "../../styledComponents/StyledDescriptionField";
+
 import {
   Task,
   TaskListItem,
@@ -26,35 +28,34 @@ import {
   Icon,
   Attachment,
 } from "../../types";
+
 import EditableText from "../EditableText/EditableText";
 import AttachmentIcon from "../../assets/icons/TaskIcons/AttachmentIcon.svg";
 import { useTaskStore } from "../../store/TaskStore";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
+import CloseButton from "../../components/CloseButton/CloseButton";
+
 import dayjs from "dayjs";
 import "dayjs/locale/pl";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 
 type AddTaskModalProps = {
   isOpen: boolean;
   handleClose: () => void;
-  // onAddTask: (task: { id: string; name: string; description?: string }) => void;
-  // handleAddResource: (resource: Resource) => void;
-  // selectedIcon: Icon;
   onIconSelect: (icon: Icon | null) => void;
-  // onAttachmentSelect: (attachment: Attachment[]) => void;
   selectedTask?: Task;
 };
 
 const taskValidationSchema = Yup.object({
   name: Yup.string()
-    .trim() // Trims whitespace from both ends of the string
-    .min(1, "Task name must contain at least 1 character.") // Ensures at least one character is present
+    .trim()
+    .min(1, "Task name must contain at least 1 character.")
     .required("Task name is required."),
-  // Include other fields and validation rules as needed
 });
 
 const AddTaskModal = ({
@@ -109,7 +110,6 @@ const AddTaskModal = ({
 
   useEffect(() => {
     if (selectedTask) {
-      // Pre-populate the states if editing an existing task
       setStartDate(
         selectedTask.startDate ? dayjs(selectedTask.startDate) : null
       );
@@ -118,17 +118,15 @@ const AddTaskModal = ({
       setSelectedMembers(selectedTask.members ?? []);
       setTasksList(selectedTask.taskList ?? []);
       setResources(selectedTask.resources ?? []);
-      // Ensure attachments is always an array, even if empty
       setAttachments(selectedTask.attachments ?? []);
     } else {
-      // Reset states for a new task
       setStartDate(null);
       setEndDate(null);
       setSelectedIcon(undefined);
       setTasksList([]);
       setResources([]);
       setSelectedMembers([]);
-      setAttachments([]); // Initialize as an empty array for new task
+      setAttachments([]);
     }
   }, [selectedTask, isOpen]);
 
@@ -534,7 +532,6 @@ const AddTaskModal = ({
                 endDate={endDate}
                 onStartDateChange={setStartDate}
                 onEndDateChange={setEndDate}
-                // taskId={selectedTask?.id}
               />
             </Box>
           </DialogContent>

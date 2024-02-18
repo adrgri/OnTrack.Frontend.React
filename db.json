@@ -99,110 +99,17 @@
       "status": "todo"
     },
     {
-      "id": "11fa",
-      "name": "nnnn",
+      "id": "b89c",
+      "name": "nnn",
       "description": "",
       "members": [],
       "startDate": null,
       "endDate": null,
-      "icon": null,
-      "attachments": [
-        {}
-      ],
-      "taskList": [],
-      "resources": [],
-      "status": "todo"
-    },
-    {
-      "id": "5afd",
-      "name": "sss",
-      "description": "",
-      "members": [],
-      "startDate": null,
-      "endDate": null,
-      "icon": null,
-      "attachments": [
-        {}
-      ],
-      "taskList": [],
-      "resources": [],
-      "status": "todo"
-    },
-    {
-      "id": "55cb",
-      "name": "att",
-      "description": "",
-      "members": [],
-      "startDate": null,
-      "endDate": null,
-      "icon": null,
-      "attachments": [
-        {
-          "url": "blob:http://localhost:3000/8b6898ab-7794-47f7-9c98-94b43d9e7b2c"
-        }
-      ],
-      "taskList": [],
-      "resources": [],
-      "status": "todo"
-    },
-    {
-      "id": "79b3",
-      "name": "ddd",
-      "description": "",
-      "members": [],
-      "startDate": null,
-      "endDate": null,
-      "icon": null,
-      "attachments": [
-        {
-          "url": "blob:http://localhost:3000/e302364e-b92b-4bca-9c10-c382e3d27b4d",
-          "name": "Group 6.svg"
-        }
-      ],
-      "taskList": [],
-      "resources": [],
-      "status": "todo"
-    },
-    {
-      "id": "3618",
-      "name": "dd",
-      "description": "",
-      "members": [],
-      "startDate": null,
-      "endDate": null,
-      "icon": null,
-      "attachments": [
-        {
-          "url": "blob:http://localhost:3000/f5c7955f-f7c2-4e55-92cd-7fe5cdcfb2d5",
-          "name": "Group 7.svg"
-        },
-        {
-          "url": "blob:http://localhost:3000/dd61cd53-d11f-43bc-9465-c8177bbe9459",
-          "name": "Group 6.svg"
-        }
-      ],
-      "taskList": [],
-      "resources": [],
-      "status": "todo"
-    },
-    {
-      "id": "a29f",
-      "name": "mmm",
-      "description": "",
-      "members": [],
-      "startDate": null,
-      "endDate": null,
-      "icon": null,
-      "attachments": [
-        {
-          "url": "blob:http://localhost:3000/5bd2f1e0-e8e3-40a6-b751-4d85f28377a9",
-          "name": "LOGO.svg"
-        },
-        {
-          "url": "blob:http://localhost:3000/e2d73228-01a6-4a93-a89a-129f89b072d5",
-          "name": "Group 6.svg"
-        }
-      ],
+      "icon": {
+        "iconName": "settings",
+        "imageUrl": "/src/assets/icons/IconsIcons/SettingsIcon.svg"
+      },
+      "attachments": [],
       "taskList": [],
       "resources": [],
       "status": "todo"

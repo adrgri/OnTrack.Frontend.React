@@ -43,7 +43,7 @@ type AddTaskSidebarButtonsProps = {
   addTaskList: (taskText: string) => void;
   handleAddResource: (resource: Resource) => void;
   onMemberSelect: (member: User) => void;
-  selectedIcon?: Icon | undefined;
+  selectedIcon: Icon | undefined;
   onIconSelect: (icon: Icon) => void;
   onAttachmentSelect: (attachments: Attachment[]) => void;
   startDate: dayjs.Dayjs | null;

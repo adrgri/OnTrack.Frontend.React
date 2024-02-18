@@ -17,7 +17,7 @@ interface IconsModalProps {
   open: boolean;
   anchorEl: HTMLButtonElement | null;
   onClose: () => void;
-  selectedIcon?: Icon | undefined;
+  selectedIcon: Icon | undefined;
   onIconSelect: (icon: Icon) => void;
 }
 
@@ -43,7 +43,6 @@ const IconsModal: React.FC<IconsModalProps> = ({
 
   const handleIconSelect = (icon: Icon) => {
     onIconSelect(icon);
-    // console.log("Selected icon from IconsModal:", icon);
   };
 
   const handleUploadClick = () => {
