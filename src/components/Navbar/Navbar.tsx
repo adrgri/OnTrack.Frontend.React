@@ -169,7 +169,11 @@ function ResponsiveAppBar() {
             }}
           >
             {navigationItems.map((item) => (
-              <MenuItem key={item.text} onClick={handleCloseNavMenu}>
+              <MenuItem
+                key={item.text}
+                onClick={handleCloseNavMenu}
+                sx={{ marginLeft: item.text === "Wyjście" ? "50px" : 0 }}
+              >
                 <NavLink
                   to={item.to}
                   style={({ isActive }) => ({
@@ -181,7 +185,6 @@ function ResponsiveAppBar() {
                     borderBottom: isActive
                       ? `2px solid ${theme.palette.primary.main}`
                       : "none",
-                    marginLeft: item.text === "Wyjście" ? "50px" : 0,
                   })}
                   onClick={item.text === "Wyjście" ? handleLogout : undefined}
                 >
