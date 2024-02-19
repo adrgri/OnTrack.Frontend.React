@@ -8,40 +8,26 @@ import {
   Avatar,
   Stack,
 } from "@mui/material";
-import CircularProgress, {
-  CircularProgressProps,
-} from "@mui/material/CircularProgress";
+
 import { useProjectStore } from "../../store/ProjectStore";
-import dayjs from "dayjs";
-import "dayjs/locale/pl";
 import TasksIcon from "../../assets/icons/TasksIcon.svg";
 import DateChip from "../CardComponents/DateChip";
+import CircularProgressWithLabel from "../CardComponents/CircularProgressWithLabel";
 
 interface TaskCardProps {
   projectId: string;
   handleTaskClick: () => void;
 }
 
-type ProjectCardProps = TaskCardProps & CircularProgressProps;
-
-const ProjectCard: React.FC<ProjectCardProps> = ({
+const ProjectCard: React.FC<TaskCardProps> = ({
   projectId,
   handleTaskClick,
-  ...circularProgressProps
 }) => {
   const project = useProjectStore((state) =>
     state.projects.find((p) => p.id === projectId)
   );
 
   const progress = project?.progress ?? 0;
-
-  const formatDate = (date: dayjs.Dayjs | null) => {
-    if (!date) {
-      return "";
-    }
-
-    return date.format("DD MMM");
-  };
 
   const additionalMembersCount = (project?.members?.length || 0) - 2;
 
@@ -142,46 +128,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             justifyContent={"space-between"}
           >
             <Grid item xs={true} container justifyContent="center">
-              <Box sx={{ position: "relative", display: "inline-flex" }}>
-                {/* Background circle */}
-                <CircularProgress
-                  variant="determinate"
-                  value={100}
-                  size={100}
-                  sx={{
-                    color: "#5E5F7D",
-                  }}
-                />
-                {/* Progress circle */}
-                <CircularProgress
-                  variant="determinate"
-                  {...circularProgressProps}
-                  value={progress}
-                  size={100}
-                  sx={{
-                    position: "absolute",
-                    left: 0,
-                  }}
-                />
-                <Box
-                  sx={{
-                    top: 0,
-                    left: 0,
-                    bottom: 0,
-                    right: 0,
-                    position: "absolute",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  <Typography
-                    variant="caption"
-                    component="div"
-                    color="primary.main"
-                  >{`${Math.round(progress)}%`}</Typography>
-                </Box>
-              </Box>
+              <CircularProgressWithLabel value={progress} />
             </Grid>
 
             <Grid
