@@ -78,3 +78,12 @@ export type RegistrationResult = {
   success: boolean;
   message?: string;
 };
+
+export type Project = {
+  id: string;
+  name: string;
+  members: User[];
+  endDate: dayjs.Dayjs | null | undefined | string;
+  tasksAmount: number;
+  progress: number;
+};

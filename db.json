@@ -114,5 +114,100 @@
       "resources": [],
       "status": "todo"
     }
+  ],
+  "projects": [
+    {
+      "id": "1",
+      "name": "Project Alpha",
+      "members": [
+        {
+          "id": 1,
+          "firstName": "Alice",
+          "lastName": "Johnson",
+          "email": "Alice@me.com",
+          "avatar": "https://i.pravatar.cc/150?img=3"
+        },
+        {
+          "id": 1,
+          "firstName": "Alice",
+          "lastName": "Johnson",
+          "email": "Alice@me.com",
+          "avatar": "https://i.pravatar.cc/150?img=2"
+        },
+        {
+          "id": 1,
+          "firstName": "Alice",
+          "lastName": "Johnson",
+          "email": "Alice@me.com",
+          "avatar": "https://i.pravatar.cc/150?img=2"
+        },
+        {
+          "id": 1,
+          "firstName": "Alice",
+          "lastName": "Johnson",
+          "email": "Alice@me.com",
+          "avatar": "https://i.pravatar.cc/150?img=3"
+        },
+        {
+          "id": 1,
+          "firstName": "Alice",
+          "lastName": "Johnson",
+          "email": "Alice@me.com",
+          "avatar": "https://i.pravatar.cc/150?img=2"
+        },
+        {
+          "id": 1,
+          "firstName": "Alice",
+          "lastName": "Johnson",
+          "email": "Alice@me.com",
+          "avatar": "https://i.pravatar.cc/150?img=2"
+        }
+      ],
+      "endDate": "2022-12-13T00:00:00.000Z",
+      "tasksAmount": 50,
+      "progress": 50
+    },
+    {
+      "id": "2",
+      "name": "Project Beta",
+      "members": [
+        {
+          "id": "1",
+          "name": "John Doe",
+          "avatar": "https://i.pravatar.cc/150?img=27"
+        }
+      ],
+      "endDate": "2022-12-13T00:00:00.000Z",
+      "tasksAmount": 40,
+      "progress": 75
+    },
+    {
+      "id": "3",
+      "name": "Project Gamma",
+      "members": [
+        {
+          "id": "1",
+          "name": "John Doe",
+          "avatar": "https://i.pravatar.cc/150?img=22"
+        }
+      ],
+      "endDate": "2022-12-13T00:00:00.000Z",
+      "tasksAmount": 30,
+      "progress": 40
+    },
+    {
+      "id": "4",
+      "name": "Project Delta",
+      "members": [
+        {
+          "id": "1",
+          "name": "John Doe",
+          "avatar": "https://i.pravatar.cc/150?img=66"
+        }
+      ],
+      "endDate": "2022-12-13T00:00:00.000Z",
+      "tasksAmount": 1,
+      "progress": 90
+    }
   ]
 }

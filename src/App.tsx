@@ -19,6 +19,7 @@ const Register = lazy(() => import("./pages/Register/Register"));
 const Settings = lazy(() => import("./pages/Settings/Settings"));
 const Tablica = lazy(() => import("./pages/Tablica/Tablica"));
 const Home = lazy(() => import("./pages/Home/Home"));
+const Projects = lazy(() => import("./pages/Projects/Projects"));
 
 function App() {
   return (
@@ -69,6 +70,14 @@ function App() {
                 element={
                   // <ProtectedRoute>
                   <Home />
+                  // </ProtectedRoute>
+                }
+              />
+              <Route
+                path="/projects"
+                element={
+                  // <ProtectedRoute>
+                  <Projects />
                   // </ProtectedRoute>
                 }
               />
