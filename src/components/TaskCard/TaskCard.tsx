@@ -1,16 +1,7 @@
 import React from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Avatar,
-  Grid,
-  Chip,
-} from "@mui/material";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import { Card, CardContent, Typography, Avatar, Grid } from "@mui/material";
 import { useTaskStore } from "../../store/TaskStore";
-import dayjs from "dayjs";
-import "dayjs/locale/pl";
+import DateChip from "../CardComponents/DateChip";
 
 type TaskCardProps = {
   taskId: string;
@@ -21,14 +12,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskId, handleTaskClick }) => {
   const task = useTaskStore((state) =>
     state.tasks.find((t) => t.id === taskId)
   );
-
-  const formatDate = (date: dayjs.Dayjs | null) => {
-    if (!date) {
-      return "";
-    }
-
-    return date.format("DD MMM");
-  };
 
   return (
     <Card
@@ -64,18 +47,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskId, handleTaskClick }) => {
 
           <Grid item container xs={12} alignItems="center" spacing={2}>
             <Grid item xs={true}>
-              {task?.endDate && (
-                <Chip
-                  icon={<AccessTimeIcon />}
-                  color="primary"
-                  label={formatDate(dayjs(task.endDate))}
-                  size="small"
-                  sx={{
-                    borderRadius: 0,
-                    fontSize: "13px",
-                  }}
-                />
-              )}
+              {task?.endDate && <DateChip date={task.endDate} />}
             </Grid>
 
             <Grid item xs={true} container justifyContent="flex-end">

@@ -5,18 +5,17 @@ import {
   Typography,
   Box,
   Grid,
-  Chip,
   Avatar,
   Stack,
 } from "@mui/material";
 import CircularProgress, {
   CircularProgressProps,
 } from "@mui/material/CircularProgress";
-import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import { useProjectStore } from "../../store/ProjectStore";
 import dayjs from "dayjs";
 import "dayjs/locale/pl";
 import TasksIcon from "../../assets/icons/TasksIcon.svg";
+import DateChip from "../CardComponents/DateChip";
 
 interface TaskCardProps {
   projectId: string;
@@ -44,7 +43,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     return date.format("DD MMM");
   };
 
-  const additionalMembersCount = project?.members?.length - 2;
+  const additionalMembersCount = (project?.members?.length || 0) - 2;
 
   return (
     <Card
@@ -130,18 +129,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
             <Grid item container xs={12} alignItems="center" spacing={2}>
               <Grid item xs={true}>
-                {project?.endDate && (
-                  <Chip
-                    icon={<AccessTimeIcon />}
-                    color="primary"
-                    label={formatDate(dayjs(project.endDate))}
-                    size="small"
-                    sx={{
-                      borderRadius: 0,
-                      fontSize: "13px",
-                    }}
-                  />
-                )}
+                {project?.endDate && <DateChip date={project.endDate} />}
               </Grid>
             </Grid>
           </Grid>

@@ -160,7 +160,7 @@
           "firstName": "Alice",
           "lastName": "Johnson",
           "email": "Alice@me.com",
-          "avatar": "https://i.pravatar.cc/150?img=2"
+          "avatar": "https://i.pravatar.cc/150?img=26"
         }
       ],
       "endDate": "2022-12-13T00:00:00.000Z",
@@ -174,7 +174,7 @@
         {
           "id": "1",
           "name": "John Doe",
-          "avatar": "https://i.pravatar.cc/150?img=27"
+          "avatar": "https://i.pravatar.cc/150?img=24"
         }
       ],
       "endDate": "2022-12-13T00:00:00.000Z",
@@ -202,7 +202,7 @@
         {
           "id": "1",
           "name": "John Doe",
-          "avatar": "https://i.pravatar.cc/150?img=66"
+          "avatar": "https://i.pravatar.cc/150?img=6"
         }
       ],
       "endDate": "2022-12-13T00:00:00.000Z",
