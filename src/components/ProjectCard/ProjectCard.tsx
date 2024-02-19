@@ -155,12 +155,25 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           >
             <Grid item xs={true} container justifyContent="center">
               <Box sx={{ position: "relative", display: "inline-flex" }}>
+                {/* Background circle */}
+                <CircularProgress
+                  variant="determinate"
+                  value={100}
+                  size={100}
+                  sx={{
+                    color: "#5E5F7D",
+                  }}
+                />
+                {/* Progress circle */}
                 <CircularProgress
                   variant="determinate"
                   {...circularProgressProps}
                   value={progress}
                   size={100}
-                  thickness={3}
+                  sx={{
+                    position: "absolute",
+                    left: 0,
+                  }}
                 />
                 <Box
                   sx={{
