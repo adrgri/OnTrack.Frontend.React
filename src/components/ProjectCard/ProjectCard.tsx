@@ -1,18 +1,10 @@
 import React from "react";
-import {
-  Card,
-  CardContent,
-  Typography,
-  Box,
-  Grid,
-  Avatar,
-  Stack,
-} from "@mui/material";
-
+import { Card, CardContent, Typography, Grid, Stack } from "@mui/material";
 import { useProjectStore } from "../../store/ProjectStore";
 import TasksIcon from "../../assets/icons/TasksIcon.svg";
 import DateChip from "../CardComponents/DateChip";
 import CircularProgressWithLabel from "../CardComponents/CircularProgressWithLabel";
+import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
 
 interface TaskCardProps {
   projectId: string;
@@ -28,8 +20,6 @@ const ProjectCard: React.FC<TaskCardProps> = ({
   );
 
   const progress = project?.progress ?? 0;
-
-  const additionalMembersCount = (project?.members?.length || 0) - 2;
 
   return (
     <Card
@@ -60,60 +50,24 @@ const ProjectCard: React.FC<TaskCardProps> = ({
               <Typography>{project?.name}</Typography>
             </Grid>
 
-            <Grid item xs={12} mb={2} alignItems="center">
-              {project && project?.members?.length > 0 && (
-                <Stack spacing={2} mb={4}>
-                  <Typography variant="subtitle2" color="text.secondary">
-                    Zespół
-                  </Typography>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      position: "relative",
-                      pt: 1,
-                    }}
-                  >
-                    {project?.members?.slice(0, 2).map((user, index) => (
-                      <Avatar
-                        key={user.id}
-                        src={user.avatar}
-                        alt={`${user.firstName} ${user.lastName}`}
-                        sx={{
-                          width: 40,
-                          height: 40,
-                          border: "2px solid white",
-                          position: "absolute",
-                          left: `${index * 25}px`,
-                          zIndex: 1,
-                        }}
-                      />
-                    ))}
-
-                    {additionalMembersCount > 0 && (
-                      <Box
-                        sx={{
-                          width: 40,
-                          height: 40,
-                          backgroundColor: "grey",
-                          borderRadius: "50%",
-                          position: "absolute",
-                          left: `${2 * 25}px`,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          zIndex: 0,
-                        }}
-                      >
-                        <Typography color="white">{`+${additionalMembersCount}`}</Typography>
-                      </Box>
-                    )}
-                  </Box>
-                </Stack>
-              )}
+            <Grid item xs={12}>
+              <Stack
+                spacing={2}
+                mb={2}
+                sx={{
+                  "& > :not(style) ~ :not(style)": {
+                    mt: 0,
+                  },
+                }}
+              >
+                <Typography variant="subtitle2" color="text.secondary">
+                  Zespół
+                </Typography>
+                <MembersAvatarsRow members={project?.members ?? []} />
+              </Stack>
             </Grid>
 
-            <Grid item container xs={12} alignItems="center" spacing={2}>
+            <Grid item xs={12}>
               <Grid item xs={true}>
                 {project?.endDate && <DateChip date={project.endDate} />}
               </Grid>

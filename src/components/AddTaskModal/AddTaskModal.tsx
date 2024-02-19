@@ -9,7 +9,6 @@ import {
   Box,
   FormControlLabel,
   Checkbox,
-  Avatar,
   Stack,
 } from "@mui/material";
 
@@ -43,6 +42,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 import * as Yup from "yup";
 import { toast } from "react-toastify";
+import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
 
 type AddTaskModalProps = {
   isOpen: boolean;
@@ -198,8 +198,6 @@ const AddTaskModal = ({
     ]);
   };
 
-  const additionalMembersCount = selectedMembers.length - 2;
-
   const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
     useState(false);
 
@@ -308,48 +306,7 @@ const AddTaskModal = ({
               {selectedMembers.length > 0 && (
                 <Stack spacing={2}>
                   <Typography variant="subtitle1">Członkowie</Typography>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      position: "relative",
-                    }}
-                  >
-                    {selectedMembers.slice(0, 2).map((user, index) => (
-                      <Avatar
-                        key={user.id}
-                        src={user.avatar}
-                        alt={`${user.firstName} ${user.lastName}`}
-                        sx={{
-                          width: 40,
-                          height: 40,
-                          border: "2px solid white",
-                          position: "absolute",
-                          left: `${index * 25}px`,
-                          zIndex: 1,
-                        }}
-                      />
-                    ))}
-
-                    {additionalMembersCount > 0 && (
-                      <Box
-                        sx={{
-                          width: 40,
-                          height: 40,
-                          backgroundColor: "grey",
-                          borderRadius: "50%",
-                          position: "absolute",
-                          left: `${2 * 25}px`,
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          zIndex: 0,
-                        }}
-                      >
-                        <Typography color="white">{`+${additionalMembersCount}`}</Typography>
-                      </Box>
-                    )}
-                  </Box>
+                  <MembersAvatarsRow members={selectedMembers ?? []} />
                 </Stack>
               )}
 

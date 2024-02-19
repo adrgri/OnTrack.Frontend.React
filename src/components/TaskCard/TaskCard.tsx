@@ -1,7 +1,8 @@
 import React from "react";
-import { Card, CardContent, Typography, Avatar, Grid } from "@mui/material";
+import { Card, CardContent, Typography, Grid } from "@mui/material";
 import { useTaskStore } from "../../store/TaskStore";
 import DateChip from "../CardComponents/DateChip";
+import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
 
 type TaskCardProps = {
   taskId: string;
@@ -51,19 +52,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskId, handleTaskClick }) => {
             </Grid>
 
             <Grid item xs={true} container justifyContent="flex-end">
-              {task?.members?.map((member) => (
-                <Grid item key={member.id}>
-                  <Avatar
-                    src={member.avatar}
-                    alt={`${member.firstName} ${member.lastName}`}
-                    sx={{
-                      width: 24,
-                      height: 24,
-                      marginLeft: 1,
-                    }}
-                  />
-                </Grid>
-              ))}
+              <MembersAvatarsRow members={task?.members ?? []} />
             </Grid>
           </Grid>
         </Grid>
