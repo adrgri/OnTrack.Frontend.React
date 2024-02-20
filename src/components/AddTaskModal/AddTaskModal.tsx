@@ -43,6 +43,7 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
+import EntityIcon from "../CardComponents/EntityIcon";
 
 type AddTaskModalProps = {
   isOpen: boolean;
@@ -290,16 +291,11 @@ const AddTaskModal = ({
                   placeholder="Wpisz nazwe zadania"
                 />
 
-                {selectedIcon && (
-                  <img
-                    src={selectedIcon.imageUrl}
-                    alt={selectedIcon.iconName}
-                    style={{
-                      width: "20px",
-                      height: "20px",
-                    }}
-                  />
-                )}
+                <EntityIcon
+                  icon={selectedIcon}
+                  style={{ width: "20px", height: "20px" }}
+                />
+
                 <CloseButton onClick={handleClose} right={20} top={20} />
               </Box>
 

@@ -1,17 +1,18 @@
 import React from "react";
-import { Card, CardContent, Typography, Grid, Stack } from "@mui/material";
+import { Typography, Grid, Stack } from "@mui/material";
 import { useProjectStore } from "../../store/ProjectStore";
 import TasksIcon from "../../assets/icons/TasksIcon.svg";
 import DateChip from "../CardComponents/DateChip";
 import CircularProgressWithLabel from "../CardComponents/CircularProgressWithLabel";
 import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
+import GenericCard from "../GenericCard/GenericCard";
 
-interface TaskCardProps {
+interface ProjectCardProps {
   projectId: string;
   handleTaskClick: () => void;
 }
 
-const ProjectCard: React.FC<TaskCardProps> = ({
+const ProjectCard: React.FC<ProjectCardProps> = ({
   projectId,
   handleTaskClick,
 }) => {
@@ -22,88 +23,72 @@ const ProjectCard: React.FC<TaskCardProps> = ({
   const progress = project?.progress ?? 0;
 
   return (
-    <Card
-      sx={{
-        my: 2,
-        boxShadow: 3,
-        transition: "border-color 0.4s ease-in-out",
-        border: 2,
-        borderRadius: "5px",
-        borderColor: "transparent",
-        "&:hover": {
-          borderColor: "primary.main",
-        },
-        width: "400px",
-      }}
-      onClick={handleTaskClick}
-    >
-      <CardContent>
+    <GenericCard onClick={handleTaskClick} sx={{ width: "400px" }}>
+      <Grid
+        container
+        direction="row"
+        spacing={2}
+        alignItems="center"
+        justifyContent={"space-between"}
+      >
+        <Grid item direction="column" spacing={2}>
+          <Grid item xs={12} mb={2} alignItems="center">
+            <Typography>{project?.name}</Typography>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Stack
+              spacing={2}
+              mb={2}
+              sx={{
+                "& > :not(style) ~ :not(style)": {
+                  mt: 0,
+                },
+              }}
+            >
+              <Typography variant="subtitle2" color="text.secondary">
+                Zespół
+              </Typography>
+              <MembersAvatarsRow members={project?.members ?? []} />
+            </Stack>
+          </Grid>
+
+          <Grid item xs={12}>
+            <Grid item xs={true}>
+              {project?.endDate && <DateChip date={project.endDate} />}
+            </Grid>
+          </Grid>
+        </Grid>
+
         <Grid
-          container
-          direction="row"
+          item
+          direction="column"
           spacing={2}
           alignItems="center"
           justifyContent={"space-between"}
         >
-          <Grid item direction="column" spacing={2}>
-            <Grid item xs={12} mb={2} alignItems="center">
-              <Typography>{project?.name}</Typography>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Stack
-                spacing={2}
-                mb={2}
-                sx={{
-                  "& > :not(style) ~ :not(style)": {
-                    mt: 0,
-                  },
-                }}
-              >
-                <Typography variant="subtitle2" color="text.secondary">
-                  Zespół
-                </Typography>
-                <MembersAvatarsRow members={project?.members ?? []} />
-              </Stack>
-            </Grid>
-
-            <Grid item xs={12}>
-              <Grid item xs={true}>
-                {project?.endDate && <DateChip date={project.endDate} />}
-              </Grid>
-            </Grid>
+          <Grid item xs={true} container justifyContent="center">
+            <CircularProgressWithLabel value={progress} />
           </Grid>
 
           <Grid
             item
-            direction="column"
-            spacing={2}
+            xs={12}
+            mt={2}
+            container
             alignItems="center"
-            justifyContent={"space-between"}
+            justifyContent="center"
           >
-            <Grid item xs={true} container justifyContent="center">
-              <CircularProgressWithLabel value={progress} />
-            </Grid>
-
-            <Grid
-              item
-              xs={12}
-              mt={2}
-              container
-              alignItems="center"
-              justifyContent="center"
-            >
-              <img src={TasksIcon} alt="Tasks" />
-              <Typography variant="subtitle2" color="text.secondary" ml={1}>
-                {project?.tasksAmount === 1
-                  ? `${project?.tasksAmount} zadanie`
-                  : `${project?.tasksAmount} zadań`}
-              </Typography>
-            </Grid>
+            <img src={TasksIcon} alt="Tasks" />
+            <Typography variant="subtitle2" color="text.secondary" ml={1}>
+              {`${project?.tasksAmount ?? 0} ${
+                project?.tasksAmount === 1 ? "zadanie" : "zadań"
+              }`}
+            </Typography>
           </Grid>
         </Grid>
-      </CardContent>
-    </Card>
+      </Grid>
+    </GenericCard>
   );
 };
 

@@ -3,7 +3,7 @@
     {
       "id": "1",
       "name": "Design the new landing page 2",
-      "status": "todo",
+      "status": "inProgress",
       "startDate": "2022-12-30T00:00:00.000Z",
       "endDate": "2022-12-31T00:00:00.000Z",
       "icon": {
@@ -73,7 +73,7 @@
     {
       "id": "4",
       "name": "Deploy the application to production",
-      "status": "inProgress",
+      "status": "todo",
       "startDate": "2022-12-02T00:00:00.000Z",
       "endDate": "2022-12-07T00:00:00.000Z",
       "members": [
