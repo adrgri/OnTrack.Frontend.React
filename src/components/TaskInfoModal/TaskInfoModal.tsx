@@ -19,20 +19,13 @@ import { useTheme } from "@mui/material/styles";
 import SmallButton from "../../styledComponents/SmallButton";
 import StyledDescriptionField from "../../styledComponents/StyledDescriptionField";
 
-import {
-  Task,
-  TaskListItem,
-  Resource,
-  User,
-  Icon,
-  Attachment,
-} from "../../types";
+import { TaskListItem, Resource, User, Icon, Attachment } from "../../types";
 
 import EditableText from "../EditableText/EditableText";
 import AttachmentIcon from "../../assets/icons/TaskIcons/AttachmentIcon.svg";
 import { useTaskStore } from "../../store/TaskStore";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
-import CloseButton from "../../components/CloseButton/CloseButton";
+import CloseButton from "../CloseButton/CloseButton";
 
 import dayjs from "dayjs";
 import "dayjs/locale/pl";
@@ -48,8 +41,7 @@ import EntityIcon from "../CardComponents/EntityIcon";
 type AddTaskModalProps = {
   isOpen: boolean;
   handleClose: () => void;
-  onIconSelect: (icon: Icon | null) => void;
-  selectedTask?: Task;
+  taskId?: string | null;
 };
 
 const taskValidationSchema = Yup.object({
@@ -59,12 +51,9 @@ const taskValidationSchema = Yup.object({
     .required("Task name is required."),
 });
 
-const AddTaskModal = ({
-  isOpen,
-  handleClose,
-  onIconSelect,
-  selectedTask,
-}: AddTaskModalProps) => {
+const AddTaskModal = ({ isOpen, handleClose, taskId }: AddTaskModalProps) => {
+  const task = useTaskStore((state) => state.getTaskById(taskId ?? ""));
+
   const [tasksList, setTasksList] = useState<TaskListItem[]>([]);
   const [resources, setResources] = useState<Resource[]>([]);
   const [selectedMembers, setSelectedMembers] = useState<User[]>([]);
@@ -72,10 +61,10 @@ const AddTaskModal = ({
   const [attachments, setAttachments] = useState<Attachment[]>();
   const { addTask, updateTask, deleteTask } = useTaskStore();
   const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(
-    selectedTask ? dayjs(selectedTask.startDate) : null
+    task ? dayjs(task.startDate) : null
   );
   const [endDate, setEndDate] = useState<dayjs.Dayjs | null>(
-    selectedTask ? dayjs(selectedTask.endDate) : null
+    task ? dayjs(task.endDate) : null
   );
 
   const handleAttachmentSelect = (newAttachments: Attachment[]) => {
@@ -87,7 +76,6 @@ const AddTaskModal = ({
 
   const handleIconSelect = (icon: Icon) => {
     setSelectedIcon(icon);
-    onIconSelect(icon);
   };
 
   const handleMemberSelect = (selectedMember: User) => {
@@ -110,16 +98,14 @@ const AddTaskModal = ({
   };
 
   useEffect(() => {
-    if (selectedTask) {
-      setStartDate(
-        selectedTask.startDate ? dayjs(selectedTask.startDate) : null
-      );
-      setEndDate(selectedTask.endDate ? dayjs(selectedTask.endDate) : null);
-      setSelectedIcon(selectedTask.icon ?? undefined);
-      setSelectedMembers(selectedTask.members ?? []);
-      setTasksList(selectedTask.taskList ?? []);
-      setResources(selectedTask.resources ?? []);
-      setAttachments(selectedTask.attachments ?? []);
+    if (task) {
+      setStartDate(task.startDate ? dayjs(task.startDate) : null);
+      setEndDate(task.endDate ? dayjs(task.endDate) : null);
+      setSelectedIcon(task.icon ?? undefined);
+      setSelectedMembers(task.members ?? []);
+      setTasksList(task.taskList ?? []);
+      setResources(task.resources ?? []);
+      setAttachments(task.attachments ?? []);
     } else {
       setStartDate(null);
       setEndDate(null);
@@ -129,19 +115,19 @@ const AddTaskModal = ({
       setSelectedMembers([]);
       setAttachments([]);
     }
-  }, [selectedTask, isOpen]);
+  }, [task, isOpen]);
 
   const formik = useFormik({
     initialValues: {
-      name: selectedTask?.name ?? "",
-      description: selectedTask?.description ?? "",
-      members: selectedTask?.members ?? [],
-      startDate: selectedTask?.startDate ?? null,
-      endDate: selectedTask?.endDate ?? null,
-      icon: selectedTask?.icon ?? null,
-      attachments: selectedTask?.attachments ?? [],
-      taskList: selectedTask?.taskList ?? [],
-      resources: selectedTask?.resources ?? [],
+      name: task?.name ?? "",
+      description: task?.description ?? "",
+      members: task?.members ?? [],
+      startDate: task?.startDate ?? null,
+      endDate: task?.endDate ?? null,
+      icon: task?.icon ?? null,
+      attachments: task?.attachments ?? [],
+      taskList: task?.taskList ?? [],
+      resources: task?.resources ?? [],
     },
 
     validationSchema: taskValidationSchema,
@@ -164,11 +150,11 @@ const AddTaskModal = ({
         attachments: attachments ?? [],
         taskList: tasksList,
         resources: resources,
-        status: selectedTask ? selectedTask.status : "todo",
+        status: task ? task.status : "todo",
       };
 
-      if (selectedTask?.id) {
-        updateTask(selectedTask.id, taskData)
+      if (task?.id) {
+        updateTask(task.id, taskData)
           .then(() => {
             toast.success("Task updated successfully!");
             handleClose();
@@ -185,7 +171,6 @@ const AddTaskModal = ({
 
       resetForm();
       setSubmitting(false);
-      onIconSelect(null);
     },
     enableReinitialize: true,
   });
@@ -206,8 +191,8 @@ const AddTaskModal = ({
     setIsConfirmDeleteModalOpen(true);
   };
   const handleDeleteConfirm = () => {
-    if (selectedTask?.id) {
-      deleteTask(selectedTask.id)
+    if (task?.id) {
+      deleteTask(task.id)
         .then(() => {
           console.log("Task deleted successfully");
           setIsConfirmDeleteModalOpen(false);
@@ -232,8 +217,8 @@ const AddTaskModal = ({
   }, [attachments]);
 
   useEffect(() => {
-    console.log("Selected task from useEffect:", selectedTask);
-  }, [selectedTask]);
+    console.log("Selected task from useEffect:", task);
+  }, [task]);
 
   useEffect(() => {
     console.log("Selected icon from useEffect:", selectedIcon);

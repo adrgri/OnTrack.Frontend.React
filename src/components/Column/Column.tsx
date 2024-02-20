@@ -1,8 +1,21 @@
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import TaskCard from "../TaskCard/TaskCard";
 import { Typography, Box } from "@mui/material";
+import { TaskListItem } from "../../types";
 
-export const Column = ({ columnId, title, tasks, handleTaskClick }) => {
+type ColumnProps = {
+  columnId: string;
+  title: string;
+  tasks: TaskListItem[];
+  handleTaskClick: (taskId: string) => void;
+};
+
+export const Column = ({
+  columnId,
+  title,
+  tasks,
+  handleTaskClick,
+}: ColumnProps) => {
   return (
     <Droppable droppableId={columnId}>
       {(provided, snapshot) => (

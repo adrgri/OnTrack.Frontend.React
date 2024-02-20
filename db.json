@@ -3,7 +3,7 @@
     {
       "id": "1",
       "name": "Design the new landing page 2",
-      "status": "inProgress",
+      "status": "done",
       "startDate": "2022-12-30T00:00:00.000Z",
       "endDate": "2022-12-31T00:00:00.000Z",
       "icon": {
@@ -41,7 +41,7 @@
     {
       "id": "1fefe",
       "name": "Design the new landing page",
-      "status": "done",
+      "status": "todo",
       "startDate": "2022-12-30T00:00:00.000Z",
       "endDate": "2022-12-31T00:00:00.000Z",
       "members": [
@@ -57,7 +57,7 @@
     {
       "id": "2",
       "name": "Implement authentication logic",
-      "status": "inProgress",
+      "status": "done",
       "startDate": "2022-11-30T00:00:00.000Z",
       "endDate": "2022-11-31T00:00:00.000Z",
       "members": [
@@ -73,7 +73,7 @@
     {
       "id": "4",
       "name": "Deploy the application to production",
-      "status": "todo",
+      "status": "inProgress",
       "startDate": "2022-12-02T00:00:00.000Z",
       "endDate": "2022-12-07T00:00:00.000Z",
       "members": [
@@ -116,7 +116,7 @@
       "attachments": [],
       "taskList": [],
       "resources": [],
-      "status": "todo"
+      "status": "inProgress"
     },
     {
       "id": "b89c",
@@ -132,7 +132,43 @@
       "attachments": [],
       "taskList": [],
       "resources": [],
+      "status": "inProgress"
+    },
+    {
+      "id": "1491",
+      "name": "task",
+      "description": "",
+      "members": [
+        {
+          "id": 1,
+          "firstName": "Alice",
+          "lastName": "Johnson",
+          "email": "Alice@me.com",
+          "avatar": "https://i.pravatar.cc/150?img=3"
+        }
+      ],
+      "startDate": null,
+      "endDate": null,
+      "attachments": [],
+      "taskList": [],
+      "resources": [],
       "status": "todo"
+    },
+    {
+      "id": "7992",
+      "name": "ddvdv",
+      "description": "",
+      "members": [],
+      "startDate": null,
+      "endDate": null,
+      "icon": {
+        "iconName": "settings",
+        "imageUrl": "/src/assets/icons/IconsIcons/SettingsIcon.svg"
+      },
+      "attachments": [],
+      "taskList": [],
+      "resources": [],
+      "status": "done"
     }
   ],
   "projects": [

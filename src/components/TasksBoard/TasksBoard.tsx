@@ -1,14 +1,14 @@
 import { useEffect, useState } from "react";
 import { Grid, Button } from "@mui/material";
 import { Add as AddIcon } from "@mui/icons-material";
-import AddTaskModal from "../AddTaskModal/AddTaskModal";
+import AddTaskModal from "../TaskInfoModal/TaskInfoModal";
 import BoardNavigation from "../BoardNavigation/BoardNavigation";
 import { useTaskStore } from "../../store/TaskStore";
 import { DragDropContext } from "react-beautiful-dnd";
 import { Column } from "../Column/Column";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import { Task } from "../../types";
+import { DropResult } from "react-beautiful-dnd";
 
 const columnTitles = {
   todo: "Do zrobienia",
@@ -19,17 +19,15 @@ const columnTitles = {
 const TasksBoard = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const { tasks, fetchTasks, addTask, updateTaskStatus } = useTaskStore();
+  const { tasks, fetchTasks, updateTaskStatus } = useTaskStore();
   const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(false);
-  const [selectedTask, setSelectedTask] = useState<Task | null>(null);
+  const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
 
   useEffect(() => {
     fetchTasks();
   }, [fetchTasks]);
 
-  const { getTaskById } = useTaskStore();
-
-  const onDragEnd = (result: any) => {
+  const onDragEnd = (result: DropResult) => {
     const { source, destination } = result;
 
     if (!destination) {
@@ -49,16 +47,8 @@ const TasksBoard = () => {
   };
 
   const handleTaskClick = (taskId: string) => {
-    // Use getTaskById to fetch the task data
-    const taskToEdit = getTaskById(taskId);
-
-    if (taskToEdit) {
-      setSelectedTask(taskToEdit);
-      setIsAddTaskModalOpen(true);
-
-      // Log the task data retrieved by getTaskById
-      console.log("Selected task data:", taskToEdit);
-    }
+    setSelectedTaskId(taskId);
+    setIsAddTaskModalOpen(true);
   };
 
   return (
@@ -126,10 +116,9 @@ const TasksBoard = () => {
         isOpen={isAddTaskModalOpen}
         handleClose={() => {
           setIsAddTaskModalOpen(false);
-          setSelectedTask(null);
+          setSelectedTaskId(null);
         }}
-        onAddTask={addTask}
-        selectedTask={selectedTask}
+        taskId={selectedTaskId}
       />
     </>
   );
