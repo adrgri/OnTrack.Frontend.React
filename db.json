@@ -169,6 +169,26 @@
       "taskList": [],
       "resources": [],
       "status": "5b0af015-6a59-4a43-bf86-12300b641697"
+    },
+    {
+      "id": "",
+      "name": "new",
+      "description": "",
+      "members": [
+        {
+          "id": "2",
+          "firstName": "Bob",
+          "lastName": "Smith",
+          "email": "Bob@me.com",
+          "avatar": "https://i.pravatar.cc/150?img=5"
+        }
+      ],
+      "startDate": null,
+      "endDate": null,
+      "attachments": [],
+      "taskList": [],
+      "resources": [],
+      "status": "todo"
     }
   ],
   "projects": [

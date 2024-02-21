@@ -1,5 +1,5 @@
 import "devextreme/dist/css/dx.light.css";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./themes/theme";
@@ -22,6 +22,16 @@ const Home = lazy(() => import("./pages/Home/Home"));
 const Projects = lazy(() => import("./pages/Projects/Projects"));
 
 function App() {
+  useEffect(() => {
+    // Check if the redirect sessionStorage item exists
+    const redirect = sessionStorage.redirect;
+    delete sessionStorage.redirect; // Clean up the redirect sessionStorage item
+    if (redirect && redirect !== window.location.href) {
+      // Use history to push the corrected path
+      window.history.pushState(null, "", redirect.split("/").pop());
+    }
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>

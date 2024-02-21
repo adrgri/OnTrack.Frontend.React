@@ -1,7 +1,7 @@
 import axios from "axios";
 import Cookies from "js-cookie";
 
-const baseApiURL = "https://ontrackbackendapi.azurewebsites.net/";
+const baseApiURL = import.meta.env.VITE_API_URL;
 
 export const api = axios.create({
   baseURL: baseApiURL,
