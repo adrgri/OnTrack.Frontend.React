@@ -77,11 +77,19 @@ const AddTaskSidebarButtons = ({
   const [openModal, setOpenModal] = useState<ModalName | null>(null);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
+  // const handleOpenModal = (
+  //   event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+  //   modalName: ModalName
+  // ) => {
+  //   setAnchorEl(event.currentTarget);
+  //   setOpenModal(modalName);
+  // };
+
   const handleOpenModal = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    event: React.MouseEvent<HTMLElement, MouseEvent>,
     modalName: ModalName
   ) => {
-    setAnchorEl(event.currentTarget);
+    setAnchorEl(event.currentTarget as HTMLButtonElement);
     setOpenModal(modalName);
   };
 
@@ -222,7 +230,9 @@ const AddTaskSidebarButtons = ({
                 width: "100%",
                 borderRadius: "5px",
               }}
-              onClick={(event) => handleOpenModal(event, item.modal)}
+              onClick={(event) =>
+                handleOpenModal(event, item.modal as ModalName)
+              }
             >
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <ListItemIcon sx={{ minWidth: "auto", marginRight: "8px" }}>

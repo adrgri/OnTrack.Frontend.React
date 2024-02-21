@@ -2,7 +2,17 @@ import SmallButton from "../../styledComponents/SmallButton";
 import CloseButton from "../CloseButton/CloseButton";
 import { Box, Dialog, DialogContent, Typography } from "@mui/material";
 
-const ConfirmDeleteModal = ({ isOpen, onDeleteConfirm, onClose }) => {
+type ConfirmDeleteModalProps = {
+  isOpen: boolean;
+  onDeleteConfirm: () => void;
+  onClose: () => void;
+};
+
+const ConfirmDeleteModal = ({
+  isOpen,
+  onDeleteConfirm,
+  onClose,
+}: ConfirmDeleteModalProps) => {
   return (
     <Dialog maxWidth="md" open={isOpen} onClose={onClose}>
       <CloseButton onClick={onClose} right={10} top={10} />

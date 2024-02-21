@@ -1,12 +1,12 @@
 import { Droppable, Draggable } from "react-beautiful-dnd";
 import TaskCard from "../TaskCard/TaskCard";
 import { Typography, Box } from "@mui/material";
-import { TaskListItem } from "../../types";
+import { Task } from "../../types";
 
 type ColumnProps = {
   columnId: string;
   title: string;
-  tasks: TaskListItem[];
+  tasks: Task[];
   handleTaskClick: (taskId: string) => void;
 };
 

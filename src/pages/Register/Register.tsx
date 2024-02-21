@@ -22,9 +22,9 @@ const Register = () => {
         }}
       />
       <RegisterForm
-        onSubmit={(firstName, lastName, email, password) =>
-          console.log(firstName, lastName, email, password)
-        }
+      // onSubmit={(firstName, lastName, email, password) =>
+      //   console.log(firstName, lastName, email, password)
+      // }
       />
     </div>
   );

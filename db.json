@@ -46,7 +46,7 @@
       "endDate": "2022-12-31T00:00:00.000Z",
       "members": [
         {
-          "id": 1,
+          "id": "3",
           "firstName": "Alice",
           "lastName": "Johnson",
           "email": "Alice@me.com",
@@ -57,12 +57,12 @@
     {
       "id": "2",
       "name": "Implement authentication logic",
-      "status": "done",
+      "status": "inProgress",
       "startDate": "2022-11-30T00:00:00.000Z",
       "endDate": "2022-11-31T00:00:00.000Z",
       "members": [
         {
-          "id": 1,
+          "id": "5",
           "firstName": "Alice",
           "lastName": "Johnson",
           "email": "Alice@me.com",
@@ -73,12 +73,12 @@
     {
       "id": "4",
       "name": "Deploy the application to production",
-      "status": "inProgress",
+      "status": "59389d35-7a8d-4fd6-810f-a1f06fc1fd5c",
       "startDate": "2022-12-02T00:00:00.000Z",
       "endDate": "2022-12-07T00:00:00.000Z",
       "members": [
         {
-          "id": 1,
+          "id": "3",
           "firstName": "Alice",
           "lastName": "Johnson",
           "email": "Alice@me.com",
@@ -94,7 +94,7 @@
       "endDate": "2022-12-13T00:00:00.000Z",
       "members": [
         {
-          "id": 1,
+          "id": "3",
           "firstName": "Alice",
           "lastName": "Johnson",
           "email": "Alice@me.com",
@@ -116,7 +116,7 @@
       "attachments": [],
       "taskList": [],
       "resources": [],
-      "status": "inProgress"
+      "status": "59389d35-7a8d-4fd6-810f-a1f06fc1fd5c"
     },
     {
       "id": "b89c",
@@ -132,7 +132,7 @@
       "attachments": [],
       "taskList": [],
       "resources": [],
-      "status": "inProgress"
+      "status": "5b0af015-6a59-4a43-bf86-12300b641697"
     },
     {
       "id": "1491",
@@ -152,7 +152,7 @@
       "attachments": [],
       "taskList": [],
       "resources": [],
-      "status": "todo"
+      "status": "inProgress"
     },
     {
       "id": "7992",
@@ -168,57 +168,14 @@
       "attachments": [],
       "taskList": [],
       "resources": [],
-      "status": "done"
+      "status": "5b0af015-6a59-4a43-bf86-12300b641697"
     }
   ],
   "projects": [
     {
       "id": "1",
       "name": "Project Alpha",
-      "members": [
-        {
-          "id": 1,
-          "firstName": "Alice",
-          "lastName": "Johnson",
-          "email": "Alice@me.com",
-          "avatar": "https://i.pravatar.cc/150?img=3"
-        },
-        {
-          "id": 1,
-          "firstName": "Alice",
-          "lastName": "Johnson",
-          "email": "Alice@me.com",
-          "avatar": "https://i.pravatar.cc/150?img=2"
-        },
-        {
-          "id": 1,
-          "firstName": "Alice",
-          "lastName": "Johnson",
-          "email": "Alice@me.com",
-          "avatar": "https://i.pravatar.cc/150?img=2"
-        },
-        {
-          "id": 1,
-          "firstName": "Alice",
-          "lastName": "Johnson",
-          "email": "Alice@me.com",
-          "avatar": "https://i.pravatar.cc/150?img=3"
-        },
-        {
-          "id": 1,
-          "firstName": "Alice",
-          "lastName": "Johnson",
-          "email": "Alice@me.com",
-          "avatar": "https://i.pravatar.cc/150?img=2"
-        },
-        {
-          "id": 1,
-          "firstName": "Alice",
-          "lastName": "Johnson",
-          "email": "Alice@me.com",
-          "avatar": "https://i.pravatar.cc/150?img=26"
-        }
-      ],
+      "members": [],
       "endDate": "2022-12-13T00:00:00.000Z",
       "tasksAmount": 50,
       "progress": 50
@@ -279,6 +236,23 @@
       "endDate": "2022-12-13T00:00:00.000Z",
       "tasksAmount": 1,
       "progress": 90
+    }
+  ],
+  "status": [
+    {
+      "id": "5b0af015-6a59-4a43-bf86-12300b641697",
+      "name": "inProgress",
+      "order": 1
+    },
+    {
+      "id": "7607033f-eab2-420d-98f7-5009249e10bf",
+      "name": "done",
+      "order": 2
+    },
+    {
+      "id": "59389d35-7a8d-4fd6-810f-a1f06fc1fd5c",
+      "name": "todo",
+      "order": 0
     }
   ]
 }

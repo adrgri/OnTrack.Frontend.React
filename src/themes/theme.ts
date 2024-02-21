@@ -70,12 +70,12 @@ export const theme = createTheme({
         },
       },
     },
-    MuiDateCalendar: {
-      styleOverrides: {
-        root: {
-          height: "300px",
-        },
-      },
-    },
+    // MuiDateCalendar: {
+    //   styleOverrides: {
+    //     root: {
+    //       height: "300px",
+    //     },
+    //   },
+    // },
   },
 });

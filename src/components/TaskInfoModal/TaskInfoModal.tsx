@@ -141,6 +141,7 @@ const AddTaskModal = ({ isOpen, handleClose, taskId }: AddTaskModalProps) => {
       }
 
       const taskData = {
+        id: task?.id ?? "",
         name: values.name,
         description: values.description,
         members: selectedMembers,

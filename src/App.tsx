@@ -4,7 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./themes/theme";
 import { AuthProvider } from "./contexts/AuthContext";
-import ProtectedRoute from "./ProtectedRoute";
+// import ProtectedRoute from "./ProtectedRoute";
 import "./App.css";
 import Loading from "./components/Loading/Loading";
 import "dayjs/locale/pl";

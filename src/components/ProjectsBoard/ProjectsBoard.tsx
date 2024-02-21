@@ -4,11 +4,12 @@ import { Button, Grid, useMediaQuery, useTheme } from "@mui/material";
 import { Add as AddIcon } from "@mui/icons-material";
 import ProjectCard from "../ProjectCard/ProjectCard";
 import { useProjectStore } from "../../store/ProjectStore";
+import ProjectInfoModal from "../ProjectInfoModal/ProjectInfoModal";
 
 export default function ProjectsBoard() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(false);
+  const [isProjectInfoModalOpen, setIsProjectInfoModalOpen] = useState(false);
 
   const { projects, fetchProjects } = useProjectStore();
 
@@ -42,7 +43,7 @@ export default function ProjectsBoard() {
               zIndex: 2,
               borderRadius: "5px",
             }}
-            onClick={() => setIsAddTaskModalOpen(true)}
+            onClick={() => setIsProjectInfoModalOpen(true)}
           >
             Projekt
           </Button>
@@ -71,6 +72,8 @@ export default function ProjectsBoard() {
           />
         ))}
       </Grid>
+
+      <ProjectInfoModal isOpen={isProjectInfoModalOpen} />
     </>
   );
 }

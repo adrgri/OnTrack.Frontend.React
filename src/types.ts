@@ -10,13 +10,25 @@ export type Icon = {
   imageUrl: string;
 };
 
-export type Member = {
+export type User = {
   id: string;
   firstName: string;
   lastName: string;
   email: string;
   avatar: string;
+  password?: string;
 };
+
+// Picking specific properties from User and making them optional
+export type Member = Omit<User, "password">;
+
+// export type Member = {
+//   id: string;
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   avatar: string;
+// };
 
 export interface Attachment extends File {
   id?: string;
@@ -40,7 +52,7 @@ export type Resource = {
 export type Status = "todo" | "inProgress" | "done";
 
 export type Task = {
-  id?: string;
+  id: string;
   name: string;
   description?: string;
   members?: User[];
@@ -51,15 +63,6 @@ export type Task = {
   taskList?: TaskListItem[];
   resources?: Resource[];
   status: Status;
-};
-
-export type User = {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  avatar: string;
-  password?: string;
 };
 
 export type LoginData = {

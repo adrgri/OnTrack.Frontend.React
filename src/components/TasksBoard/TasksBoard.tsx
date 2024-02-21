@@ -9,6 +9,7 @@ import { Column } from "../Column/Column";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { DropResult } from "react-beautiful-dnd";
+import { Status } from "../../types";
 
 const columnTitles = {
   todo: "Do zrobienia",
@@ -41,7 +42,7 @@ const TasksBoard = () => {
       // Call the updateTaskStatus method here
       const task = tasks.find((t) => t.id === result.draggableId);
       if (task) {
-        updateTaskStatus(task.id, destination.droppableId);
+        updateTaskStatus(task.id, destination.droppableId as Status);
       }
     }
   };

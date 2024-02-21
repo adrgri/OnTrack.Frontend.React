@@ -4,12 +4,12 @@ import UserForm from "../UserForm/UserForm";
 import { baseValidationSchema } from "../schemas/baseValidationSchema";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { RegistrationData, RegistrationResult } from "../../types";
+// import { RegistrationData, RegistrationResult } from "../../types";
 import { useEffect } from "react";
 
-type RegisterFormProps = {
-  onSubmit: (registrationData: RegistrationData) => Promise<RegistrationResult>;
-};
+// type RegisterFormProps = {
+//   onSubmit: (registrationData: RegistrationData) => Promise<RegistrationResult>;
+// };
 
 const registrationValidationSchema = baseValidationSchema.shape({
   firstName: (
@@ -26,7 +26,7 @@ const registrationValidationSchema = baseValidationSchema.shape({
   ),
 });
 
-const RegisterForm = ({ onSubmit }: RegisterFormProps) => {
+const RegisterForm = () => {
   const { register, isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
