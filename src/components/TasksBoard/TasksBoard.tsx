@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Grid, Button } from "@mui/material";
 import { Add as AddIcon } from "@mui/icons-material";
+import EditIcon from "../../assets/icons/EditIcon.svg";
 import AddTaskModal from "../TaskInfoModal/TaskInfoModal";
 import BoardNavigation from "../BoardNavigation/BoardNavigation";
 import { useTaskStore } from "../../store/TaskStore";
@@ -68,20 +69,41 @@ const TasksBoard = () => {
             rightButtonLink="/tablica"
           />
         </Grid>
+
         <Grid item>
-          <Button
-            startIcon={<AddIcon />}
-            variant="contained"
-            sx={{
-              padding: "5px 20px",
-              fontSize: "14px",
-              zIndex: 2,
-              borderRadius: "5px",
-            }}
-            onClick={() => setIsAddTaskModalOpen(true)}
-          >
-            Zadanie
-          </Button>
+          <Grid container spacing={2}>
+            <Grid item>
+              <Button
+                startIcon={<img src={EditIcon} />}
+                variant="contained"
+                sx={{
+                  padding: "5px 20px",
+                  fontSize: "14px",
+                  zIndex: 2,
+                  borderRadius: "5px",
+                  backgroundColor: "#50557F",
+                }}
+                onClick={() => setIsAddTaskModalOpen(true)}
+              >
+                Edytuj
+              </Button>
+            </Grid>
+            <Grid item>
+              <Button
+                startIcon={<AddIcon />}
+                variant="contained"
+                sx={{
+                  padding: "5px 20px",
+                  fontSize: "14px",
+                  zIndex: 2,
+                  borderRadius: "5px",
+                }}
+                onClick={() => setIsAddTaskModalOpen(true)}
+              >
+                Zadanie
+              </Button>
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
 
