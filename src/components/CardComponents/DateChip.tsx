@@ -17,8 +17,8 @@ const DateChip: React.FC<DateChipProps> = ({ date }) => {
       icon={<AccessTimeIcon />}
       color="primary"
       label={formattedDate}
-      size="small"
-      sx={{ borderRadius: 0, fontSize: "13px" }}
+      size="medium"
+      sx={{ borderRadius: "5px", fontSize: "13px" }}
     />
   );
 };
