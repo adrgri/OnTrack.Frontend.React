@@ -73,10 +73,14 @@ export const theme = createTheme({
     MuiCardContent: {
       styleOverrides: {
         root: {
-          paddingBottom: "0rem",
+          padding: "0.5rem 1rem",
+          "&:last-child": {
+            paddingBottom: "0.5rem",
+          },
         },
       },
     },
+
     // MuiDateCalendar: {
     //   styleOverrides: {
     //     root: {
