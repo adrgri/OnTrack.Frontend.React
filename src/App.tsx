@@ -35,7 +35,7 @@ function App() {
   return (
     <ThemeProvider theme={theme}>
       <AuthProvider>
-        <BrowserRouter>
+        <BrowserRouter basename="/OnTrack.Frontend.React">
           <ToastContainer
             position="top-right"
             autoClose={5000}
