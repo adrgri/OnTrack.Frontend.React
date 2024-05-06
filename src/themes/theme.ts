@@ -75,12 +75,18 @@ export const theme = createTheme({
         root: {
           padding: "0.5rem 1rem",
           "&:last-child": {
-            paddingBottom: "0.5rem",
+            paddingBottom: "1rem",
           },
         },
       },
     },
-
+    MuiList: {
+      styleOverrides: {
+        root: {
+          padding: 0,
+        },
+      },
+    },
     // MuiDateCalendar: {
     //   styleOverrides: {
     //     root: {
