@@ -74,7 +74,7 @@ const TasksBoard = () => {
           <Grid container spacing={2}>
             <Grid item>
               <Button
-                startIcon={<img src={EditIcon} />}
+                startIcon={<img src={EditIcon} alt="Edytuj" />}
                 variant="contained"
                 sx={{
                   padding: "5px 20px",
