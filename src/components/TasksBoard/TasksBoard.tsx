@@ -62,6 +62,10 @@ const TasksBoard = () => {
     setIsAddTaskModalOpen(true);
   };
 
+  function handleCancel() {
+    setIsAddTaskModalOpen(false);
+  }
+
   return (
     <>
       <Grid
@@ -150,6 +154,7 @@ const TasksBoard = () => {
           setIsAddTaskModalOpen(false);
           setSelectedTaskId(null);
         }}
+        onCancel={handleCancel}
         taskId={selectedTaskId}
       />
     </>

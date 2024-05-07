@@ -24,7 +24,6 @@ import { TaskListItem, Resource, User, Icon, Attachment } from "../../types";
 import EditableText from "../EditableText/EditableText";
 import AttachmentIcon from "../../assets/icons/TaskIcons/AttachmentIcon.svg";
 import { useTaskStore } from "../../store/TaskStore";
-import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import CloseButton from "../CloseButton/CloseButton";
 
 import dayjs from "dayjs";
@@ -41,6 +40,7 @@ import EntityIcon from "../CardComponents/EntityIcon";
 type AddTaskModalProps = {
   isOpen: boolean;
   handleClose: () => void;
+  onCancel: () => void;
   taskId?: string | null;
 };
 
@@ -51,7 +51,12 @@ const taskValidationSchema = Yup.object({
     .required("Task name is required."),
 });
 
-const AddTaskModal = ({ isOpen, handleClose, taskId }: AddTaskModalProps) => {
+const AddTaskModal = ({
+  isOpen,
+  handleClose,
+  onCancel,
+  taskId,
+}: AddTaskModalProps) => {
   const task = useTaskStore((state) => state.getTaskById(taskId ?? ""));
 
   const [tasksList, setTasksList] = useState<TaskListItem[]>([]);
@@ -59,7 +64,7 @@ const AddTaskModal = ({ isOpen, handleClose, taskId }: AddTaskModalProps) => {
   const [selectedMembers, setSelectedMembers] = useState<User[]>([]);
   const [selectedIcon, setSelectedIcon] = useState<Icon>();
   const [attachments, setAttachments] = useState<Attachment[]>();
-  const { addTask, updateTask, deleteTask } = useTaskStore();
+  const { addTask, updateTask } = useTaskStore();
   const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(
     task ? dayjs(task.startDate) : null
   );
@@ -185,27 +190,6 @@ const AddTaskModal = ({ isOpen, handleClose, taskId }: AddTaskModalProps) => {
     ]);
   };
 
-  const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
-    useState(false);
-
-  const onDelete = () => {
-    setIsConfirmDeleteModalOpen(true);
-  };
-
-  const handleDeleteConfirm = () => {
-    if (task?.id) {
-      deleteTask(task.id)
-        .then(() => {
-          console.log("Task deleted successfully");
-          setIsConfirmDeleteModalOpen(false);
-          handleClose();
-        })
-        .catch((error) => {
-          console.error("Failed to delete task:", error);
-        });
-    }
-  };
-
   useEffect(() => {
     return () => {
       if (attachments !== undefined) {
@@ -227,293 +211,276 @@ const AddTaskModal = ({ isOpen, handleClose, taskId }: AddTaskModalProps) => {
   }, [selectedIcon]);
 
   return (
-    <>
-      <Dialog
-        fullWidth
-        maxWidth="md"
-        open={isOpen}
-        onClose={handleClose}
-        PaperProps={{
-          sx: {
-            height: "80vh",
-            maxHeight: "80vh",
-          },
-        }}
-      >
-        <form onSubmit={formik.handleSubmit}>
-          <DialogContent
+    <Dialog
+      fullWidth
+      maxWidth="md"
+      open={isOpen}
+      onClose={handleClose}
+      PaperProps={{
+        sx: {
+          height: "80vh",
+          maxHeight: "80vh",
+        },
+      }}
+    >
+      <form onSubmit={formik.handleSubmit}>
+        <DialogContent
+          sx={{
+            position: "relative",
+            display: "flex",
+            flexDirection: { xs: "column", sm: "row" },
+            justifyContent: "space-between",
+            padding: 4,
+            paddingTop: "16px",
+            [theme.breakpoints.down("sm")]: {
+              flexDirection: "column",
+            },
+          }}
+        >
+          <Box
             sx={{
-              position: "relative",
               display: "flex",
-              flexDirection: { xs: "column", sm: "row" },
-              justifyContent: "space-between",
-              padding: 4,
-              paddingTop: "16px",
-              [theme.breakpoints.down("sm")]: {
-                flexDirection: "column",
-              },
+              flexDirection: "column",
+              flex: 1,
             }}
           >
             <Box
               sx={{
                 display: "flex",
-                flexDirection: "column",
-                flex: 1,
+                alignItems: "center",
+                justifyContent: "flex-start",
+
+                gap: 1,
               }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
+              <EditableText
+                text={formik.values.name}
+                onTextChange={(newValue) =>
+                  formik.setFieldValue("name", newValue)
+                }
+                placeholder="Wpisz nazwe zadania"
+              />
 
-                  gap: 1,
-                }}
-              >
-                <EditableText
-                  text={formik.values.name}
-                  onTextChange={(newValue) =>
-                    formik.setFieldValue("name", newValue)
-                  }
-                  placeholder="Wpisz nazwe zadania"
-                />
+              <EntityIcon
+                icon={selectedIcon}
+                style={{ width: "20px", height: "20px" }}
+              />
 
-                <EntityIcon
-                  icon={selectedIcon}
-                  style={{ width: "20px", height: "20px" }}
-                />
+              <CloseButton onClick={handleClose} right={20} top={20} />
+            </Box>
 
-                <CloseButton onClick={handleClose} right={20} top={20} />
-              </Box>
+            {selectedMembers.length > 0 && (
+              <Stack spacing={2}>
+                <Typography variant="subtitle1">Członkowie</Typography>
+                <MembersAvatarsRow members={selectedMembers ?? []} />
+              </Stack>
+            )}
 
-              {selectedMembers.length > 0 && (
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              {startDate && (
                 <Stack spacing={2}>
-                  <Typography variant="subtitle1">Członkowie</Typography>
-                  <MembersAvatarsRow members={selectedMembers ?? []} />
-                </Stack>
-              )}
-
-              <Box sx={{ display: "flex", alignItems: "center" }}>
-                {startDate && (
-                  <Stack spacing={2}>
-                    <Typography variant="subtitle1">
-                      Data rozpoczęcia
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        position: "relative",
-                      }}
-                    >
-                      <LocalizationProvider
-                        dateAdapter={AdapterDayjs}
-                        adapterLocale="pl"
-                      >
-                        <DateTimePicker
-                          sx={{ width: "80%" }}
-                          value={startDate}
-                          onChange={(newValue) => setStartDate(newValue)}
-                        />
-                      </LocalizationProvider>
-                    </Box>
-                  </Stack>
-                )}
-
-                {endDate && (
-                  <Stack spacing={2}>
-                    <Typography variant="subtitle1">
-                      Data zakończenia
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        // position: "relative",
-                      }}
-                    >
-                      <LocalizationProvider
-                        dateAdapter={AdapterDayjs}
-                        adapterLocale="pl"
-                      >
-                        <DateTimePicker
-                          sx={{ width: "80%" }}
-                          value={endDate}
-                          onChange={(newValue) => setEndDate(newValue)}
-                        />
-                      </LocalizationProvider>
-                    </Box>
-                  </Stack>
-                )}
-              </Box>
-
-              {attachments && attachments.length > 0 && (
-                <>
-                  <Typography variant="subtitle1">Załączniki</Typography>
+                  <Typography variant="subtitle1">Data rozpoczęcia</Typography>
                   <Box
                     sx={{
                       display: "flex",
-                      flexDirection: "column",
-                      gap: 1,
-                      mt: 2,
+                      alignItems: "center",
+                      position: "relative",
                     }}
                   >
-                    {attachments.map((file, index) => (
-                      <Box
-                        key={index}
-                        sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                      >
-                        <img
-                          src={AttachmentIcon}
-                          alt="Attachment"
-                          style={{ width: 24, height: 24 }}
-                        />
-                        <Typography>
-                          <a
-                            href={
-                              file.url ? file.url : URL.createObjectURL(file)
-                            }
-                            download={file.name}
-                            style={{ textDecoration: "none", color: "inherit" }}
-                          >
-                            {file.name}
-                          </a>
-                        </Typography>
-                      </Box>
-                    ))}
-                  </Box>
-                </>
-              )}
-
-              <StyledDescriptionField
-                fullWidth
-                id="description"
-                name="description"
-                label={
-                  <Box display="flex" alignItems="center">
-                    <FormatListBulletedIcon sx={{ marginRight: 1 }} />
-                    <Typography variant="subtitle1" sx={{ fontSize: "1.2rem" }}>
-                      Opis
-                    </Typography>
-                  </Box>
-                }
-                value={formik.values.description}
-                onChange={formik.handleChange}
-                multiline
-                rows={4}
-                placeholder="Dodaj bardziej szczegółowy opis..."
-                variant="standard"
-                InputProps={{
-                  disableUnderline: true,
-                  inputComponent: TextareaAutosize,
-                  inputProps: {
-                    minRows: 3,
-                    maxRows: 10,
-                  },
-                }}
-                InputLabelProps={{
-                  shrink: true,
-                  style: {
-                    position: "absolute",
-                    top: "-12px",
-                  },
-                }}
-                sx={{
-                  mt: 5,
-                }}
-              />
-
-              {tasksList.length > 0 && (
-                <Typography variant="subtitle1">Lista zadań</Typography>
-              )}
-
-              {tasksList.map((task, index) => (
-                <Box key={task.id}>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={task.isChecked}
-                        onChange={(e) => {
-                          const newTasksList = tasksList.map(
-                            (item, itemIndex) =>
-                              index === itemIndex
-                                ? { ...item, isChecked: e.target.checked }
-                                : item
-                          );
-                          setTasksList(newTasksList);
-                        }}
+                    <LocalizationProvider
+                      dateAdapter={AdapterDayjs}
+                      adapterLocale="pl"
+                    >
+                      <DateTimePicker
+                        sx={{ width: "80%" }}
+                        value={startDate}
+                        onChange={(newValue) => setStartDate(newValue)}
                       />
-                    }
-                    label={task.text}
-                  />
-                </Box>
-              ))}
-
-              {resources.length > 0 && (
-                <Typography variant="subtitle1">Zasoby</Typography>
+                    </LocalizationProvider>
+                  </Box>
+                </Stack>
               )}
-              {resources.map((res, index) => (
-                <div key={index}>
-                  {res.resourceName} {res.quantity}
-                  {res.unit}
-                </div>
-              ))}
+
+              {endDate && (
+                <Stack spacing={2}>
+                  <Typography variant="subtitle1">Data zakończenia</Typography>
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      // position: "relative",
+                    }}
+                  >
+                    <LocalizationProvider
+                      dateAdapter={AdapterDayjs}
+                      adapterLocale="pl"
+                    >
+                      <DateTimePicker
+                        sx={{ width: "80%" }}
+                        value={endDate}
+                        onChange={(newValue) => setEndDate(newValue)}
+                      />
+                    </LocalizationProvider>
+                  </Box>
+                </Stack>
+              )}
             </Box>
 
-            <Box sx={{ flex: "0 1 auto", mt: 6 }}>
-              <AddTaskSidebarButtons
-                addTaskList={addTaskList}
-                handleAddResource={handleAddResource}
-                onMemberSelect={handleMemberSelect}
-                selectedIcon={selectedIcon}
-                onIconSelect={handleIconSelect}
-                onAttachmentSelect={handleAttachmentSelect}
-                startDate={startDate}
-                endDate={endDate}
-                onStartDateChange={setStartDate}
-                onEndDateChange={setEndDate}
-              />
-            </Box>
-          </DialogContent>
+            {attachments && attachments.length > 0 && (
+              <>
+                <Typography variant="subtitle1">Załączniki</Typography>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 1,
+                    mt: 2,
+                  }}
+                >
+                  {attachments.map((file, index) => (
+                    <Box
+                      key={index}
+                      sx={{ display: "flex", alignItems: "center", gap: 1 }}
+                    >
+                      <img
+                        src={AttachmentIcon}
+                        alt="Attachment"
+                        style={{ width: 24, height: 24 }}
+                      />
+                      <Typography>
+                        <a
+                          href={file.url ? file.url : URL.createObjectURL(file)}
+                          download={file.name}
+                          style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                          {file.name}
+                        </a>
+                      </Typography>
+                    </Box>
+                  ))}
+                </Box>
+              </>
+            )}
 
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end",
-              mt: 2,
-              position: "absolute",
-              bottom: 36,
-              right: 26,
-            }}
-          >
-            <SmallButton
-              type="submit"
-              variant="contained"
-              sx={{ marginRight: 2 }}
-              onClick={handleClose}
-            >
-              Zapisz
-            </SmallButton>
-            <SmallButton
-              type="submit"
-              variant="contained"
-              sx={{ backgroundColor: "#5E5F7D" }}
-              onClick={(e) => {
-                e.preventDefault();
-                onDelete();
+            <StyledDescriptionField
+              fullWidth
+              id="description"
+              name="description"
+              label={
+                <Box display="flex" alignItems="center">
+                  <FormatListBulletedIcon sx={{ marginRight: 1 }} />
+                  <Typography variant="subtitle1" sx={{ fontSize: "1.2rem" }}>
+                    Opis
+                  </Typography>
+                </Box>
+              }
+              value={formik.values.description}
+              onChange={formik.handleChange}
+              multiline
+              rows={4}
+              placeholder="Dodaj bardziej szczegółowy opis..."
+              variant="standard"
+              InputProps={{
+                disableUnderline: true,
+                inputComponent: TextareaAutosize,
+                inputProps: {
+                  minRows: 3,
+                  maxRows: 10,
+                },
               }}
-            >
-              Usuń
-            </SmallButton>
+              InputLabelProps={{
+                shrink: true,
+                style: {
+                  position: "absolute",
+                  top: "-12px",
+                },
+              }}
+              sx={{
+                mt: 5,
+              }}
+            />
+
+            {tasksList.length > 0 && (
+              <Typography variant="subtitle1">Lista zadań</Typography>
+            )}
+
+            {tasksList.map((task, index) => (
+              <Box key={task.id}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={task.isChecked}
+                      onChange={(e) => {
+                        const newTasksList = tasksList.map((item, itemIndex) =>
+                          index === itemIndex
+                            ? { ...item, isChecked: e.target.checked }
+                            : item
+                        );
+                        setTasksList(newTasksList);
+                      }}
+                    />
+                  }
+                  label={task.text}
+                />
+              </Box>
+            ))}
+
+            {resources.length > 0 && (
+              <Typography variant="subtitle1">Zasoby</Typography>
+            )}
+            {resources.map((res, index) => (
+              <div key={index}>
+                {res.resourceName} {res.quantity}
+                {res.unit}
+              </div>
+            ))}
           </Box>
-        </form>
-      </Dialog>
-      <ConfirmDeleteModal
-        isOpen={isConfirmDeleteModalOpen}
-        onDeleteConfirm={handleDeleteConfirm}
-        onClose={() => setIsConfirmDeleteModalOpen(false)}
-      />
-    </>
+
+          <Box sx={{ flex: "0 1 auto", mt: 6 }}>
+            <AddTaskSidebarButtons
+              addTaskList={addTaskList}
+              handleAddResource={handleAddResource}
+              onMemberSelect={handleMemberSelect}
+              selectedIcon={selectedIcon}
+              onIconSelect={handleIconSelect}
+              onAttachmentSelect={handleAttachmentSelect}
+              startDate={startDate}
+              endDate={endDate}
+              onStartDateChange={setStartDate}
+              onEndDateChange={setEndDate}
+            />
+          </Box>
+        </DialogContent>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            mt: 2,
+            position: "absolute",
+            bottom: 36,
+            right: 26,
+          }}
+        >
+          <SmallButton
+            type="submit"
+            variant="contained"
+            sx={{ marginRight: 2 }}
+            onClick={handleClose}
+          >
+            Zapisz
+          </SmallButton>
+          <SmallButton
+            type="submit"
+            variant="contained"
+            sx={{ backgroundColor: "#5E5F7D" }}
+            onClick={onCancel}
+          >
+            Anuluj
+          </SmallButton>
+        </Box>
+      </form>
+    </Dialog>
   );
 };
 

@@ -18,22 +18,20 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskId, handleTaskClick }) => {
     state.tasks.find((t) => t.id === taskId)
   );
 
-  const [openModal, setOpenModal] = useState(false);
+  const [isOptionsPopupOpen, setIsOptionsPopupOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
-  const handleOpenModal = (
+  const handleOpenOptionsPopup = (
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
-    event.stopPropagation(); // Prevents the GenericCard's onClick from firing
+    event.stopPropagation();
     setAnchorEl(event.currentTarget as HTMLButtonElement);
-    setOpenModal(true);
-    console.log("Open modal");
+    setIsOptionsPopupOpen(true);
   };
 
-  const handleCloseModal = () => {
+  const handleCloseOptionsPopup = () => {
+    setIsOptionsPopupOpen(false);
     setAnchorEl(null);
-    setOpenModal(false);
-    console.log("Close modal");
   };
 
   return (
@@ -56,7 +54,10 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskId, handleTaskClick }) => {
               </Typography>
               <Typography variant="body1">{task?.name}</Typography>
             </Box>
-            <IconButton aria-label="more options" onClick={handleOpenModal}>
+            <IconButton
+              aria-label="more options"
+              onClick={handleOpenOptionsPopup}
+            >
               <img src={MenuDotsVertical} alt="Więcej opcji" />
             </IconButton>
           </Box>
@@ -77,9 +78,9 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskId, handleTaskClick }) => {
         </Grid>
       </Grid>
       <OptionsPopup
-        open={openModal}
+        open={isOptionsPopupOpen}
         anchorEl={anchorEl}
-        onClose={handleCloseModal}
+        onClose={handleCloseOptionsPopup}
         task={task}
       />
     </GenericCard>
