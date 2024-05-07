@@ -8,6 +8,7 @@ type ColumnProps = {
   title: string;
   tasks: Task[];
   handleTaskClick: (taskId: string) => void;
+  isEditClicked: boolean;
 };
 
 export const Column = ({
@@ -15,6 +16,7 @@ export const Column = ({
   title,
   tasks,
   handleTaskClick,
+  isEditClicked,
 }: ColumnProps) => {
   return (
     <Droppable droppableId={columnId}>
@@ -50,6 +52,7 @@ export const Column = ({
                   <TaskCard
                     taskId={task.id}
                     handleTaskClick={() => handleTaskClick(task.id)}
+                    isEditClicked={isEditClicked}
                     // handleTaskClick={() => console.log("Task clicked")}
                   />
                 </div>

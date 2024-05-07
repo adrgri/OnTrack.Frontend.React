@@ -1,7 +1,5 @@
 import { useEffect, useState } from "react";
-import { Grid, Button } from "@mui/material";
-import { Add as AddIcon } from "@mui/icons-material";
-import EditIcon from "../../assets/icons/EditIcon.svg";
+import { Grid } from "@mui/material";
 import AddTaskModal from "../TaskInfoModal/TaskInfoModal";
 import BoardNavigation from "../BoardNavigation/BoardNavigation";
 import { useTaskStore } from "../../store/TaskStore";
@@ -24,6 +22,7 @@ const TasksBoard = () => {
   const { tasks, fetchTasks, updateTaskStatus } = useTaskStore();
   const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
+  const [isEditClicked, setIsEditClicked] = useState(false);
 
   useEffect(() => {
     fetchTasks();
@@ -55,6 +54,7 @@ const TasksBoard = () => {
 
   const handleEdit = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
+    setIsEditClicked((prevIsEditClicked) => !prevIsEditClicked);
     console.log("Edit action triggered");
   };
 
@@ -111,6 +111,7 @@ const TasksBoard = () => {
                 title={title}
                 tasks={tasks.filter((task) => task.status === columnKey)}
                 handleTaskClick={handleTaskClick}
+                isEditClicked={isEditClicked}
               />
             </Grid>
           ))}

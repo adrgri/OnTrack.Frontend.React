@@ -6,20 +6,49 @@ import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
 import GenericCard from "../GenericCard/GenericCard";
 import EntityIcon from "../CardComponents/EntityIcon";
 import MenuDotsVertical from "../../assets/icons/MenuDotsVertical.svg";
+import CloseIcon from "../../assets/icons/CloseIcon.svg";
 import OptionsPopup from "../layout/OptionsPopup";
+import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 
 type TaskCardProps = {
   taskId: string;
   handleTaskClick: () => void;
+  isEditClicked: boolean;
 };
 
-const TaskCard: React.FC<TaskCardProps> = ({ taskId, handleTaskClick }) => {
+const TaskCard: React.FC<TaskCardProps> = ({
+  taskId,
+  handleTaskClick,
+  isEditClicked,
+}) => {
   const task = useTaskStore((state) =>
     state.tasks.find((t) => t.id === taskId)
   );
-
+  const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
+    useState(false);
   const [isOptionsPopupOpen, setIsOptionsPopupOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  const handleOpenDeleteModal = (event: React.MouseEvent) => {
+    event.stopPropagation();
+    setIsConfirmDeleteModalOpen(true);
+  };
+
+  const handleDeleteConfirm = () => {
+    if (task?.id) {
+      useTaskStore
+        .getState()
+        .deleteTask(task.id)
+        .then(() => {
+          console.log("Task deleted successfully");
+          setIsConfirmDeleteModalOpen(false);
+          setIsOptionsPopupOpen(false);
+        })
+        .catch((error) => {
+          console.error("Failed to delete task:", error);
+        });
+    }
+  };
 
   const handleOpenOptionsPopup = (
     event: React.MouseEvent<HTMLElement, MouseEvent>
@@ -27,11 +56,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskId, handleTaskClick }) => {
     event.stopPropagation();
     setAnchorEl(event.currentTarget as HTMLButtonElement);
     setIsOptionsPopupOpen(true);
-  };
-
-  const handleCloseOptionsPopup = () => {
-    setIsOptionsPopupOpen(false);
-    setAnchorEl(null);
   };
 
   return (
@@ -56,9 +80,15 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskId, handleTaskClick }) => {
             </Box>
             <IconButton
               aria-label="more options"
-              onClick={handleOpenOptionsPopup}
+              onClick={
+                isEditClicked ? handleOpenDeleteModal : handleOpenOptionsPopup
+              }
             >
-              <img src={MenuDotsVertical} alt="Więcej opcji" />
+              {isEditClicked ? (
+                <img src={CloseIcon} alt="Usuń" />
+              ) : (
+                <img src={MenuDotsVertical} alt="Więcej opcji" />
+              )}
             </IconButton>
           </Box>
           <EntityIcon
@@ -77,10 +107,16 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskId, handleTaskClick }) => {
           </Grid>
         </Grid>
       </Grid>
+      <ConfirmDeleteModal
+        isOpen={isConfirmDeleteModalOpen}
+        onDeleteConfirm={handleDeleteConfirm}
+        onClose={() => setIsConfirmDeleteModalOpen(false)}
+        task={task}
+      />
       <OptionsPopup
         open={isOptionsPopupOpen}
         anchorEl={anchorEl}
-        onClose={handleCloseOptionsPopup}
+        onClose={() => setIsOptionsPopupOpen(false)}
         task={task}
       />
     </GenericCard>
