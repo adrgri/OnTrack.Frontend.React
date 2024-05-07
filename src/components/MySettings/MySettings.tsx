@@ -1,4 +1,4 @@
-import UserForm from "../UserForm/UserForm";
+import SettingsForm from "../SettingsForm/SettingsForm";
 import { baseValidationSchema } from "../schemas/baseValidationSchema";
 
 const MySettings = () => {
@@ -30,23 +30,23 @@ const MySettings = () => {
   };
 
   return (
-    <UserForm
+    <SettingsForm
       initialValues={{
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        password: "",
+        oldPassword: "",
+        newPassword: "",
+        repeatPassword: "",
       }}
       onSubmit={handleUpdateSettings}
       formTitle="Moje ustawienia"
       submitButtonText="Zapisz zmiany"
       userProfile={{
-        name: `${user.firstName} ${user.lastName}`,
         avatar: user.avatar,
       }}
       validationSchema={baseValidationSchema}
       passwordFieldProps={{
-        placeholder: "Wpisz nowe hasło",
         InputLabelProps: {
           shrink: true,
         },

@@ -1,7 +1,6 @@
 import dayjs from "dayjs";
 
 export type UserProfileProps = {
-  name: string;
   avatar: string;
 };
 
