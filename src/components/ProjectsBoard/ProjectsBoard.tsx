@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import BoardNavigation from "../BoardNavigation/BoardNavigation";
-import { Button, Grid, useMediaQuery, useTheme } from "@mui/material";
-import { Add as AddIcon } from "@mui/icons-material";
+import { Grid, useMediaQuery, useTheme } from "@mui/material";
 import ProjectCard from "../ProjectCard/ProjectCard";
 import { useProjectStore } from "../../store/ProjectStore";
 import ProjectInfoModal from "../ProjectInfoModal/ProjectInfoModal";
