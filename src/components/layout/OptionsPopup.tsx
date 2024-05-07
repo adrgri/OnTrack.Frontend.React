@@ -84,7 +84,7 @@ const OptionsPopup: React.FC<PopupLayoutProps> = ({
         <Divider />
 
         <ListItemButton onClick={handleDelete}>
-          <img src={CloseIcon} alt="Edytuj" style={{ marginRight: "10px" }} />
+          <img src={CloseIcon} alt="Usuń" style={{ marginRight: "10px" }} />
 
           <ListItemText primary="Usuń" sx={{ color: "#5F5B5B" }} />
         </ListItemButton>
