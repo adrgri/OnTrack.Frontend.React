@@ -50,6 +50,7 @@ export const Column = ({
                   <TaskCard
                     taskId={task.id}
                     handleTaskClick={() => handleTaskClick(task.id)}
+                    // handleTaskClick={() => console.log("Task clicked")}
                   />
                 </div>
               )}

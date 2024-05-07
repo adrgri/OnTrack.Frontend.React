@@ -191,6 +191,7 @@ const AddTaskModal = ({ isOpen, handleClose, taskId }: AddTaskModalProps) => {
   const onDelete = () => {
     setIsConfirmDeleteModalOpen(true);
   };
+
   const handleDeleteConfirm = () => {
     if (task?.id) {
       deleteTask(task.id)

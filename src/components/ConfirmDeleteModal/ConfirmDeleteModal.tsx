@@ -1,4 +1,5 @@
 import SmallButton from "../../styledComponents/SmallButton";
+import { Task } from "../../types";
 import CloseButton from "../CloseButton/CloseButton";
 import { Box, Dialog, DialogContent, Typography } from "@mui/material";
 
@@ -6,12 +7,14 @@ type ConfirmDeleteModalProps = {
   isOpen: boolean;
   onDeleteConfirm: () => void;
   onClose: () => void;
+  task: Task | undefined;
 };
 
 const ConfirmDeleteModal = ({
   isOpen,
   onDeleteConfirm,
   onClose,
+  task,
 }: ConfirmDeleteModalProps) => {
   return (
     <Dialog maxWidth="md" open={isOpen} onClose={onClose}>
@@ -31,7 +34,8 @@ const ConfirmDeleteModal = ({
             mb: 3,
           }}
         >
-          Czy na pewno chcesz usunąć to zadanie?
+          Czy na pewno chcesz usunąć to zadanie
+          {<span style={{ fontWeight: "bold" }}> "{task?.name}"</span>}?
         </Typography>
 
         <Box

@@ -1,12 +1,12 @@
-import React from "react";
-import { Typography, Grid, Box } from "@mui/material";
+import React, { useState } from "react";
+import { Typography, Grid, Box, IconButton } from "@mui/material";
 import { useTaskStore } from "../../store/TaskStore";
 import DateChip from "../CardComponents/DateChip";
 import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
 import GenericCard from "../GenericCard/GenericCard";
 import EntityIcon from "../CardComponents/EntityIcon";
-import IconButton from "@mui/material/IconButton";
-import MenuDotsVertical from "../../assets//icons/MenuDotsVertical.svg";
+import MenuDotsVertical from "../../assets/icons/MenuDotsVertical.svg";
+import OptionsPopup from "../layout/OptionsPopup";
 
 type TaskCardProps = {
   taskId: string;
@@ -17,6 +17,24 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskId, handleTaskClick }) => {
   const task = useTaskStore((state) =>
     state.tasks.find((t) => t.id === taskId)
   );
+
+  const [openModal, setOpenModal] = useState(false);
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  const handleOpenModal = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
+    event.stopPropagation(); // Prevents the GenericCard's onClick from firing
+    setAnchorEl(event.currentTarget as HTMLButtonElement);
+    setOpenModal(true);
+    console.log("Open modal");
+  };
+
+  const handleCloseModal = () => {
+    setAnchorEl(null);
+    setOpenModal(false);
+    console.log("Close modal");
+  };
 
   return (
     <GenericCard onClick={handleTaskClick}>
@@ -38,12 +56,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskId, handleTaskClick }) => {
               </Typography>
               <Typography variant="body1">{task?.name}</Typography>
             </Box>
-            <IconButton
-              aria-label="more options"
-              onClick={(event) => {
-                event.stopPropagation();
-              }}
-            >
+            <IconButton aria-label="more options" onClick={handleOpenModal}>
               <img src={MenuDotsVertical} alt="Więcej opcji" />
             </IconButton>
           </Box>
@@ -63,6 +76,12 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskId, handleTaskClick }) => {
           </Grid>
         </Grid>
       </Grid>
+      <OptionsPopup
+        open={openModal}
+        anchorEl={anchorEl}
+        onClose={handleCloseModal}
+        task={task}
+      />
     </GenericCard>
   );
 };
