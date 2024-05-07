@@ -10,6 +10,7 @@ import { Column } from "../Column/Column";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { Status } from "../../types";
+import ActionButtons from "../UI/ActionButtons";
 
 const columnTitles = {
   todo: "Do zrobienia",
@@ -83,42 +84,14 @@ const TasksBoard = () => {
           />
         </Grid>
 
-        <Grid item>
-          <Grid container spacing={3}>
-            <Grid item>
-              <Button
-                startIcon={<img src={EditIcon} alt="Edytuj" />}
-                variant="contained"
-                sx={{
-                  padding: "5px 20px",
-                  fontSize: "14px",
-                  zIndex: 2,
-                  borderRadius: "5px",
-                  backgroundColor: "#50557F",
-                }}
-                onClick={handleEdit}
-              >
-                Edytuj
-              </Button>
-            </Grid>
-            <Grid item>
-              <Button
-                startIcon={<AddIcon />}
-                variant="contained"
-                sx={{
-                  padding: "5px 20px",
-                  fontSize: "14px",
-                  zIndex: 2,
-                  borderRadius: "5px",
-                }}
-                onClick={handleAddTask}
-              >
-                Zadanie
-              </Button>
-            </Grid>
-          </Grid>
-        </Grid>
+        <ActionButtons handleAdd={handleAddTask} handleEdit={handleEdit}>
+          Zadanie
+        </ActionButtons>
       </Grid>
+
+      <ActionButtons handleAdd={handleAddTask} handleEdit={handleEdit}>
+        Zadanie
+      </ActionButtons>
 
       <DragDropContext onDragEnd={onDragEnd}>
         <Grid

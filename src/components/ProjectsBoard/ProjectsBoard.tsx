@@ -5,6 +5,7 @@ import { Add as AddIcon } from "@mui/icons-material";
 import ProjectCard from "../ProjectCard/ProjectCard";
 import { useProjectStore } from "../../store/ProjectStore";
 import ProjectInfoModal from "../ProjectInfoModal/ProjectInfoModal";
+import ActionButtons from "../UI/ActionButtons";
 
 export default function ProjectsBoard() {
   const theme = useTheme();
@@ -16,6 +17,14 @@ export default function ProjectsBoard() {
   useEffect(() => {
     fetchProjects();
   }, [fetchProjects]);
+
+  function handleAddProject() {
+    setIsProjectInfoModalOpen(true);
+  }
+
+  function handleEdit() {
+    console.log("Edit action triggered");
+  }
 
   return (
     <>
@@ -33,21 +42,10 @@ export default function ProjectsBoard() {
             rightButtonLink="/tablica"
           />
         </Grid>
-        <Grid item>
-          <Button
-            startIcon={<AddIcon />}
-            variant="contained"
-            sx={{
-              padding: "5px 20px",
-              fontSize: "14px",
-              zIndex: 2,
-              borderRadius: "5px",
-            }}
-            onClick={() => setIsProjectInfoModalOpen(true)}
-          >
-            Projekt
-          </Button>
-        </Grid>
+
+        <ActionButtons handleAdd={handleAddProject} handleEdit={handleEdit}>
+          Projekt
+        </ActionButtons>
       </Grid>
 
       <Grid
