@@ -5,11 +5,10 @@ import EditIcon from "../../assets/icons/EditIcon.svg";
 import AddTaskModal from "../TaskInfoModal/TaskInfoModal";
 import BoardNavigation from "../BoardNavigation/BoardNavigation";
 import { useTaskStore } from "../../store/TaskStore";
-import { DragDropContext } from "react-beautiful-dnd";
+import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { Column } from "../Column/Column";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import { DropResult } from "react-beautiful-dnd";
 import { Status } from "../../types";
 
 const columnTitles = {
@@ -53,6 +52,16 @@ const TasksBoard = () => {
     setIsAddTaskModalOpen(true);
   };
 
+  const handleEdit = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    event.stopPropagation();
+    console.log("Edit action triggered");
+  };
+
+  const handleAddTask = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    event.stopPropagation();
+    setIsAddTaskModalOpen(true);
+  };
+
   return (
     <>
       <Grid
@@ -83,7 +92,7 @@ const TasksBoard = () => {
                   borderRadius: "5px",
                   backgroundColor: "#50557F",
                 }}
-                onClick={() => setIsAddTaskModalOpen(true)}
+                onClick={handleEdit}
               >
                 Edytuj
               </Button>
@@ -98,7 +107,7 @@ const TasksBoard = () => {
                   zIndex: 2,
                   borderRadius: "5px",
                 }}
-                onClick={() => setIsAddTaskModalOpen(true)}
+                onClick={handleAddTask}
               >
                 Zadanie
               </Button>
