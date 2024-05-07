@@ -89,10 +89,6 @@ const TasksBoard = () => {
         </ActionButtons>
       </Grid>
 
-      <ActionButtons handleAdd={handleAddTask} handleEdit={handleEdit}>
-        Zadanie
-      </ActionButtons>
-
       <DragDropContext onDragEnd={onDragEnd}>
         <Grid
           container
