@@ -5,11 +5,15 @@ import ProjectCard from "../ProjectCard/ProjectCard";
 import { useProjectStore } from "../../store/ProjectStore";
 import ProjectInfoModal from "../ProjectInfoModal/ProjectInfoModal";
 import ActionButtons from "../UI/ActionButtons";
+import AddProjectForm from "../AddProjectForm/AddProjectForm";
 
 export default function ProjectsBoard() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [isProjectInfoModalOpen, setIsProjectInfoModalOpen] = useState(false);
+  const [isEditClicked, setIsEditClicked] = useState<string | null>(null);
+  const [isAddProjectFormModalOpen, setIsAddProjectFormModalOpen] =
+    useState(false);
 
   const { projects, fetchProjects } = useProjectStore();
 
@@ -17,13 +21,26 @@ export default function ProjectsBoard() {
     fetchProjects();
   }, [fetchProjects]);
 
-  function handleAddProject() {
-    setIsProjectInfoModalOpen(true);
+  const handleEdit = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    event.stopPropagation();
+    // setIsEditClicked((prevIsEditClicked) => !prevIsEditClicked);
+    console.log("Edit action triggered");
+  };
+
+  function handleProjectInfoModalClose() {
+    setIsProjectInfoModalOpen(false);
   }
 
-  function handleEdit() {
-    console.log("Edit action triggered");
+  function handleAddProjectFormClose() {
+    setIsAddProjectFormModalOpen(false);
   }
+
+  const handleAddProject = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
+    event.stopPropagation();
+    setIsAddProjectFormModalOpen(true);
+  };
 
   return (
     <>
@@ -71,6 +88,10 @@ export default function ProjectsBoard() {
       </Grid>
 
       <ProjectInfoModal isOpen={isProjectInfoModalOpen} />
+      <AddProjectForm
+        isOpen={isAddProjectFormModalOpen}
+        handleClose={handleAddProjectFormClose}
+      />
     </>
   );
 }
