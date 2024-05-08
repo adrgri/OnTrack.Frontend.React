@@ -91,6 +91,7 @@ export default function ProjectsBoard() {
       <AddProjectForm
         isOpen={isAddProjectFormModalOpen}
         handleClose={handleAddProjectFormClose}
+        title="Dodaj projekt"
       />
     </>
   );

@@ -14,9 +14,10 @@ import StyledSidebarModalInput from "../../styledComponents/StyledSidebarModalIn
 interface AddProjectFormProps {
   isOpen: boolean;
   handleClose: () => void;
+  title: string;
 }
 
-function AddProjectForm({ isOpen, handleClose }: AddProjectFormProps) {
+function AddProjectForm({ isOpen, handleClose, title }: AddProjectFormProps) {
   return (
     <Dialog
       fullWidth
@@ -39,7 +40,7 @@ function AddProjectForm({ isOpen, handleClose }: AddProjectFormProps) {
           mt: 2,
         }}
       >
-        Dodaj projekt
+        {title}
       </DialogTitle>
       <CloseButton onClick={handleClose} right={20} top={20} />
 
