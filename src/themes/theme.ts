@@ -29,7 +29,7 @@ export const theme = createTheme({
       fontSize: "0.875rem",
     },
     caption: {
-      fontSize: "1.7rem",
+      fontSize: "0.75rem",
     },
     overline: {
       fontSize: "0.875rem",
