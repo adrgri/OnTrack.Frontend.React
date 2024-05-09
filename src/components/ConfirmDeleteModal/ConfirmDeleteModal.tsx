@@ -7,6 +7,7 @@ interface ConfirmDeleteModalProps {
   onDeleteConfirm: () => void;
   onClose: () => void;
   itemName: string | undefined;
+  itemType: "task" | "project";
 }
 
 const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
@@ -14,7 +15,10 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
   onDeleteConfirm,
   onClose,
   itemName,
+  itemType,
 }) => {
+  const itemLabel = itemType === "task" ? "to zadanie" : "ten projekt";
+
   return (
     <Dialog maxWidth="md" open={isOpen} onClose={onClose}>
       <CloseButton onClick={onClose} right={10} top={10} />
@@ -27,8 +31,11 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
         }}
       >
         <Typography sx={{ textAlign: "center", mt: 7, mb: 3 }}>
-          Czy na pewno chcesz usunąć to zadanie{" "}
-          {<span style={{ fontWeight: "bold" }}> "{itemName}"</span>}?
+          Czy na pewno chcesz usunąć {itemLabel}{" "}
+          {itemName && (
+            <span style={{ fontWeight: "bold" }}> "{itemName}"</span>
+          )}
+          ?
         </Typography>
         <Box
           sx={{
