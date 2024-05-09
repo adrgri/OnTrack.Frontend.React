@@ -11,7 +11,7 @@ export default function ProjectsBoard() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [isProjectInfoModalOpen, setIsProjectInfoModalOpen] = useState(false);
-  const [isEditClicked, setIsEditClicked] = useState<string | null>(null);
+  const [isEditClicked, setIsEditClicked] = useState(false);
   const [isAddProjectFormModalOpen, setIsAddProjectFormModalOpen] =
     useState(false);
 
@@ -23,7 +23,7 @@ export default function ProjectsBoard() {
 
   const handleEdit = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
-    // setIsEditClicked((prevIsEditClicked) => !prevIsEditClicked);
+    setIsEditClicked((prevIsEditClicked) => !prevIsEditClicked);
     console.log("Edit action triggered");
   };
 
@@ -83,6 +83,7 @@ export default function ProjectsBoard() {
             key={project.id}
             projectId={project.id}
             handleTaskClick={() => {}}
+            isEditClicked={isEditClicked}
           />
         ))}
       </Grid>
