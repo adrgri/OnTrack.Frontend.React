@@ -1,6 +1,6 @@
 import "devextreme/dist/css/dx.light.css";
 import { Suspense, lazy, useEffect } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./themes/theme";
 import { AuthProvider } from "./contexts/AuthContext";
@@ -14,12 +14,31 @@ import { ToastContainer } from "react-toastify";
 
 dayjs.locale("pl");
 
+// Lazy-loaded components
 const Login = lazy(() => import("./pages/Login/Login"));
 const Register = lazy(() => import("./pages/Register/Register"));
 const Settings = lazy(() => import("./pages/Settings/Settings"));
 const Tablica = lazy(() => import("./pages/Tablica/Tablica"));
 const Home = lazy(() => import("./pages/Home/Home"));
 const Projects = lazy(() => import("./pages/Projects/Projects"));
+// const TasksPage = lazy(() => import('./pages/Projects/TasksPage'));
+
+// Route configuration
+const routes = [
+  { path: "/login", element: <Login /> },
+  { path: "/register", element: <Register /> },
+  { path: "/settings", element: <Settings />, protected: true },
+  { path: "/tablica", element: <Tablica />, protected: true },
+  { path: "/home", element: <Home />, protected: true },
+  { path: "/", element: <Home />, protected: true },
+  {
+    path: "/projects",
+    element: <Projects />,
+    protected: true,
+    // children: [{ path: ":projectId/tasks", element: <TasksPage /> }],
+  },
+  { path: "*", element: <div>404 Not Found</div> },
+];
 
 function App() {
   useEffect(() => {
@@ -49,55 +68,30 @@ function App() {
           />
           <Suspense fallback={<Loading />}>
             <Routes>
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route
-                path="/settings"
-                element={
-                  // <ProtectedRoute>
-                  <Settings />
-                  // </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/tablica"
-                element={
-                  // <ProtectedRoute>
-                  <Tablica />
-                  // </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/home"
-                element={
-                  // <ProtectedRoute>
-                  <Home />
-                  // </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/"
-                element={
-                  // <ProtectedRoute>
-                  <Home />
-                  // </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/projects"
-                element={
-                  // <ProtectedRoute>
-                  <Projects />
-                  // </ProtectedRoute>
-                }
-              />
-              <Route path="*" element={<div>404</div>} />
+              {routes.map(({ path, element, protected: isProtected }) => (
+                <Route
+                  key={path}
+                  path={path}
+                  element={
+                    isProtected ? (
+                      <ProtectedRoute>{element}</ProtectedRoute>
+                    ) : (
+                      element
+                    )
+                  }
+                />
+              ))}
             </Routes>
           </Suspense>
         </BrowserRouter>
       </AuthProvider>
     </ThemeProvider>
   );
+}
+
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const isAuthenticated = true; // This should be determined dynamically //TODO
+  return isAuthenticated ? children : <Navigate to="/login" replace />;
 }
 
 export default App;
