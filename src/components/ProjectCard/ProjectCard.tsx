@@ -28,7 +28,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   );
 
   const progress = project?.progress ?? 0;
-
+  const [isOptionsPopupOpen, setIsOptionsPopupOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   const { requestDelete, confirmDelete, isConfirmOpen, closeModal } =
@@ -39,6 +39,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   ) => {
     event.stopPropagation();
     setAnchorEl(event.currentTarget as HTMLButtonElement);
+    setIsOptionsPopupOpen(true);
   };
 
   const handleDelete = useCallback(() => {
@@ -136,9 +137,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         <Grid></Grid>
       </Grid>
       <OptionsPopup
-        open={Boolean(anchorEl)}
+        open={isOptionsPopupOpen}
         anchorEl={anchorEl}
-        onClose={() => setAnchorEl(null)}
+        onClose={() => setIsOptionsPopupOpen(false)}
         onEdit={() => console.log("Edit Project")}
         onDelete={handleDelete}
       />
