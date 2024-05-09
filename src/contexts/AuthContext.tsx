@@ -36,6 +36,8 @@ type AuthProviderProps = {
   children: React.ReactNode;
 };
 
+const { VITE_API_URL } = import.meta.env;
+
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
@@ -51,7 +53,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = useCallback(async (loginData: LoginData) => {
     try {
-      const response = await api.post(`api/identity/login`, loginData);
+      const response = await api.post(
+        `${VITE_API_URL}/identity/login`,
+        loginData
+      );
       console.log(response.data);
       const { accessToken, refreshToken, expiresIn } = response.data;
 
@@ -70,7 +75,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     async (registrationData: RegistrationData): Promise<RegistrationResult> => {
       try {
         const response = await api.post(
-          "api/identity/register",
+          `${VITE_API_URL}/identity/register`,
           registrationData
         );
         const newUser: User = response.data; // Assuming the server returns the new user details
@@ -104,7 +109,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // If there's an access token, attempt to notify the server about the logout
       if (accessToken) {
         await api.post(
-          "api/identity/logout",
+          `${VITE_API_URL}/identity/logout`,
           {},
           {
             headers: {
@@ -130,7 +135,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const resetPassword = useCallback(async (email: string) => {
     try {
-      await api.post("api/identity/forgotPassword", { email });
+      await api.post(`${VITE_API_URL}/identity/forgotPassword`, { email });
 
       console.log("Password reset email sent to", email);
     } catch (error) {
