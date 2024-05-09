@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Typography, Grid, Box, IconButton } from "@mui/material";
 import { useTaskStore } from "../../store/TaskStore";
 import DateChip from "../CardComponents/DateChip";
@@ -37,6 +37,15 @@ const TaskCard: React.FC<TaskCardProps> = ({
     setIsOptionsPopupOpen(true);
   };
 
+  const handleDelete = useCallback(() => {
+    if (task) {
+      requestDelete(
+        { id: task.id, type: "task" },
+        useTaskStore.getState().deleteTask
+      );
+    }
+  }, [task, requestDelete]);
+
   return (
     <GenericCard onClick={handleTaskClick}>
       <Grid container direction="column" spacing={1}>
@@ -53,19 +62,13 @@ const TaskCard: React.FC<TaskCardProps> = ({
               <Typography
                 sx={{ fontSize: "1rem", color: "primary.main", mb: 1.5 }}
               >
-                {task?.name}
+                {"project?.name"}
               </Typography>
+              <Typography variant="body1">{task?.name}</Typography>
             </Box>
             <IconButton
               aria-label="more options"
-              onClick={
-                isEditClicked
-                  ? (event) => {
-                      event.stopPropagation(); // Ensure to stop propagation here as well
-                      requestDelete(task, useTaskStore.getState().deleteTask);
-                    }
-                  : handleOpenOptionsPopup
-              }
+              onClick={isEditClicked ? handleDelete : handleOpenOptionsPopup}
             >
               {isEditClicked ? (
                 <img src={CloseIcon} alt="Usuń" />
@@ -94,13 +97,14 @@ const TaskCard: React.FC<TaskCardProps> = ({
         anchorEl={anchorEl}
         onClose={() => setIsOptionsPopupOpen(false)}
         onEdit={() => console.log("Edit Task")}
-        onDelete={() => requestDelete(task, useTaskStore.getState().deleteTask)}
+        onDelete={handleDelete}
       />
       <ConfirmDeleteModal
         isOpen={isConfirmOpen}
         onDeleteConfirm={confirmDelete}
         onClose={closeModal}
         itemName={task?.name}
+        itemType="task"
       />
     </GenericCard>
   );
