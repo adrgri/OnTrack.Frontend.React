@@ -10,42 +10,49 @@ import SearchIcon from "../../assets/icons/SearchIcon.svg";
 import CloseButton from "../CloseButton/CloseButton";
 import SmallButton from "../../styledComponents/SmallButton";
 import StyledSidebarModalInput from "../../styledComponents/StyledSidebarModalInput";
-import { useEffect, useState } from "react";
-
-interface Project {
-  id: string;
-  name: string;
-  description: string;
-}
+import { useFormik } from "formik";
+import { Project } from "../../types";
+import { useProjectStore } from "../../store/ProjectStore";
 
 interface ProjectFormProps {
   isOpen: boolean;
-  handleClose: (event: React.MouseEvent<HTMLElement>) => void;
+  handleClose: () => void;
   project?: Project; // May be undefined for 'add' mode
   mode: "add" | "edit";
 }
 
 function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
-  const [name, setName] = useState("");
-  const [description, setDescription] = useState("");
+  const { addProject, updateProject } = useProjectStore();
 
-  useEffect(() => {
-    if (mode === "edit" && project) {
-      setName(project.name);
-      setDescription(project.description);
-    } else {
-      setName("");
-      setDescription("");
-    }
-  }, [project, mode]);
+  const formik = useFormik({
+    initialValues: {
+      name: project?.name || "",
+      description: project?.description || "",
+      members: project?.members?.join(", ") || "",
+    },
+    onSubmit: async (values, { setSubmitting }) => {
+      const newProjectData = {
+        ...project,
+        name: values.name,
+        description: values.description,
+        members: values.members.split(",").map((member) => member.trim()),
+      };
 
-  const handleSubmit = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
-    event.preventDefault();
-    const projectData = { name, description };
-    console.log(`${mode === "add" ? "Dodaj" : "Edytuj"} projekt:`, projectData);
-    handleClose(event);
-  };
-
+      try {
+        if (mode === "add") {
+          await addProject(newProjectData);
+        } else if (mode === "edit" && project?.id) {
+          await updateProject(project.id, newProjectData);
+        }
+        handleClose();
+      } catch (error) {
+        console.error("Error submitting the project:", error);
+      } finally {
+        setSubmitting(false);
+      }
+    },
+    enableReinitialize: true,
+  });
   return (
     <Dialog
       fullWidth
@@ -72,7 +79,7 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
       </DialogTitle>
       <CloseButton onClick={handleClose} right={20} top={20} />
 
-      <form>
+      <form onSubmit={formik.handleSubmit}>
         <DialogContent sx={{ paddingBottom: 12 }}>
           <Typography
             variant="body1"
@@ -83,10 +90,10 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
           <StyledSidebarModalInput
             fullWidth
             variant="filled"
-            // value={task.text}
-            // onChange={(e) => handleInputChange(task.id, e.target.value)}
+            name="name"
+            value={formik.values.name}
+            onChange={formik.handleChange}
             placeholder="Wpisz nazwe projektu"
-            // onKeyPress={(e) => handleKeyPress(e, task)}
             sx={{ width: 300 }}
           />
           <Typography
@@ -99,10 +106,10 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
           <StyledSidebarModalInput
             fullWidth
             variant="filled"
-            // value={task.text}
-            // onChange={(e) => handleInputChange(task.id, e.target.value)}
+            name="members"
+            value={formik.values.members}
+            onChange={formik.handleChange}
             placeholder="Wyszukaj członków"
-            // onKeyPress={(e) => handleKeyPress(e, task)}
             sx={{ width: 300 }}
             endAdornment={
               <InputAdornment position="end">
@@ -125,12 +132,11 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
             type="submit"
             variant="contained"
             sx={{ marginRight: 2 }}
-            onClick={handleSubmit}
           >
             Zapisz
           </SmallButton>
           <SmallButton
-            type="submit"
+            type="button"
             variant="contained"
             sx={{ backgroundColor: "#5E5F7D" }}
             onClick={handleClose}
