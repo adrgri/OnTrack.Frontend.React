@@ -9,6 +9,7 @@ import MenuDotsVertical from "../../assets/icons/MenuDotsVertical.svg";
 import CloseIcon from "../../assets/icons/CloseIcon.svg";
 import OptionsPopup from "../layout/OptionsPopup";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
+import useDeletion from "../../hooks/useDeletion";
 
 type TaskCardProps = {
   taskId: string;
@@ -24,35 +25,13 @@ const TaskCard: React.FC<TaskCardProps> = ({
   const task = useTaskStore((state) =>
     state.tasks.find((t) => t.id === taskId)
   );
-  const [isConfirmDeleteModalOpen, setIsConfirmDeleteModalOpen] =
-    useState(false);
   const [isOptionsPopupOpen, setIsOptionsPopupOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
-  const handleOpenDeleteModal = (event: React.MouseEvent) => {
-    event.stopPropagation();
-    setIsConfirmDeleteModalOpen(true);
-  };
+  const { requestDelete, confirmDelete, isConfirmOpen, closeModal } =
+    useDeletion();
 
-  const handleDeleteConfirm = () => {
-    if (task?.id) {
-      useTaskStore
-        .getState()
-        .deleteTask(task.id)
-        .then(() => {
-          console.log("Task deleted successfully");
-          setIsConfirmDeleteModalOpen(false);
-          setIsOptionsPopupOpen(false);
-        })
-        .catch((error) => {
-          console.error("Failed to delete task:", error);
-        });
-    }
-  };
-
-  const handleOpenOptionsPopup = (
-    event: React.MouseEvent<HTMLElement, MouseEvent>
-  ) => {
+  const handleOpenOptionsPopup = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
     setAnchorEl(event.currentTarget as HTMLButtonElement);
     setIsOptionsPopupOpen(true);
@@ -74,14 +53,18 @@ const TaskCard: React.FC<TaskCardProps> = ({
               <Typography
                 sx={{ fontSize: "1rem", color: "primary.main", mb: 1.5 }}
               >
-                {"project?.name"}
+                {task?.name}
               </Typography>
-              <Typography variant="body1">{task?.name}</Typography>
             </Box>
             <IconButton
               aria-label="more options"
               onClick={
-                isEditClicked ? handleOpenDeleteModal : handleOpenOptionsPopup
+                isEditClicked
+                  ? (event) => {
+                      event.stopPropagation(); // Ensure to stop propagation here as well
+                      requestDelete(task, useTaskStore.getState().deleteTask);
+                    }
+                  : handleOpenOptionsPopup
               }
             >
               {isEditClicked ? (
@@ -99,25 +82,25 @@ const TaskCard: React.FC<TaskCardProps> = ({
 
         <Grid item container xs={12} alignItems="center" spacing={2}>
           <Grid item xs={true}>
-            {<DateChip date={task?.endDate ?? null} />}
+            <DateChip date={task?.endDate ?? null} />
           </Grid>
-
           <Grid item xs={true} container justifyContent="flex-end">
             <MembersAvatarsRow members={task?.members ?? []} />
           </Grid>
         </Grid>
       </Grid>
-      <ConfirmDeleteModal
-        isOpen={isConfirmDeleteModalOpen}
-        onDeleteConfirm={handleDeleteConfirm}
-        onClose={() => setIsConfirmDeleteModalOpen(false)}
-        task={task}
-      />
       <OptionsPopup
         open={isOptionsPopupOpen}
         anchorEl={anchorEl}
         onClose={() => setIsOptionsPopupOpen(false)}
-        task={task}
+        onEdit={() => console.log("Edit Task")}
+        onDelete={() => requestDelete(task, useTaskStore.getState().deleteTask)}
+      />
+      <ConfirmDeleteModal
+        isOpen={isConfirmOpen}
+        onDeleteConfirm={confirmDelete}
+        onClose={closeModal}
+        itemName={task?.name}
       />
     </GenericCard>
   );
