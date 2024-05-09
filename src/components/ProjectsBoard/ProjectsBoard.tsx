@@ -31,7 +31,8 @@ export default function ProjectsBoard() {
     setIsProjectInfoModalOpen(false);
   }
 
-  function handleAddProjectFormClose() {
+  function handleAddProjectFormClose(event: React.MouseEvent<HTMLElement>) {
+    event.preventDefault();
     setIsAddProjectFormModalOpen(false);
   }
 

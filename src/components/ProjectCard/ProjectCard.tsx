@@ -58,6 +58,11 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     setIsOptionsPopupOpen(false);
   }, []);
 
+  const handleFormClose = (event: React.MouseEvent<HTMLElement>) => {
+    event.preventDefault();
+    setIsFormOpen(false);
+  };
+
   return (
     <>
       <GenericCard
@@ -161,7 +166,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       </GenericCard>
       <ProjectForm
         isOpen={isFormOpen}
-        handleClose={() => setIsFormOpen(false)}
+        handleClose={handleFormClose}
         // project={project}
         mode="edit"
       />

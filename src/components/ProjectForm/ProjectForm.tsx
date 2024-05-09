@@ -20,7 +20,7 @@ interface Project {
 
 interface ProjectFormProps {
   isOpen: boolean;
-  handleClose: () => void;
+  handleClose: (event: React.MouseEvent<HTMLElement>) => void;
   project?: Project; // May be undefined for 'add' mode
   mode: "add" | "edit";
 }
@@ -43,7 +43,7 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
     event.preventDefault();
     const projectData = { name, description };
     console.log(`${mode === "add" ? "Dodaj" : "Edytuj"} projekt:`, projectData);
-    handleClose();
+    handleClose(event);
   };
 
   return (
@@ -133,7 +133,7 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
             type="submit"
             variant="contained"
             sx={{ backgroundColor: "#5E5F7D" }}
-            // onClick={onCancel}
+            onClick={handleClose}
           >
             Anuluj
           </SmallButton>
