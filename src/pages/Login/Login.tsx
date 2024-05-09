@@ -1,30 +1,32 @@
 import { useState } from "react";
 import LoginForm from "../../components/LoginForm/LoginForm";
 import ForgotPasswordModal from "../../components/ForgotPasswordModal/ForgotPasswordModal";
+import ResetPasswordModal from "../../components/ResetPasswordModal/ResetpasswordModal";
 // import ResetPasswordModal from "../../components/ResetPasswordModal/ResetpasswordModal";
 // import { useAuth } from "../../contexts/AuthContext";
 import Logo from "../../assets/logos/Logo.svg";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Login = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  // const { resetPassword } = useAuth();
-  // const [isResetModalOpen, setIsResetModalOpen] = useState(false);
+  const { resetPassword } = useAuth();
+  const [isResetModalOpen, setIsResetModalOpen] = useState(false);
 
   const handleClickOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  // // Inside Login component
-  // const handleResetPassword = async (email) => {
-  //   try {
-  //     await resetPassword(email);
-  //     // Assuming resetPassword is a promise that resolves when successful
-  //     setIsModalOpen(false); // Close ForgotPasswordModal
-  //     setIsResetModalOpen(true); // Open ResetPasswordModal
-  //   } catch (error) {
-  //     console.error("Reset password failed:", error);
-  //     // Handle error, possibly staying on the same modal and showing an error message
-  //   }
-  // };
+  // Inside Login component
+  const handleResetPassword = async (email: string) => {
+    try {
+      await resetPassword(email);
+      // Assuming resetPassword is a promise that resolves when successful
+      setIsModalOpen(false); // Close ForgotPasswordModal
+      setIsResetModalOpen(true); // Open ResetPasswordModal
+    } catch (error) {
+      console.error("Reset password failed:", error);
+      // Handle error, possibly staying on the same modal and showing an error message
+    }
+  };
 
   return (
     <div
@@ -54,8 +56,14 @@ const Login = () => {
         handleClose={handleCloseModal}
         onResetSuccess={(email) => {
           console.log("Reset email sent to:", email);
-          // setIsResetModalOpen(true);
+          setIsResetModalOpen(true);
         }}
+      />
+
+      <ResetPasswordModal
+        isOpen={isResetModalOpen}
+        handleClose={() => setIsResetModalOpen(false)}
+        onResetSuccess={handleResetPassword}
       />
     </div>
   );

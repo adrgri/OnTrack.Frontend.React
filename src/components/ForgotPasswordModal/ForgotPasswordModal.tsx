@@ -60,7 +60,7 @@ const ForgotPasswordModal: FC<ForgotPasswordModalProps> = ({
   return (
     <div>
       <StyledDialog fullWidth maxWidth="sm" open={isOpen} onClose={handleClose}>
-        <DialogTitle component="h5" sx={{ m: 0, p: 2 }}>
+        <DialogTitle sx={{ m: 0, p: 2, fontSize: "1.2rem" }}>
           Zapomniałem hasła
           <CloseButton onClick={handleClose} />
         </DialogTitle>

@@ -23,7 +23,8 @@ type AuthContextType = {
   logout: () => void;
   changePassword: (
     currentPassword: string,
-    newPassword: string
+    newPassword: string,
+    repeatPassword: string
   ) => Promise<void>;
   resetPassword: (email: string) => Promise<void>;
 };
