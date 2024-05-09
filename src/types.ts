@@ -1,7 +1,9 @@
 import dayjs from "dayjs";
 
 export type UserProfileProps = {
+  name?: string;
   avatar: string;
+  setAvatarFile?: (file: File) => void;
 };
 
 export type Icon = {
@@ -82,10 +84,11 @@ export type RegistrationResult = {
 };
 
 export type Project = {
-  id: string;
+  id?: string | undefined;
   name: string;
-  members: User[];
-  endDate: dayjs.Dayjs | null | undefined | string;
-  tasksAmount: number;
-  progress: number;
+  description?: string;
+  members?: string[];
+  endDate?: dayjs.Dayjs | null | undefined | string;
+  tasksAmount?: number | undefined;
+  progress?: number | undefined;
 };
