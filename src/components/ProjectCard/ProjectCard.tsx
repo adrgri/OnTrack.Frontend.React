@@ -1,20 +1,27 @@
-import React from "react";
-import { Typography, Grid, Stack } from "@mui/material";
+import React, { useCallback, useState } from "react";
+import { Typography, Grid, Stack, IconButton } from "@mui/material";
 import { useProjectStore } from "../../store/ProjectStore";
 import TasksIcon from "../../assets/icons/TasksIcon.svg";
 import DateChip from "../CardComponents/DateChip";
 import CircularProgressWithLabel from "../CardComponents/CircularProgressWithLabel";
 import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
 import GenericCard from "../GenericCard/GenericCard";
+import MenuDotsVertical from "../../assets/icons/MenuDotsVertical.svg";
+import CloseIcon from "../../assets/icons/CloseIcon.svg";
+import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
+import OptionsPopup from "../layout/OptionsPopup";
+import useDeletion from "../../hooks/useDeletion";
 
 interface ProjectCardProps {
   projectId: string;
   handleTaskClick: () => void;
+  isEditClicked: boolean;
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
   projectId,
   handleTaskClick,
+  isEditClicked,
 }) => {
   const project = useProjectStore((state) =>
     state.projects.find((p) => p.id === projectId)
@@ -22,8 +29,44 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
   const progress = project?.progress ?? 0;
 
+  const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+
+  const { requestDelete, confirmDelete, isConfirmOpen, closeModal } =
+    useDeletion();
+
+  const handleOpenOptionsPopup = (
+    event: React.MouseEvent<HTMLElement, MouseEvent>
+  ) => {
+    event.stopPropagation();
+    setAnchorEl(event.currentTarget as HTMLButtonElement);
+  };
+
+  const handleDelete = useCallback(() => {
+    if (project) {
+      requestDelete(
+        { id: project.id, type: "project" },
+        useProjectStore.getState().deleteProject
+      );
+    }
+  }, [project, requestDelete]);
+
   return (
-    <GenericCard onClick={handleTaskClick} sx={{ width: "400px" }}>
+    <GenericCard
+      onClick={handleTaskClick}
+      sx={{ width: "400px", position: "relative" }}
+    >
+      <IconButton
+        aria-label="more options"
+        sx={{ position: "absolute", top: 8, right: 8 }}
+        onClick={isEditClicked ? handleDelete : handleOpenOptionsPopup}
+      >
+        {isEditClicked ? (
+          <img src={CloseIcon} alt="Usuń" />
+        ) : (
+          <img src={MenuDotsVertical} alt="Więcej opcji" />
+        )}
+      </IconButton>
+
       <Grid
         container
         direction="row"
@@ -31,7 +74,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         alignItems="center"
         justifyContent={"space-between"}
       >
-        <Grid item direction="column" spacing={2}>
+        {/* Column 1: Project name, team, and date */}
+        <Grid item direction="column" spacing={2} xs={7}>
           <Grid item xs={12} mb={2} alignItems="center">
             <Typography>{project?.name}</Typography>
           </Grid>
@@ -60,12 +104,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           </Grid>
         </Grid>
 
+        {/* Column 2: Progress and task count */}
         <Grid
           item
           direction="column"
           spacing={2}
           alignItems="center"
           justifyContent={"space-between"}
+          xs={4}
         >
           <Grid item xs={true} container justifyContent="center">
             <CircularProgressWithLabel value={progress} />
@@ -87,7 +133,22 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             </Typography>
           </Grid>
         </Grid>
+        <Grid></Grid>
       </Grid>
+      <OptionsPopup
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        onClose={() => setAnchorEl(null)}
+        onEdit={() => console.log("Edit Project")}
+        onDelete={handleDelete}
+      />
+      <ConfirmDeleteModal
+        isOpen={isConfirmOpen}
+        onDeleteConfirm={confirmDelete}
+        onClose={closeModal}
+        itemName={project?.name}
+        itemType="project"
+      />
     </GenericCard>
   );
 };
