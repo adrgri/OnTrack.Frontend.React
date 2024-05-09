@@ -1,21 +1,20 @@
+import { Dialog, DialogContent, Typography, Box } from "@mui/material";
 import SmallButton from "../../styledComponents/SmallButton";
-import { Task } from "../../types";
 import CloseButton from "../CloseButton/CloseButton";
-import { Box, Dialog, DialogContent, Typography } from "@mui/material";
 
-type ConfirmDeleteModalProps = {
+interface ConfirmDeleteModalProps {
   isOpen: boolean;
   onDeleteConfirm: () => void;
   onClose: () => void;
-  task: Task | undefined;
-};
+  itemName: string | undefined;
+}
 
-const ConfirmDeleteModal = ({
+const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
   isOpen,
   onDeleteConfirm,
   onClose,
-  task,
-}: ConfirmDeleteModalProps) => {
+  itemName,
+}) => {
   return (
     <Dialog maxWidth="md" open={isOpen} onClose={onClose}>
       <CloseButton onClick={onClose} right={10} top={10} />
@@ -27,17 +26,10 @@ const ConfirmDeleteModal = ({
           width: "450px",
         }}
       >
-        <Typography
-          sx={{
-            textAlign: "center",
-            mt: 7,
-            mb: 3,
-          }}
-        >
-          Czy na pewno chcesz usunąć to zadanie
-          {<span style={{ fontWeight: "bold" }}> "{task?.name}"</span>}?
+        <Typography sx={{ textAlign: "center", mt: 7, mb: 3 }}>
+          Czy na pewno chcesz usunąć to zadanie{" "}
+          {<span style={{ fontWeight: "bold" }}> "{itemName}"</span>}?
         </Typography>
-
         <Box
           sx={{
             display: "flex",
