@@ -2,7 +2,7 @@ import { useState } from "react";
 
 interface DeletableItem {
   id: string;
-  type: string; // "task" or "project"
+  type: "task" | "project";
 }
 
 interface DeletionState {
