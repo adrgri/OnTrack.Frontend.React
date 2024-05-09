@@ -54,6 +54,7 @@ const CircularProgressWithLabel: React.FC<CircularProgressWithLabelProps> = ({
           variant="caption"
           component="div"
           color="primary.main"
+          fontSize="1.75rem"
         >{`${Math.round(value)}%`}</Typography>
       </Box>
     </Box>
