@@ -5,7 +5,7 @@ import ProjectCard from "../ProjectCard/ProjectCard";
 import { useProjectStore } from "../../store/ProjectStore";
 import ProjectInfoModal from "../ProjectInfoModal/ProjectInfoModal";
 import ActionButtons from "../UI/ActionButtons";
-import AddProjectForm from "../AddProjectForm/AddProjectForm";
+import ProjectForm from "../ProjectForm/ProjectForm";
 
 export default function ProjectsBoard() {
   const theme = useTheme();
@@ -89,10 +89,10 @@ export default function ProjectsBoard() {
       </Grid>
 
       <ProjectInfoModal isOpen={isProjectInfoModalOpen} />
-      <AddProjectForm
+      <ProjectForm
         isOpen={isAddProjectFormModalOpen}
         handleClose={handleAddProjectFormClose}
-        title="Dodaj projekt"
+        mode="add"
       />
     </>
   );

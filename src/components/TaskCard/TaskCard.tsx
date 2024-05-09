@@ -11,11 +11,11 @@ import OptionsPopup from "../layout/OptionsPopup";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import useDeletion from "../../hooks/useDeletion";
 
-type TaskCardProps = {
+interface TaskCardProps {
   taskId: string;
   handleTaskClick: () => void;
   isEditClicked: boolean;
-};
+}
 
 const TaskCard: React.FC<TaskCardProps> = ({
   taskId,

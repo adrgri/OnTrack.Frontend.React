@@ -11,6 +11,7 @@ import CloseIcon from "../../assets/icons/CloseIcon.svg";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import OptionsPopup from "../layout/OptionsPopup";
 import useDeletion from "../../hooks/useDeletion";
+import ProjectForm from "../ProjectForm/ProjectForm";
 
 interface ProjectCardProps {
   projectId: string;
@@ -30,6 +31,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const progress = project?.progress ?? 0;
   const [isOptionsPopupOpen, setIsOptionsPopupOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   const { requestDelete, confirmDelete, isConfirmOpen, closeModal } =
     useDeletion();
@@ -51,106 +53,119 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     }
   }, [project, requestDelete]);
 
+  const handleEdit = useCallback(() => {
+    setIsFormOpen(true);
+    setIsOptionsPopupOpen(false);
+  }, []);
+
   return (
-    <GenericCard
-      onClick={handleTaskClick}
-      sx={{ width: "400px", position: "relative" }}
-    >
-      <IconButton
-        aria-label="more options"
-        sx={{ position: "absolute", top: 8, right: 8 }}
-        onClick={isEditClicked ? handleDelete : handleOpenOptionsPopup}
+    <>
+      <GenericCard
+        onClick={handleTaskClick}
+        sx={{ width: "400px", position: "relative" }}
       >
-        {isEditClicked ? (
-          <img src={CloseIcon} alt="Usuń" />
-        ) : (
-          <img src={MenuDotsVertical} alt="Więcej opcji" />
-        )}
-      </IconButton>
+        <IconButton
+          aria-label="more options"
+          sx={{ position: "absolute", top: 8, right: 8 }}
+          onClick={isEditClicked ? handleDelete : handleOpenOptionsPopup}
+        >
+          {isEditClicked ? (
+            <img src={CloseIcon} alt="Usuń" />
+          ) : (
+            <img src={MenuDotsVertical} alt="Więcej opcji" />
+          )}
+        </IconButton>
 
-      <Grid
-        container
-        direction="row"
-        spacing={2}
-        alignItems="center"
-        justifyContent={"space-between"}
-      >
-        {/* Column 1: Project name, team, and date */}
-        <Grid item direction="column" spacing={2} xs={7}>
-          <Grid item xs={12} mb={2} alignItems="center">
-            <Typography>{project?.name}</Typography>
-          </Grid>
-
-          <Grid item xs={12}>
-            <Stack
-              spacing={2}
-              mb={2}
-              sx={{
-                "& > :not(style) ~ :not(style)": {
-                  mt: 0,
-                },
-              }}
-            >
-              <Typography variant="subtitle2" color="text.secondary">
-                Zespół
-              </Typography>
-              <MembersAvatarsRow members={project?.members ?? []} />
-            </Stack>
-          </Grid>
-
-          <Grid item xs={12}>
-            <Grid item xs={true}>
-              {project?.endDate && <DateChip date={project.endDate} />}
-            </Grid>
-          </Grid>
-        </Grid>
-
-        {/* Column 2: Progress and task count */}
         <Grid
-          item
-          direction="column"
+          container
+          direction="row"
           spacing={2}
           alignItems="center"
           justifyContent={"space-between"}
-          xs={4}
         >
-          <Grid item xs={true} container justifyContent="center">
-            <CircularProgressWithLabel value={progress} />
+          {/* Column 1: Project name, team, and date */}
+          <Grid item direction="column" spacing={2} xs={7}>
+            <Grid item xs={12} mb={2} alignItems="center">
+              <Typography>{project?.name}</Typography>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Stack
+                spacing={2}
+                mb={2}
+                sx={{
+                  "& > :not(style) ~ :not(style)": {
+                    mt: 0,
+                  },
+                }}
+              >
+                <Typography variant="subtitle2" color="text.secondary">
+                  Zespół
+                </Typography>
+                <MembersAvatarsRow members={project?.members ?? []} />
+              </Stack>
+            </Grid>
+
+            <Grid item xs={12}>
+              <Grid item xs={true}>
+                {project?.endDate && <DateChip date={project.endDate} />}
+              </Grid>
+            </Grid>
           </Grid>
 
+          {/* Column 2: Progress and task count */}
           <Grid
             item
-            xs={12}
-            mt={2}
-            container
+            direction="column"
+            spacing={2}
             alignItems="center"
-            justifyContent="center"
+            justifyContent={"space-between"}
+            xs={4}
           >
-            <img src={TasksIcon} alt="Tasks" />
-            <Typography variant="subtitle2" color="text.secondary" ml={1}>
-              {`${project?.tasksAmount ?? 0} ${
-                project?.tasksAmount === 1 ? "zadanie" : "zadań"
-              }`}
-            </Typography>
+            <Grid item xs={true} container justifyContent="center">
+              <CircularProgressWithLabel value={progress} />
+            </Grid>
+
+            <Grid
+              item
+              xs={12}
+              mt={2}
+              container
+              alignItems="center"
+              justifyContent="center"
+            >
+              <img src={TasksIcon} alt="Tasks" />
+              <Typography variant="subtitle2" color="text.secondary" ml={1}>
+                {`${project?.tasksAmount ?? 0} ${
+                  project?.tasksAmount === 1 ? "zadanie" : "zadań"
+                }`}
+              </Typography>
+            </Grid>
           </Grid>
+          <Grid></Grid>
         </Grid>
-        <Grid></Grid>
-      </Grid>
-      <OptionsPopup
-        open={isOptionsPopupOpen}
-        anchorEl={anchorEl}
-        onClose={() => setIsOptionsPopupOpen(false)}
-        onEdit={() => console.log("Edit Project")}
-        onDelete={handleDelete}
+        <OptionsPopup
+          open={isOptionsPopupOpen}
+          anchorEl={anchorEl}
+          onClose={() => setIsOptionsPopupOpen(false)}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+        <ConfirmDeleteModal
+          isOpen={isConfirmOpen}
+          onDeleteConfirm={confirmDelete}
+          onClose={closeModal}
+          itemName={project?.name}
+          itemType="project"
+        />
+      </GenericCard>
+      <ProjectForm
+        isOpen={isFormOpen}
+        handleClose={() => setIsFormOpen(false)}
+        // project={project}
+        mode="edit"
       />
-      <ConfirmDeleteModal
-        isOpen={isConfirmOpen}
-        onDeleteConfirm={confirmDelete}
-        onClose={closeModal}
-        itemName={project?.name}
-        itemType="project"
-      />
-    </GenericCard>
+    </>
   );
 };
 

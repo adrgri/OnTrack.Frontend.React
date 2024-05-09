@@ -10,14 +10,42 @@ import SearchIcon from "../../assets/icons/SearchIcon.svg";
 import CloseButton from "../CloseButton/CloseButton";
 import SmallButton from "../../styledComponents/SmallButton";
 import StyledSidebarModalInput from "../../styledComponents/StyledSidebarModalInput";
+import { useEffect, useState } from "react";
 
-interface AddProjectFormProps {
-  isOpen: boolean;
-  handleClose: () => void;
-  title: string;
+interface Project {
+  id: string;
+  name: string;
+  description: string;
 }
 
-function AddProjectForm({ isOpen, handleClose, title }: AddProjectFormProps) {
+interface ProjectFormProps {
+  isOpen: boolean;
+  handleClose: () => void;
+  project?: Project; // May be undefined for 'add' mode
+  mode: "add" | "edit";
+}
+
+function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+
+  useEffect(() => {
+    if (mode === "edit" && project) {
+      setName(project.name);
+      setDescription(project.description);
+    } else {
+      setName("");
+      setDescription("");
+    }
+  }, [project, mode]);
+
+  const handleSubmit = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    event.preventDefault();
+    const projectData = { name, description };
+    console.log(`${mode === "add" ? "Dodaj" : "Edytuj"} projekt:`, projectData);
+    handleClose();
+  };
+
   return (
     <Dialog
       fullWidth
@@ -40,7 +68,7 @@ function AddProjectForm({ isOpen, handleClose, title }: AddProjectFormProps) {
           mt: 2,
         }}
       >
-        {title}
+        {mode === "add" ? "Dodaj projekt" : "Edytuj projekt"}
       </DialogTitle>
       <CloseButton onClick={handleClose} right={20} top={20} />
 
@@ -97,7 +125,7 @@ function AddProjectForm({ isOpen, handleClose, title }: AddProjectFormProps) {
             type="submit"
             variant="contained"
             sx={{ marginRight: 2 }}
-            onClick={handleClose}
+            onClick={handleSubmit}
           >
             Zapisz
           </SmallButton>
@@ -115,4 +143,4 @@ function AddProjectForm({ isOpen, handleClose, title }: AddProjectFormProps) {
   );
 }
 
-export default AddProjectForm;
+export default ProjectForm;
