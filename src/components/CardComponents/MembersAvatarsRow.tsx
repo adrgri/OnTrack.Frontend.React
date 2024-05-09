@@ -15,9 +15,9 @@ const MembersAvatarsRow: React.FC<MembersAvatarsRowProps> = ({
 }) => {
   return (
     <AvatarGroup max={3} sx={{ display: "flex", justifyContent: "flex-end" }}>
-      {members.map((member) => (
+      {members.map((member, index) => (
         <Avatar
-          key={member.id}
+          key={member.id ?? index}
           src={member.avatar}
           alt={`${member.firstName} ${member.lastName}`}
           sx={{ width: width, height: height }}
