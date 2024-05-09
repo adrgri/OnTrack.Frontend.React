@@ -58,8 +58,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     setIsOptionsPopupOpen(false);
   }, []);
 
-  const handleFormClose = (event: React.MouseEvent<HTMLElement>) => {
-    event.preventDefault();
+  const handleFormClose = () => {
     setIsFormOpen(false);
   };
 
@@ -89,7 +88,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           justifyContent={"space-between"}
         >
           {/* Column 1: Project name, team, and date */}
-          <Grid item direction="column" spacing={2} xs={7}>
+          <Grid item xs={7}>
             <Grid item xs={12} mb={2} alignItems="center">
               <Typography>{project?.name}</Typography>
             </Grid>
@@ -121,8 +120,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           {/* Column 2: Progress and task count */}
           <Grid
             item
-            direction="column"
-            spacing={2}
             alignItems="center"
             justifyContent={"space-between"}
             xs={4}
