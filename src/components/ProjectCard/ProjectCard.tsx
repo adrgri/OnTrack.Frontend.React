@@ -12,22 +12,19 @@ import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import OptionsPopup from "../layout/OptionsPopup";
 import useDeletion from "../../hooks/useDeletion";
 import ProjectForm from "../ProjectForm/ProjectForm";
+import { Project } from "../../types";
 
 interface ProjectCardProps {
-  projectId: string;
+  project: Project;
   handleTaskClick: () => void;
   isEditClicked: boolean;
 }
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
-  projectId,
+  project,
   handleTaskClick,
   isEditClicked,
 }) => {
-  const project = useProjectStore((state) =>
-    state.projects.find((p) => p.id === projectId)
-  );
-
   const progress = project?.progress ?? 0;
   const [isOptionsPopupOpen, setIsOptionsPopupOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);

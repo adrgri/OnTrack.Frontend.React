@@ -26,21 +26,24 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
 
   const formik = useFormik({
     initialValues: {
-      name: project?.name || "",
+      name: project?.title || "",
       description: project?.description || "",
-      members: project?.members?.join(", ") || "",
+      // memberIds: project?.memberIds?.join(", ") || "",
+      memberIds: ["8ea90da1-7a64-4817-9208-45b5ad734bc3"],
     },
     onSubmit: async (values, { setSubmitting }) => {
       const newProjectData = {
         ...project,
-        name: values.name,
+        title: values.name,
         description: values.description,
-        members: values.members.split(",").map((member) => member.trim()),
+        // members: values.members.split(",").map((member) => member.trim()),
+        memberIds: ["8ea90da1-7a64-4817-9208-45b5ad734bc3"],
       };
 
       try {
         if (mode === "add") {
           await addProject(newProjectData);
+          console.log("Adding project:", newProjectData);
         } else if (mode === "edit" && project?.id) {
           await updateProject(project.id, newProjectData);
         }
@@ -106,8 +109,8 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
           <StyledSidebarModalInput
             fullWidth
             variant="filled"
-            name="members"
-            value={formik.values.members}
+            name="memberIds"
+            value={formik.values.memberIds}
             onChange={formik.handleChange}
             placeholder="Wyszukaj członków"
             sx={{ width: 300 }}

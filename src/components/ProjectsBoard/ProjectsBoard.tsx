@@ -17,6 +17,7 @@ export default function ProjectsBoard() {
 
   const { projects, fetchProjects } = useProjectStore();
 
+  console.log("Projects:", projects);
   useEffect(() => {
     fetchProjects();
   }, [fetchProjects]);
@@ -81,7 +82,7 @@ export default function ProjectsBoard() {
         {projects.map((project) => (
           <ProjectCard
             key={project.id}
-            projectId={project.id}
+            project={project}
             handleTaskClick={() => {}}
             isEditClicked={isEditClicked}
           />
