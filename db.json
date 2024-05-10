@@ -194,15 +194,18 @@
   "projects": [
     {
       "id": "1",
-      "name": "Project Alpha",
+      "title": "Project Alpha",
+      "description": "",
       "members": [],
       "endDate": "2022-12-13T00:00:00.000Z",
       "tasksAmount": 50,
-      "progress": 50
+      "progress": 50,
+      "memberIds": ["8ea90da1-7a64-4817-9208-45b5ad734bc3"]
     },
     {
       "id": "2",
-      "name": "Project Beta",
+      "title": "Project Beta",
+      "description": "",
       "members": [
         {
           "id": "14",
@@ -212,11 +215,13 @@
       ],
       "endDate": "2022-12-13T00:00:00.000Z",
       "tasksAmount": 40,
-      "progress": 75
+      "progress": 75,
+      "memberIds": ["8ea90da1-7a64-4817-9208-45b5ad734bc3"]
     },
     {
       "id": "3",
-      "name": "Project Gamma",
+      "title": "Project Gamma",
+      "description": "",
       "members": [
         {
           "id": "15",
@@ -226,11 +231,13 @@
       ],
       "endDate": "2022-12-13T00:00:00.000Z",
       "tasksAmount": 30,
-      "progress": 40
+      "progress": 40,
+      "memberIds": ["8ea90da1-7a64-4817-9208-45b5ad734bc3"]
     },
     {
       "id": "4",
-      "name": "Project Delta",
+      "title": "Project Delta",
+      "description": "",
       "members": [
         {
           "id": "16",
@@ -255,31 +262,29 @@
       ],
       "endDate": "2022-12-13T00:00:00.000Z",
       "tasksAmount": 1,
-      "progress": 90
+      "progress": 90,
+      "memberIds": ["8ea90da1-7a64-4817-9208-45b5ad734bc3"]
     },
     {
       "id": "f089",
-      "name": "nbhbh",
+      "title": "nbhbh",
       "description": "",
-      "members": [
-        "hbh"
-      ]
+      "members": ["hbh"],
+      "memberIds": ["8ea90da1-7a64-4817-9208-45b5ad734bc3"]
     },
     {
       "id": "65b5",
-      "name": "ssss",
+      "title": "ssss",
       "description": "",
-      "members": [
-        "sss"
-      ]
+      "members": ["sss"],
+      "memberIds": ["8ea90da1-7a64-4817-9208-45b5ad734bc3"]
     },
     {
       "id": "25dc",
-      "name": "abc",
+      "title": "abc",
       "description": "",
-      "members": [
-        "fdffdf"
-      ]
+      "members": ["fdffdf"],
+      "memberIds": ["8ea90da1-7a64-4817-9208-45b5ad734bc3"]
     }
   ],
   "status": [

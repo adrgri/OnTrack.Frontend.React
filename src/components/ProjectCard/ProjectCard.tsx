@@ -90,7 +90,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           {/* Column 1: Project name, team, and date */}
           <Grid item xs={7}>
             <Grid item xs={12} mb={2} alignItems="center">
-              <Typography>{project?.name}</Typography>
+              <Typography>{project?.title}</Typography>
             </Grid>
 
             <Grid item xs={12}>
@@ -157,7 +157,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           isOpen={isConfirmOpen}
           onDeleteConfirm={confirmDelete}
           onClose={closeModal}
-          itemName={project?.name}
+          itemName={project?.title}
           itemType="project"
         />
       </GenericCard>

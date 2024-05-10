@@ -85,7 +85,7 @@ export type RegistrationResult = {
 
 export type Project = {
   id?: string | undefined;
-  name: string;
+  title: string;
   description?: string;
   members?: string[];
   endDate?: dayjs.Dayjs | null | undefined | string;
