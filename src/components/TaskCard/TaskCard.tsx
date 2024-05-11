@@ -34,10 +34,8 @@ const TaskCard: React.FC<TaskCardProps> = ({
   }, []);
 
   const project = useProjectStore((state) => {
-    console.log(state.projects);
     return state.projects.find((p) => p.id === task?.projectId);
   });
-  console.log("project in TaskCard", project);
 
   // console.log("project in TaskCard", project);
   const [isOptionsPopupOpen, setIsOptionsPopupOpen] = useState(false);
@@ -81,7 +79,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
                   {project.title}
                 </Typography>
               )}
-              <Typography variant="body1">{task?.name}</Typography>
+              <Typography variant="body1">{task?.title}</Typography>
             </Box>
             <IconButton
               aria-label="more options"
@@ -102,7 +100,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
 
         <Grid item container xs={12} alignItems="center" spacing={2}>
           <Grid item xs={true}>
-            <DateChip date={task?.endDate ?? null} />
+            <DateChip date={task?.dueDate ?? null} />
           </Grid>
           <Grid item xs={true} container justifyContent="flex-end">
             <MembersAvatarsRow members={task?.members ?? []} />
@@ -120,7 +118,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
         isOpen={isConfirmOpen}
         onDeleteConfirm={confirmDelete}
         onClose={closeModal}
-        itemName={task?.name}
+        itemName={task?.title}
         itemType="task"
       />
     </GenericCard>

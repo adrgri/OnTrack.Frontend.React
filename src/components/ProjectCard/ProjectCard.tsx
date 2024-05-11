@@ -114,7 +114,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
             <Grid item xs={12}>
               <Grid item xs={true}>
-                {project?.endDate && <DateChip date={project.endDate} />}
+                {project?.dueDate && <DateChip date={project.dueDate} />}
               </Grid>
             </Grid>
           </Grid>
@@ -167,7 +167,6 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         isOpen={isFormOpen}
         handleClose={handleFormClose}
         project={project}
-        // project={project}
         mode="edit"
       />
     </>
