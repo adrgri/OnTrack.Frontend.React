@@ -7,22 +7,17 @@ import {
   Typography,
   TextareaAutosize,
   Box,
-  FormControlLabel,
-  Checkbox,
   Stack,
 } from "@mui/material";
 
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 
-import AddTaskSidebarButtons from "../AddTaskSidebarButtons/AddTaskSidebarButtons";
+import TaskInfoSidebarButtons from "../TaskInfoSidebarButtons/TaskInfoSidebarButtons";
 import { useTheme } from "@mui/material/styles";
 import SmallButton from "../../styledComponents/SmallButton";
 import StyledDescriptionField from "../../styledComponents/StyledDescriptionField";
 
-import { TaskListItem, Resource, User, Icon, Attachment } from "../../types";
-
 import EditableText from "../EditableText/EditableText";
-import AttachmentIcon from "../../assets/icons/TaskIcons/AttachmentIcon.svg";
 import { useTaskStore } from "../../store/TaskStore";
 import CloseButton from "../CloseButton/CloseButton";
 
@@ -35,9 +30,9 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
-import EntityIcon from "../CardComponents/EntityIcon";
+import { UsersList } from "../../types";
 
-type AddTaskModalProps = {
+type TaskInfoModelProps = {
   isOpen: boolean;
   handleClose: () => void;
   onCancel: () => void;
@@ -45,45 +40,30 @@ type AddTaskModalProps = {
 };
 
 const taskValidationSchema = Yup.object({
-  name: Yup.string()
+  title: Yup.string()
     .trim()
-    .min(1, "Task name must contain at least 1 character.")
-    .required("Task name is required."),
+    .min(1, "Task title must contain at least 1 character.")
+    .required("Task title is required."),
 });
 
-const AddTaskModal = ({
+const TaskInfoModel = ({
   isOpen,
   handleClose,
   onCancel,
   taskId,
-}: AddTaskModalProps) => {
+}: TaskInfoModelProps) => {
   const task = useTaskStore((state) => state.getTaskById(taskId ?? ""));
 
-  const [tasksList, setTasksList] = useState<TaskListItem[]>([]);
-  const [resources, setResources] = useState<Resource[]>([]);
-  const [selectedMembers, setSelectedMembers] = useState<User[]>([]);
-  const [selectedIcon, setSelectedIcon] = useState<Icon>();
-  const [attachments, setAttachments] = useState<Attachment[]>();
+  const [selectedMembers, setSelectedMembers] = useState<UsersList[]>([]);
   const { addTask, updateTask } = useTaskStore();
   const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(
     task ? dayjs(task.startDate) : null
   );
-  const [endDate, setEndDate] = useState<dayjs.Dayjs | null>(
-    task ? dayjs(task.endDate) : null
+  const [dueDate, setdueDate] = useState<dayjs.Dayjs | null>(
+    task ? dayjs(task.dueDate) : null
   );
 
-  const handleAttachmentSelect = (newAttachments: Attachment[]) => {
-    setAttachments((prevAttachments) => [
-      ...(prevAttachments ?? []),
-      ...newAttachments,
-    ]);
-  };
-
-  const handleIconSelect = (icon: Icon) => {
-    setSelectedIcon(icon);
-  };
-
-  const handleMemberSelect = (selectedMember: User) => {
+  const handleMemberSelect = (selectedMember: UsersList) => {
     const isAlreadySelected = selectedMembers.some(
       (member) => member.id === selectedMember.id
     );
@@ -98,68 +78,44 @@ const AddTaskModal = ({
     }
   };
 
-  const handleAddResource = (newResource: Resource) => {
-    setResources([...resources, newResource]);
-  };
+  const isEditMode = !!taskId;
 
   useEffect(() => {
     if (task) {
       setStartDate(task.startDate ? dayjs(task.startDate) : null);
-      setEndDate(task.endDate ? dayjs(task.endDate) : null);
-      setSelectedIcon(task.icon ?? undefined);
-      setSelectedMembers(task.members ?? []);
-      setTasksList(task.taskList ?? []);
-      setResources(task.resources ?? []);
-      setAttachments(task.attachments ?? []);
+      setdueDate(task.dueDate ? dayjs(task.dueDate) : null);
+      setSelectedMembers(task.assignedMemberIds ?? []);
     } else {
       setStartDate(null);
-      setEndDate(null);
-      setSelectedIcon(undefined);
-      setTasksList([]);
-      setResources([]);
+      setdueDate(null);
       setSelectedMembers([]);
-      setAttachments([]);
     }
   }, [task, isOpen]);
 
   const formik = useFormik({
     initialValues: {
-      name: task?.name ?? "",
-      description: task?.description ?? "",
-      members: task?.members ?? [],
-      startDate: task?.startDate ?? null,
-      endDate: task?.endDate ?? null,
-      icon: task?.icon ?? null,
-      attachments: task?.attachments ?? [],
-      taskList: task?.taskList ?? [],
-      resources: task?.resources ?? [],
+      title: task?.title || "",
+      description: task?.description || "",
+      assignedMemberIds: task?.assignedMemberIds || [],
+      startDate: task?.startDate ? dayjs(task.startDate) : null,
+      dueDate: task?.dueDate ? dayjs(task.dueDate) : null,
     },
 
     validationSchema: taskValidationSchema,
     onSubmit: (values, { setSubmitting, resetForm }) => {
-      const { name } = values;
-      if (!name.trim()) {
-        toast.error("Task name is required.");
-        resetForm();
-        setSubmitting(false);
-        return;
-      }
-
+      // Build task data from form values
       const taskData = {
-        id: task?.id ?? "",
-        name: values.name,
+        title: values.title,
         description: values.description,
         members: selectedMembers,
-        startDate: startDate ? dayjs(startDate).toISOString() : null,
-        endDate: endDate ? dayjs(endDate).toISOString() : null,
-        icon: selectedIcon,
-        attachments: attachments ?? [],
-        taskList: tasksList,
-        resources: resources,
-        status: task ? task.status : "todo",
+        startDate: values.startDate
+          ? dayjs(values.startDate).toISOString()
+          : null,
+        dueDate: values.dueDate ? dayjs(values.dueDate).toISOString() : null,
+        status: task?.status || "todo", // Default to 'todo' if adding new
       };
 
-      if (task?.id) {
+      if (isEditMode && task?.id) {
         updateTask(task.id, taskData)
           .then(() => {
             toast.success("Task updated successfully!");
@@ -183,32 +139,9 @@ const AddTaskModal = ({
 
   const theme = useTheme();
 
-  const addTaskList = (taskText: string) => {
-    setTasksList((currentTasks: TaskListItem[]) => [
-      ...currentTasks,
-      { id: Date.now().toString(), text: taskText, isChecked: false },
-    ]);
-  };
-
-  useEffect(() => {
-    return () => {
-      if (attachments !== undefined) {
-        attachments.forEach((attachment) => {
-          if (attachment.url) {
-            URL.revokeObjectURL(attachment.url);
-          }
-        });
-      }
-    };
-  }, [attachments]);
-
   useEffect(() => {
     console.log("Selected task from useEffect:", task);
   }, [task]);
-
-  useEffect(() => {
-    console.log("Selected icon from useEffect:", selectedIcon);
-  }, [selectedIcon]);
 
   return (
     <Dialog
@@ -254,16 +187,11 @@ const AddTaskModal = ({
               }}
             >
               <EditableText
-                text={formik.values.name}
+                text={formik.values.title}
                 onTextChange={(newValue) =>
-                  formik.setFieldValue("name", newValue)
+                  formik.setFieldValue("title", newValue)
                 }
                 placeholder="Wpisz nazwe zadania"
-              />
-
-              <EntityIcon
-                icon={selectedIcon}
-                style={{ width: "20px", height: "20px" }}
               />
 
               <CloseButton onClick={handleClose} right={20} top={20} />
@@ -301,7 +229,7 @@ const AddTaskModal = ({
                 </Stack>
               )}
 
-              {endDate && (
+              {dueDate && (
                 <Stack spacing={2}>
                   <Typography variant="subtitle1">Data zakończenia</Typography>
                   <Box
@@ -317,50 +245,14 @@ const AddTaskModal = ({
                     >
                       <DateTimePicker
                         sx={{ width: "80%" }}
-                        value={endDate}
-                        onChange={(newValue) => setEndDate(newValue)}
+                        value={dueDate}
+                        onChange={(newValue) => setdueDate(newValue)}
                       />
                     </LocalizationProvider>
                   </Box>
                 </Stack>
               )}
             </Box>
-
-            {attachments && attachments.length > 0 && (
-              <>
-                <Typography variant="subtitle1">Załączniki</Typography>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 1,
-                    mt: 2,
-                  }}
-                >
-                  {attachments.map((file, index) => (
-                    <Box
-                      key={index}
-                      sx={{ display: "flex", alignItems: "center", gap: 1 }}
-                    >
-                      <img
-                        src={AttachmentIcon}
-                        alt="Attachment"
-                        style={{ width: 24, height: 24 }}
-                      />
-                      <Typography>
-                        <a
-                          href={file.url ? file.url : URL.createObjectURL(file)}
-                          download={file.name}
-                          style={{ textDecoration: "none", color: "inherit" }}
-                        >
-                          {file.name}
-                        </a>
-                      </Typography>
-                    </Box>
-                  ))}
-                </Box>
-              </>
-            )}
 
             <StyledDescriptionField
               fullWidth
@@ -399,55 +291,15 @@ const AddTaskModal = ({
                 mt: 5,
               }}
             />
-
-            {tasksList.length > 0 && (
-              <Typography variant="subtitle1">Lista zadań</Typography>
-            )}
-
-            {tasksList.map((task, index) => (
-              <Box key={task.id}>
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={task.isChecked}
-                      onChange={(e) => {
-                        const newTasksList = tasksList.map((item, itemIndex) =>
-                          index === itemIndex
-                            ? { ...item, isChecked: e.target.checked }
-                            : item
-                        );
-                        setTasksList(newTasksList);
-                      }}
-                    />
-                  }
-                  label={task.text}
-                />
-              </Box>
-            ))}
-
-            {resources.length > 0 && (
-              <Typography variant="subtitle1">Zasoby</Typography>
-            )}
-            {resources.map((res, index) => (
-              <div key={index}>
-                {res.resourceName} {res.quantity}
-                {res.unit}
-              </div>
-            ))}
           </Box>
 
           <Box sx={{ flex: "0 1 auto", mt: 6 }}>
-            <AddTaskSidebarButtons
-              addTaskList={addTaskList}
-              handleAddResource={handleAddResource}
+            <TaskInfoSidebarButtons
               onMemberSelect={handleMemberSelect}
-              selectedIcon={selectedIcon}
-              onIconSelect={handleIconSelect}
-              onAttachmentSelect={handleAttachmentSelect}
               startDate={startDate}
-              endDate={endDate}
+              dueDate={dueDate}
               onStartDateChange={setStartDate}
-              onEndDateChange={setEndDate}
+              ondueDateChange={setdueDate}
             />
           </Box>
         </DialogContent>
@@ -484,4 +336,4 @@ const AddTaskModal = ({
   );
 };
 
-export default AddTaskModal;
+export default TaskInfoModel;
