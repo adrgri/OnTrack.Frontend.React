@@ -1,3 +1,4 @@
+// src/store/useProjectStore.ts
 import { create } from "zustand";
 import axios from "axios";
 import { Project } from "../types";
@@ -14,6 +15,8 @@ interface ProjectState {
   getProjectById: (id: string) => Project | undefined;
 }
 
+const apiUrl = import.meta.env.VITE_API_URL; // Make sure you have your API base URL here
+
 export const useProjectStore = create<ProjectState>((set, get) => ({
   projects: [],
 
@@ -21,8 +24,9 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
 
   fetchProjects: async () => {
     try {
-      const response = await axios.get("http://localhost:3001/projects");
+      const response = await axios.get(`${apiUrl}/project`);
       set({ projects: response.data });
+      console.log("Projects fetched successfully");
     } catch (error) {
       console.error("Failed to fetch projects:", error);
     }
@@ -30,10 +34,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
 
   addProject: async (newProjectData) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3001/projects",
-        newProjectData
-      );
+      const response = await axios.post(`${apiUrl}/project`, newProjectData);
       const newProject = response.data;
       set((state) => ({ projects: [...state.projects, newProject] }));
     } catch (error) {
@@ -43,7 +44,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
 
   updateProject: async (projectId, updates) => {
     try {
-      await axios.put(`http://localhost:3001/projects/${projectId}`, updates);
+      await axios.put(`${apiUrl}/project`, updates);
       set((state) => ({
         projects: state.projects.map((project) =>
           project.id === projectId ? { ...project, ...updates } : project
@@ -56,7 +57,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
 
   deleteProject: async (projectId) => {
     try {
-      await axios.delete(`http://localhost:3001/projects/${projectId}`);
+      await axios.delete(`${apiUrl}/project/${projectId}`);
       set((state) => ({
         projects: state.projects.filter((project) => project.id !== projectId),
       }));
