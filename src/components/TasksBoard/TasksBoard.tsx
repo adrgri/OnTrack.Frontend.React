@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Grid } from "@mui/material";
-import AddTaskModal from "../TaskInfoModal/TaskInfoModal";
+import TaskInfoModel from "../TaskInfoModal/TaskInfoModal";
 import BoardNavigation from "../BoardNavigation/BoardNavigation";
 import { useTaskStore } from "../../store/TaskStore";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
@@ -20,7 +20,7 @@ const TasksBoard = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { tasks, fetchTasks, updateTaskStatus } = useTaskStore();
-  const [isAddTaskModalOpen, setIsAddTaskModalOpen] = useState(false);
+  const [isTaskInfoModelOpen, setIsTaskInfoModelOpen] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
   const [isEditClicked, setIsEditClicked] = useState(false);
 
@@ -49,7 +49,7 @@ const TasksBoard = () => {
 
   const handleTaskClick = (taskId: string) => {
     setSelectedTaskId(taskId);
-    setIsAddTaskModalOpen(true);
+    setIsTaskInfoModelOpen(true);
   };
 
   const handleEdit = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -60,11 +60,11 @@ const TasksBoard = () => {
 
   const handleAddTask = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
-    setIsAddTaskModalOpen(true);
+    setIsTaskInfoModelOpen(true);
   };
 
   function handleCancel() {
-    setIsAddTaskModalOpen(false);
+    setIsTaskInfoModelOpen(false);
   }
 
   return (
@@ -118,10 +118,10 @@ const TasksBoard = () => {
         </Grid>
       </DragDropContext>
 
-      <AddTaskModal
-        isOpen={isAddTaskModalOpen}
+      <TaskInfoModel
+        isOpen={isTaskInfoModelOpen}
         handleClose={() => {
-          setIsAddTaskModalOpen(false);
+          setIsTaskInfoModelOpen(false);
           setSelectedTaskId(null);
         }}
         onCancel={handleCancel}
