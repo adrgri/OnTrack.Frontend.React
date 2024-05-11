@@ -100,10 +100,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                   },
                 }}
               >
-                <Typography variant="subtitle2" color="text.secondary">
-                  Zespół
-                </Typography>
-                <MembersAvatarsRow members={project?.members ?? []} />
+                {project?.membersIds && (
+                  <>
+                    {" "}
+                    <Typography variant="subtitle2" color="text.secondary">
+                      Zespół
+                    </Typography>
+                    <MembersAvatarsRow members={project?.members ?? []} />{" "}
+                  </>
+                )}
               </Stack>
             </Grid>
 
@@ -161,6 +166,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
       <ProjectForm
         isOpen={isFormOpen}
         handleClose={handleFormClose}
+        project={project}
         // project={project}
         mode="edit"
       />

@@ -84,12 +84,21 @@ export type RegistrationResult = {
   message?: string;
 };
 
+// export type Project = {
+//   id?: string | undefined;
+//   title: string;
+//   description?: string;
+//   members?: string[];
+//   endDate?: dayjs.Dayjs | null | undefined | string;
+//   tasksAmount?: number | undefined;
+//   progress?: number | undefined;
+//   membersIds?: string[] | undefined;
+// };
+
 export type Project = {
-  id?: string | undefined;
+  id?: string;
   title: string;
   description?: string;
-  members?: string[];
-  endDate?: dayjs.Dayjs | null | undefined | string;
-  tasksAmount?: number | undefined;
-  progress?: number | undefined;
+  memberIds?: string[] | undefined;
+  taskIds?: string[] | undefined;
 };

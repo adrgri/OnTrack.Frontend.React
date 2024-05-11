@@ -26,7 +26,7 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
 
   const formik = useFormik({
     initialValues: {
-      name: project?.title || "",
+      title: project?.title || "",
       description: project?.description || "",
       // memberIds: project?.memberIds?.join(", ") || "",
       memberIds: ["8ea90da1-7a64-4817-9208-45b5ad734bc3"],
@@ -34,7 +34,7 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
     onSubmit: async (values, { setSubmitting }) => {
       const newProjectData = {
         ...project,
-        title: values.name,
+        title: values.title,
         description: values.description,
         // members: values.members.split(",").map((member) => member.trim()),
         memberIds: ["8ea90da1-7a64-4817-9208-45b5ad734bc3"],
@@ -45,6 +45,7 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
           await addProject(newProjectData);
           console.log("Adding project:", newProjectData);
         } else if (mode === "edit" && project?.id) {
+          console.log("Project updated:", newProjectData);
           await updateProject(project.id, newProjectData);
         }
         handleClose();
@@ -56,6 +57,7 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
     },
     enableReinitialize: true,
   });
+
   return (
     <Dialog
       fullWidth
@@ -93,8 +95,8 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
           <StyledSidebarModalInput
             fullWidth
             variant="filled"
-            name="name"
-            value={formik.values.name}
+            name="title"
+            value={formik.values.title}
             onChange={formik.handleChange}
             placeholder="Wpisz nazwe projektu"
             sx={{ width: 300 }}
@@ -114,11 +116,13 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
             onChange={formik.handleChange}
             placeholder="Wyszukaj członków"
             sx={{ width: 300 }}
-            endAdornment={
-              <InputAdornment position="end">
-                <img src={SearchIcon} alt="search" />
-              </InputAdornment>
-            }
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <img src={SearchIcon} alt="search" />
+                </InputAdornment>
+              ),
+            }}
           />
         </DialogContent>
         <Box
