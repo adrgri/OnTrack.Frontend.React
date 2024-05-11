@@ -39,10 +39,20 @@ type AuthProviderProps = {
 
 const { VITE_API_URL } = import.meta.env;
 
-export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
+const saveUserData = (user: User) => {
+  localStorage.setItem("userData", JSON.stringify(user));
+};
 
+const loadUserData = () => {
+  const userData = localStorage.getItem("userData");
+  return userData ? JSON.parse(userData) : null;
+};
+
+export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
+  const [user, setUser] = useState<User | null>(loadUserData());
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!user);
+
+  console.log("User:", user);
   useEffect(() => {
     const storedAccessToken = Cookies.get("accessToken");
     const storedRefreshToken = Cookies.get("refreshToken");
@@ -54,15 +64,28 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const login = useCallback(async (loginData: LoginData) => {
     try {
-      const response = await api.post(
+      const loginResponse = await api.post(
         `${VITE_API_URL}/identity/login`,
         loginData
       );
-      console.log(response.data);
-      const { accessToken, refreshToken, expiresIn } = response.data;
+      console.log(loginResponse.data);
+      const { accessToken, refreshToken, expiresIn } = loginResponse.data;
 
       Cookies.set("accessToken", accessToken, { expires: expiresIn });
       Cookies.set("refreshToken", refreshToken);
+
+      const userResponse = await api
+        .get(`${VITE_API_URL}/user/me`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        })
+        .catch((error) => {
+          console.error("Failed to fetch user details:", error);
+          throw new Error("Failed to fetch user details"); // Re-throw or handle as needed
+        });
+
+      setUser(userResponse.data);
+      saveUserData(userResponse.data);
+      console.log("User logged in successfully:", userResponse.data);
 
       setIsLoggedIn(true);
       console.log("Login successful");
@@ -84,6 +107,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         console.log("User registered successfully:");
 
         setUser(newUser);
+        saveUserData(newUser);
         setIsLoggedIn(true);
 
         return {
@@ -123,7 +147,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Whether or not the above API call is successful, remove the cookies
       Cookies.remove("accessToken");
       Cookies.remove("refreshToken");
-
+      localStorage.removeItem("userData");
       // Update the application state
       setUser(null);
       setIsLoggedIn(false);

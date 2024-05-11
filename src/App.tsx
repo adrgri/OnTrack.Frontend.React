@@ -1,10 +1,10 @@
 import "devextreme/dist/css/dx.light.css";
 import { Suspense, lazy, useEffect } from "react";
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./themes/theme";
 import { AuthProvider } from "./contexts/AuthContext";
-// import ProtectedRoute from "./ProtectedRoute";
+import ProtectedRoute from "./ProtectedRoute";
 import "./App.css";
 import Loading from "./components/Loading/Loading";
 import "dayjs/locale/pl";
@@ -87,11 +87,6 @@ function App() {
       </AuthProvider>
     </ThemeProvider>
   );
-}
-
-function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const isAuthenticated = true; // This should be determined dynamically //TODO
-  return isAuthenticated ? children : <Navigate to="/login" replace />;
 }
 
 export default App;

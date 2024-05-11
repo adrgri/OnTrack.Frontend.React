@@ -10,6 +10,8 @@ export default function ProtectedRoute({
   const { isLoggedIn } = useAuth();
   const navigate = useNavigate();
 
+  console.log("Is logged in:", isLoggedIn);
+
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/login");

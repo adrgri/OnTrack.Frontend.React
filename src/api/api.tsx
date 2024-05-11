@@ -12,10 +12,24 @@ export const api = axios.create({
   // withCredentials: true,
 });
 
-api.interceptors.request.use((request) => {
-  console.log("Starting Request", JSON.stringify(request, null, 2));
-  return request;
-});
+// api.interceptors.request.use((request) => {
+//   console.log("Starting Request", JSON.stringify(request, null, 2));
+//   return request;
+// });
+
+api.interceptors.request.use(
+  (config) => {
+    const token = Cookies.get("accessToken");
+    console.log("token", token);
+    if (token) {
+      config.headers["Authorization"] = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 api.interceptors.response.use(
   (response) => response,
