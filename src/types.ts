@@ -1,4 +1,4 @@
-import dayjs from "dayjs";
+// import dayjs from "dayjs";
 
 export type UserProfileProps = {
   name?: string;
@@ -18,6 +18,13 @@ export type User = {
   email: string;
   avatar: string;
   password?: string;
+};
+
+export type UsersList = {
+  id?: string;
+  firstName?: string;
+  lastName?: string;
+  bio?: string;
 };
 
 // Picking specific properties from User and making them optional
@@ -50,21 +57,45 @@ export type Resource = {
   unit: string;
 };
 
+export type ListItemType = {
+  text: string;
+  icon: React.ReactElement;
+  modal: string;
+  specialStyle?: boolean;
+};
+
 export type Status = "todo" | "inProgress" | "done";
 
+// export type Task = {
+//   id: string;
+//   name: string;
+//   description?: string;
+//   members?: User[];
+//   startDate?: dayjs.Dayjs | null | undefined | string;
+//   dueDate?: dayjs.Dayjs | null | undefined | string;
+//   icon?: Icon | null;
+//   attachments?: Attachment[];
+//   taskList?: TaskListItem[];
+//   resources?: Resource[];
+//   status: Status;
+//   projectId?: string | undefined;
+// };
+
 export type Task = {
-  id: string;
-  name: string;
+  id?: string;
+  projectId?: string;
+  title: string;
   description?: string;
-  members?: User[];
-  startDate?: dayjs.Dayjs | null | undefined | string;
-  endDate?: dayjs.Dayjs | null | undefined | string;
-  icon?: Icon | null;
-  attachments?: Attachment[];
-  taskList?: TaskListItem[];
-  resources?: Resource[];
-  status: Status;
-  projectId?: string | undefined;
+  startDate?: Date;
+  dueDate?: Date;
+  statusId?: string;
+  iconId?: string;
+  isCompleted: boolean;
+  assignedMemberIds?: string[];
+  assignedResourceIds?: string[];
+  attachmentIds?: string[];
+  subtaskIds?: string[];
+  status?: Status;
 };
 
 export type LoginData = {
@@ -89,7 +120,7 @@ export type RegistrationResult = {
 //   title: string;
 //   description?: string;
 //   members?: string[];
-//   endDate?: dayjs.Dayjs | null | undefined | string;
+//   dueDate?: dayjs.Dayjs | null | undefined | string;
 //   tasksAmount?: number | undefined;
 //   progress?: number | undefined;
 //   membersIds?: string[] | undefined;
