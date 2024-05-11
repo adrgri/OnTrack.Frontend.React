@@ -64,6 +64,7 @@ export type Task = {
   taskList?: TaskListItem[];
   resources?: Resource[];
   status: Status;
+  projectId?: string | undefined;
 };
 
 export type LoginData = {

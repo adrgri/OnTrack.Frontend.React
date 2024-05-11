@@ -50,6 +50,7 @@ export const Column = ({
                   {...provided.dragHandleProps}
                 >
                   <TaskCard
+                    key={task.id}
                     taskId={task.id}
                     handleTaskClick={() => handleTaskClick(task.id)}
                     isEditClicked={isEditClicked}

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Typography, Grid, Box, IconButton } from "@mui/material";
 import { useTaskStore } from "../../store/TaskStore";
 import DateChip from "../CardComponents/DateChip";
@@ -10,8 +10,11 @@ import CloseIcon from "../../assets/icons/CloseIcon.svg";
 import OptionsPopup from "../layout/OptionsPopup";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import useDeletion from "../../hooks/useDeletion";
+// import { Task } from "../../types";
+import { useProjectStore } from "../../store/ProjectStore";
 
 interface TaskCardProps {
+  // task: Task;
   taskId: string;
   handleTaskClick: () => void;
   isEditClicked: boolean;
@@ -25,6 +28,18 @@ const TaskCard: React.FC<TaskCardProps> = ({
   const task = useTaskStore((state) =>
     state.tasks.find((t) => t.id === taskId)
   );
+
+  useEffect(() => {
+    useProjectStore.getState().fetchProjects();
+  }, []);
+
+  const project = useProjectStore((state) => {
+    console.log(state.projects);
+    return state.projects.find((p) => p.id === task?.projectId);
+  });
+  console.log("project in TaskCard", project);
+
+  // console.log("project in TaskCard", project);
   const [isOptionsPopupOpen, setIsOptionsPopupOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
@@ -59,11 +74,13 @@ const TaskCard: React.FC<TaskCardProps> = ({
             }}
           >
             <Box sx={{ display: "flex", flexDirection: "column", flexGrow: 1 }}>
-              <Typography
-                sx={{ fontSize: "1rem", color: "primary.main", mb: 1.5 }}
-              >
-                {"project?.name"}
-              </Typography>
+              {project && (
+                <Typography
+                  sx={{ fontSize: "1rem", color: "primary.main", mb: 1.5 }}
+                >
+                  {project.title}
+                </Typography>
+              )}
               <Typography variant="body1">{task?.name}</Typography>
             </Box>
             <IconButton
