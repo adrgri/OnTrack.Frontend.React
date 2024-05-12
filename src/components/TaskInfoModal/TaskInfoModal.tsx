@@ -143,6 +143,8 @@ const TaskInfoModel = ({
     console.log("Selected task from useEffect:", task);
   }, [task]);
 
+  console.log("Selected task:", task);
+
   return (
     <Dialog
       fullWidth
@@ -323,7 +325,6 @@ const TaskInfoModel = ({
             Zapisz
           </SmallButton>
           <SmallButton
-            type="submit"
             variant="contained"
             sx={{ backgroundColor: "#5E5F7D" }}
             onClick={onCancel}
