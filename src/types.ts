@@ -64,7 +64,13 @@ export type ListItemType = {
   specialStyle?: boolean;
 };
 
-export type Status = "todo" | "inProgress" | "done";
+export type StatusOptions = "todo" | "inProgress" | "done";
+
+export type Status = {
+  id: string;
+  name: string;
+  order: number;
+};
 
 // export type Task = {
 //   id: string;
@@ -95,7 +101,6 @@ export type Task = {
   assignedResourceIds?: string[];
   attachmentIds?: string[];
   subtaskIds?: string[];
-  status?: Status;
 };
 
 export type LoginData = {

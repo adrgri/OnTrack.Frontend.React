@@ -7,13 +7,13 @@ import { DragDropContext, DropResult } from "react-beautiful-dnd";
 import { Column } from "../Column/Column";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
-import { Status } from "../../types";
 import ActionButtons from "../UI/ActionButtons";
+import { useStatusStore } from "../../store/StatusStore";
 
-const columnTitles = {
-  todo: "Do zrobienia",
-  inProgress: "W trakcie",
-  done: "Gotowy",
+const columnTitles: Record<string, string> = {
+  "f75fd79b-8ed2-4533-8d08-306aeee7fccb": "Do zrobienia",
+  "bfb843bf-f595-4741-a0e0-c1e311f54f8d": "W trakcie",
+  "a7c48d27-3d59-4425-b060-a754b0484826": "Gotowy",
 };
 
 const TasksBoard = () => {
@@ -23,13 +23,17 @@ const TasksBoard = () => {
   const [isTaskInfoModelOpen, setIsTaskInfoModelOpen] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
   const [isEditClicked, setIsEditClicked] = useState(false);
+  const { statuses, fetchStatuses } = useStatusStore();
 
   useEffect(() => {
     fetchTasks();
-  }, [fetchTasks]);
+    fetchStatuses();
+  }, [fetchTasks, fetchStatuses]);
 
-  const onDragEnd = (result: DropResult) => {
+  const handleOnDragEnd = (result: DropResult) => {
     const { source, destination } = result;
+    console.log("Result:", result);
+    console.log("Destination:", destination);
 
     if (!destination) {
       return;
@@ -39,10 +43,9 @@ const TasksBoard = () => {
       source.droppableId !== destination.droppableId ||
       source.index !== destination.index
     ) {
-      // Call the updateTaskStatus method here
       const task = tasks.find((t) => t.id === result.draggableId);
-      if (task?.id) {
-        updateTaskStatus(task.id, destination.droppableId as Status);
+      if (task && task.id) {
+        updateTaskStatus(task.id, destination.droppableId);
       }
     }
   };
@@ -59,7 +62,7 @@ const TasksBoard = () => {
 
   const handleEdit = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
-    setIsEditClicked((prevIsEditClicked) => !prevIsEditClicked);
+    setIsEditClicked(true);
     console.log("Edit action triggered");
   };
 
@@ -98,7 +101,7 @@ const TasksBoard = () => {
         </ActionButtons>
       </Grid>
 
-      <DragDropContext onDragEnd={onDragEnd}>
+      <DragDropContext onDragEnd={handleOnDragEnd}>
         <Grid
           container
           justifyContent="space-between"
@@ -113,12 +116,12 @@ const TasksBoard = () => {
             },
           }}
         >
-          {Object.entries(columnTitles).map(([columnKey, title]) => (
-            <Grid item sm={12} md={3} key={columnKey}>
+          {statuses.map((status) => (
+            <Grid item sm={12} md={3} key={status.id}>
               <Column
-                columnId={columnKey}
-                title={title}
-                tasks={tasks.filter((task) => task.status === columnKey)}
+                columnId={status.id}
+                title={columnTitles[status.id] || status.name}
+                tasks={tasks.filter((task) => task.statusId === status.id)}
                 handleTaskClick={handleTaskClick}
                 isEditClicked={isEditClicked}
               />

@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
-import { Task, Status } from "../types";
+import { Status, Task } from "../types";
 
 interface TaskState {
   tasks: Task[];
@@ -8,10 +8,11 @@ interface TaskState {
   addTask: (newTaskData: Task) => Promise<void>;
   updateTask: (taskId: string, updates: Partial<Task>) => Promise<void>;
   deleteTask: (taskId: string) => Promise<void>;
-  updateTaskStatus: (taskId: string, newStatus: Status) => Promise<void>;
-  getTasksByStatus: (status: string) => Task[];
   getTaskById: (id: string) => Task | undefined;
+  updateTaskStatus: (taskId: string, newStatus: Status) => Promise<void>;
 }
+
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export const useTaskStore = create<TaskState>((set, get) => ({
   tasks: [],
@@ -20,8 +21,9 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
   fetchTasks: async () => {
     try {
-      const response = await axios.get("http://localhost:3001/tasks");
+      const response = await axios.get(`${apiUrl}/task`);
       set({ tasks: response.data });
+      console.log("Tasks fetched successfully");
     } catch (error) {
       console.error("Failed to fetch tasks:", error);
     }
@@ -29,10 +31,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
   addTask: async (newTaskData) => {
     try {
-      const response = await axios.post(
-        "http://localhost:3001/tasks",
-        newTaskData
-      );
+      const response = await axios.post(`${apiUrl}/task`, newTaskData);
       const newTask = response.data;
       set((state) => ({ tasks: [...state.tasks, newTask] }));
     } catch (error) {
@@ -42,7 +41,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
   updateTask: async (taskId, updates) => {
     try {
-      await axios.put(`http://localhost:3001/tasks/${taskId}`, updates);
+      await axios.put(`${apiUrl}/task`, updates);
       set((state) => ({
         tasks: state.tasks.map((task) =>
           task.id === taskId ? { ...task, ...updates } : task
@@ -55,7 +54,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
   deleteTask: async (taskId) => {
     try {
-      await axios.delete(`http://localhost:3001/tasks/${taskId}`);
+      await axios.delete(`${apiUrl}/task/${taskId}`);
       set((state) => ({
         tasks: state.tasks.filter((task) => task.id !== taskId),
       }));
@@ -64,16 +63,11 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     }
   },
 
-  getTasksByStatus: (status) => {
-    const allTasks = get().tasks;
-    return allTasks.filter((task) => task.status === status);
-  },
-
-  updateTaskStatus: async (taskId: string, newStatus: Status) => {
+  updateTaskStatus: async (taskId: string, newStatusId) => {
     const taskToUpdate = get().tasks.find((task) => task.id === taskId);
     if (taskToUpdate) {
-      const updatedTask = { ...taskToUpdate, status: newStatus };
-      await axios.put(`http://localhost:3001/tasks/${taskId}`, updatedTask);
+      const updatedTask = { ...taskToUpdate, statusId: String(newStatusId) };
+      await axios.put(`${apiUrl}/task`, updatedTask);
       set((state) => ({
         tasks: state.tasks.map((task) =>
           task.id === taskId ? updatedTask : task
