@@ -4,8 +4,8 @@ import CloseButton from "../CloseButton/CloseButton";
 
 interface ConfirmDeleteModalProps {
   isOpen: boolean;
-  onDeleteConfirm: () => void;
-  onClose: () => void;
+  onDeleteConfirm: (event: React.MouseEvent<HTMLElement>) => void;
+  onClose: (event: React.MouseEvent<HTMLElement>) => void;
   itemName: string | undefined;
   itemType: "task" | "project";
 }

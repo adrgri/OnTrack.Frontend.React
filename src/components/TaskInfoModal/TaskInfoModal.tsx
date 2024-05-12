@@ -90,7 +90,7 @@ const TaskInfoModel = ({
       setdueDate(null);
       setSelectedMembers([]);
     }
-  }, [task, isOpen]);
+  }, [task]);
 
   const formik = useFormik({
     initialValues: {

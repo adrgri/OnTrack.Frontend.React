@@ -12,8 +12,8 @@ interface OptionsPopupProps {
   open: boolean;
   anchorEl: HTMLButtonElement | null;
   onClose: () => void;
-  onEdit: () => void; // Handler for editing
-  onDelete: () => void; // Handler for deletion
+  onEdit: () => void;
+  onDelete: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
 const OptionsPopup: React.FC<OptionsPopupProps> = ({
@@ -45,7 +45,7 @@ const OptionsPopup: React.FC<OptionsPopupProps> = ({
           <ListItemText primary="Edytuj" />
         </ListItemButton>
         <Divider />
-        <ListItemButton onClick={onDelete}>
+        <ListItemButton onClick={(event) => onDelete(event)}>
           <img src={CloseIcon} alt="Delete" style={{ marginRight: "10px" }} />
           <ListItemText primary="Usuń" />
         </ListItemButton>

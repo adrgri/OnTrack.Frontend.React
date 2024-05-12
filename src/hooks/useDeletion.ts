@@ -7,12 +7,12 @@ interface DeletableItem {
 
 interface DeletionState {
   isConfirmOpen: boolean;
-  closeModal: () => void;
+  closeModal: (event: React.MouseEvent<HTMLElement>) => void;
   requestDelete: (
     item: DeletableItem,
     deleteFunction: (id: string) => Promise<void>
   ) => void;
-  confirmDelete: () => void;
+  confirmDelete: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
 const useDeletion = (): DeletionState => {
@@ -30,7 +30,8 @@ const useDeletion = (): DeletionState => {
     setIsConfirmOpen(true);
   };
 
-  const confirmDelete = () => {
+  const confirmDelete = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
     if (currentItem && deleteAction) {
       deleteAction(currentItem.id)
         .then(() => console.log(`${currentItem.type} deleted successfully`))
@@ -43,7 +44,10 @@ const useDeletion = (): DeletionState => {
 
   return {
     isConfirmOpen,
-    closeModal: () => setIsConfirmOpen(false),
+    closeModal: (event) => {
+      event.stopPropagation();
+      setIsConfirmOpen(false);
+    },
     requestDelete,
     confirmDelete,
   };

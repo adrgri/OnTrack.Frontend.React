@@ -41,15 +41,20 @@ const TasksBoard = () => {
     ) {
       // Call the updateTaskStatus method here
       const task = tasks.find((t) => t.id === result.draggableId);
-      if (task) {
+      if (task?.id) {
         updateTaskStatus(task.id, destination.droppableId as Status);
       }
     }
   };
 
-  const handleTaskClick = (taskId: string) => {
+  const handleTaskClick = (
+    taskId: string,
+    event: React.MouseEvent<HTMLElement>
+  ) => {
+    event.stopPropagation();
     setSelectedTaskId(taskId);
     setIsTaskInfoModelOpen(true);
+    console.log("Task clicked:", taskId);
   };
 
   const handleEdit = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -64,6 +69,10 @@ const TasksBoard = () => {
   };
 
   function handleCancel() {
+    setIsTaskInfoModelOpen(false);
+  }
+
+  function handleTaskInfoModalClose() {
     setIsTaskInfoModelOpen(false);
   }
 
@@ -120,10 +129,7 @@ const TasksBoard = () => {
 
       <TaskInfoModel
         isOpen={isTaskInfoModelOpen}
-        handleClose={() => {
-          setIsTaskInfoModelOpen(false);
-          setSelectedTaskId(null);
-        }}
+        handleClose={handleTaskInfoModalClose}
         onCancel={handleCancel}
         taskId={selectedTaskId}
       />

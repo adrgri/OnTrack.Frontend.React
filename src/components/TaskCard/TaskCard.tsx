@@ -16,7 +16,10 @@ import { useProjectStore } from "../../store/ProjectStore";
 interface TaskCardProps {
   // task: Task;
   taskId: string;
-  handleTaskClick: () => void;
+  handleTaskClick: (
+    taskId: string,
+    event: React.MouseEvent<HTMLElement>
+  ) => void;
   isEditClicked: boolean;
 }
 
@@ -50,17 +53,25 @@ const TaskCard: React.FC<TaskCardProps> = ({
     setIsOptionsPopupOpen(true);
   };
 
-  const handleDelete = useCallback(() => {
-    if (task) {
-      requestDelete(
-        { id: task.id, type: "task" },
-        useTaskStore.getState().deleteTask
-      );
-    }
-  }, [task, requestDelete]);
+  function handleEdit() {
+    console.log("Edit action triggered");
+  }
+
+  const handleDelete = useCallback(
+    (event: React.MouseEvent<HTMLElement>) => {
+      event.stopPropagation();
+      if (task) {
+        requestDelete(
+          { id: task.id, type: "task" },
+          useTaskStore.getState().deleteTask
+        );
+      }
+    },
+    [task, requestDelete]
+  );
 
   return (
-    <GenericCard onClick={handleTaskClick}>
+    <GenericCard onClick={() => handleTaskClick(taskId, event)}>
       <Grid container direction="column" spacing={1}>
         <Grid item xs={12} mb={2} container alignItems="center">
           <Box
@@ -83,7 +94,12 @@ const TaskCard: React.FC<TaskCardProps> = ({
             </Box>
             <IconButton
               aria-label="more options"
-              onClick={isEditClicked ? handleDelete : handleOpenOptionsPopup}
+              onClick={(event) => {
+                event.stopPropagation();
+                isEditClicked
+                  ? handleDelete(event)
+                  : handleOpenOptionsPopup(event);
+              }}
             >
               {isEditClicked ? (
                 <img src={CloseIcon} alt="Usuń" />
@@ -111,7 +127,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
         open={isOptionsPopupOpen}
         anchorEl={anchorEl}
         onClose={() => setIsOptionsPopupOpen(false)}
-        onEdit={() => console.log("Edit Task")}
+        onEdit={handleEdit}
         onDelete={handleDelete}
       />
       <ConfirmDeleteModal

@@ -7,7 +7,10 @@ type ColumnProps = {
   columnId: string;
   title: string;
   tasks: Task[];
-  handleTaskClick: (taskId: string) => void;
+  handleTaskClick: (
+    taskId: string,
+    event: React.MouseEvent<HTMLElement>
+  ) => void;
   isEditClicked: boolean;
 };
 
@@ -41,25 +44,31 @@ export const Column = ({
               {title}
             </Typography>
           </Box>
-          {tasks.map((task, index) => (
-            <Draggable key={task.id} draggableId={task.id} index={index}>
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.draggableProps}
-                  {...provided.dragHandleProps}
-                >
-                  <TaskCard
-                    key={task.id}
-                    taskId={task.id}
-                    handleTaskClick={() => handleTaskClick(task.id)}
-                    isEditClicked={isEditClicked}
-                    // handleTaskClick={() => console.log("Task clicked")}
-                  />
-                </div>
-              )}
-            </Draggable>
-          ))}
+          {tasks.map((task, index) => {
+            if (task.id === undefined) {
+              return null;
+            }
+
+            return (
+              <Draggable key={task.id} draggableId={task.id} index={index}>
+                {(provided) => (
+                  <div
+                    ref={provided.innerRef}
+                    {...provided.draggableProps}
+                    {...provided.dragHandleProps}
+                  >
+                    <TaskCard
+                      key={task.id}
+                      taskId={task.id}
+                      handleTaskClick={handleTaskClick}
+                      isEditClicked={isEditClicked}
+                      // handleTaskClick={() => console.log("Task clicked")}
+                    />
+                  </div>
+                )}
+              </Draggable>
+            );
+          })}
           {provided.placeholder}
         </Box>
       )}
