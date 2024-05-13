@@ -28,7 +28,6 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 import * as Yup from "yup";
-import { toast } from "react-toastify";
 import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
 import { UsersList } from "../../types";
 
@@ -94,41 +93,38 @@ const TaskInfoModel = ({
 
   const formik = useFormik({
     initialValues: {
-      title: task?.title || "",
-      description: task?.description || "",
-      assignedMemberIds: task?.assignedMemberIds || [],
+      projectId: task?.projectId ?? "cea9bf77-c59f-4882-a3d1-c94525d8beca",
+      title: task?.title ?? "",
+      description: task?.description ?? "",
+      assignedMemberIds: task?.assignedMemberIds || [
+        "04c662ad-366c-418e-8119-35ec53d68305",
+      ],
       startDate: task?.startDate ? dayjs(task.startDate) : null,
       dueDate: task?.dueDate ? dayjs(task.dueDate) : null,
+      statusId: task?.statusId ?? "f75fd79b-8ed2-4533-8d08-306aeee7fccb",
+      isCompleted: task?.isCompleted ?? false,
     },
 
     validationSchema: taskValidationSchema,
-    onSubmit: (values, { setSubmitting, resetForm }) => {
-      // Build task data from form values
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
       const taskData = {
+        ...task,
+        projectId: task?.projectId ?? "cea9bf77-c59f-4882-a3d1-c94525d8beca",
         title: values.title,
         description: values.description,
-        members: selectedMembers,
+        assignedMemberIds: ["04c662ad-366c-418e-8119-35ec53d68305"],
         startDate: values.startDate
           ? dayjs(values.startDate).toISOString()
           : null,
         dueDate: values.dueDate ? dayjs(values.dueDate).toISOString() : null,
-        status: task?.status || "todo", // Default to 'todo' if adding new
+        statusId: task?.statusId ?? "f75fd79b-8ed2-4533-8d08-306aeee7fccb",
+        isCompleted: task?.isCompleted ?? false,
       };
 
       if (isEditMode && task?.id) {
-        updateTask(task.id, taskData)
-          .then(() => {
-            toast.success("Task updated successfully!");
-            handleClose();
-          })
-          .catch((error) => toast.error(`Update failed: ${error.message}`));
+        updateTask(task.id, taskData);
       } else {
-        addTask(taskData)
-          .then(() => {
-            toast.success("Task added successfully!");
-            handleClose();
-          })
-          .catch((error) => toast.error(`Add failed: ${error.message}`));
+        addTask(taskData);
       }
 
       resetForm();
