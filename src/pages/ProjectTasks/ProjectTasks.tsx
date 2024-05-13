@@ -2,7 +2,7 @@ import { useParams } from "react-router-dom";
 import MainLayout from "../../components/layout/MainLayout";
 import TasksBoard from "../../components/TasksBoard/TasksBoard";
 
-function ProjectTasksPage() {
+function ProjectTasks() {
   const { projectId } = useParams();
   return (
     <div>
@@ -13,4 +13,4 @@ function ProjectTasksPage() {
   );
 }
 
-export default ProjectTasksPage;
+export default ProjectTasks;

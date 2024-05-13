@@ -89,7 +89,7 @@ export type Status = {
 
 export type Task = {
   id?: string;
-  projectId?: string;
+  projectId?: string | null | undefined;
   title: string;
   description?: string;
   startDate?: Date;

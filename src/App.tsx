@@ -21,7 +21,7 @@ const Settings = lazy(() => import("./pages/Settings/Settings"));
 const Tablica = lazy(() => import("./pages/Tablica/Tablica"));
 const Home = lazy(() => import("./pages/Home/Home"));
 const Projects = lazy(() => import("./pages/Projects/Projects"));
-// const TasksPage = lazy(() => import('./pages/Projects/TasksPage'));
+const ProjectTasks = lazy(() => import("./pages/ProjectTasks/ProjectTasks"));
 
 // Route configuration
 const routes = [
@@ -35,7 +35,11 @@ const routes = [
     path: "/projects",
     element: <Projects />,
     protected: true,
-    // children: [{ path: ":projectId/tasks", element: <TasksPage /> }],
+  },
+  {
+    path: "/projects/:projectId/tasks",
+    element: <ProjectTasks />,
+    protected: true,
   },
   { path: "*", element: <div>404 Not Found</div> },
 ];

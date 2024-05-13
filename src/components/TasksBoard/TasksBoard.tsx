@@ -16,7 +16,7 @@ const columnTitles: Record<string, string> = {
   "a7c48d27-3d59-4425-b060-a754b0484826": "Gotowy",
 };
 
-const TasksBoard = () => {
+const TasksBoard = ({ projectId = null }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { tasks, fetchTasks, updateTaskStatus } = useTaskStore();
@@ -29,6 +29,10 @@ const TasksBoard = () => {
     fetchTasks();
     fetchStatuses();
   }, [fetchTasks, fetchStatuses]);
+
+  const filteredTasksByProject = projectId
+    ? tasks.filter((task) => task.projectId === projectId)
+    : tasks;
 
   const handleOnDragEnd = (result: DropResult) => {
     const { source, destination } = result;
@@ -121,7 +125,9 @@ const TasksBoard = () => {
               <Column
                 columnId={status.id}
                 title={columnTitles[status.id] || status.name}
-                tasks={tasks.filter((task) => task.statusId === status.id)}
+                tasks={filteredTasksByProject.filter(
+                  (task) => task.statusId === status.id
+                )}
                 handleTaskClick={handleTaskClick}
                 isEditClicked={isEditClicked}
               />

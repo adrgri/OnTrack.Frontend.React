@@ -13,6 +13,7 @@ import OptionsPopup from "../layout/OptionsPopup";
 import useDeletion from "../../hooks/useDeletion";
 import ProjectForm from "../ProjectForm/ProjectForm";
 import { Project } from "../../types";
+import { useNavigate } from "react-router-dom";
 
 interface ProjectCardProps {
   project: Project;
@@ -22,13 +23,13 @@ interface ProjectCardProps {
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
   project,
-  handleTaskClick,
   isEditClicked,
 }) => {
   const progress = project?.progress ?? 0;
   const [isOptionsPopupOpen, setIsOptionsPopupOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const navigate = useNavigate();
 
   const { requestDelete, confirmDelete, isConfirmOpen, closeModal } =
     useDeletion();
@@ -59,10 +60,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     setIsFormOpen(false);
   };
 
+  const handleProjectCardClick = () => {
+    navigate(`/projects/${project?.id}/tasks`);
+  };
+
   return (
     <>
       <GenericCard
-        onClick={handleTaskClick}
+        onClick={handleProjectCardClick}
         sx={{ width: "400px", position: "relative" }}
       >
         <IconButton
