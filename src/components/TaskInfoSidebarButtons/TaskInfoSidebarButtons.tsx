@@ -38,7 +38,7 @@ type TaskInfoSidebarButtonsProps = {
   startDate: dayjs.Dayjs | null;
   dueDate: dayjs.Dayjs | null;
   onStartDateChange: (date: dayjs.Dayjs | null) => void;
-  ondueDateChange: (date: dayjs.Dayjs | null) => void;
+  onDueDateChange: (date: dayjs.Dayjs | null) => void;
 };
 
 const TaskInfoSidebarButtons = ({
@@ -46,7 +46,7 @@ const TaskInfoSidebarButtons = ({
   startDate,
   dueDate,
   onStartDateChange,
-  ondueDateChange,
+  onDueDateChange,
 }: TaskInfoSidebarButtonsProps) => {
   const resourcesItem = {
     text: "Dodaj zasoby",
@@ -146,7 +146,7 @@ const TaskInfoSidebarButtons = ({
             anchorEl={anchorEl}
             onClose={handleCloseModal}
             value={dueDate}
-            onChange={ondueDateChange}
+            onChange={onDueDateChange}
             title="Data zakończenia"
           />
         );

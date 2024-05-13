@@ -9,7 +9,6 @@ import { DateField } from "@mui/x-date-pickers/DateField";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import dayjs from "dayjs";
 import "dayjs/locale/pl";
-import SmallButton from "../../../styledComponents/SmallButton";
 
 interface CalendarModalProps {
   open: boolean;
@@ -28,11 +27,39 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
   onChange,
   title,
 }) => {
-  const [selectedDate, setSelectedDate] = useState(value || dayjs());
+  const [selectedDate, setSelectedDate] = useState(value);
 
   const handleDateChange = (newDate: dayjs.Dayjs | null) => {
-    setSelectedDate(newDate || dayjs());
-    onChange(newDate);
+    if (!newDate) {
+      setSelectedDate(null);
+      onChange(null);
+      return;
+    }
+
+    // Preserve existing time
+    const combinedDateTime = selectedDate
+      ? newDate.hour(selectedDate.hour()).minute(selectedDate.minute())
+      : newDate;
+    console.log("Combined date:", combinedDateTime);
+
+    setSelectedDate(combinedDateTime);
+    onChange(combinedDateTime); // Update parent component
+  };
+
+  const handleTimeChange = (newTime: dayjs.Dayjs | null) => {
+    if (!newTime) {
+      // If clearing the time, you might want to handle differently
+      return;
+    }
+
+    // Update only the time of the selectedDate
+    const combinedDateTime = selectedDate
+      ? selectedDate.hour(newTime.hour()).minute(newTime.minute())
+      : dayjs().hour(newTime.hour()).minute(newTime.minute()); // Assume today if no date is set
+    console.log("Combined date and time:", combinedDateTime);
+
+    setSelectedDate(combinedDateTime);
+    onChange(combinedDateTime); // Update parent component
   };
 
   return (
@@ -125,7 +152,7 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
             <TimePicker
               label="Godzina"
               value={selectedDate}
-              onChange={(newTime) => setSelectedDate(newTime || dayjs())}
+              onChange={handleTimeChange}
               sx={{
                 flex: 1,
                 "& .MuiFormControl-root": { width: "100%" },
@@ -133,7 +160,8 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
             />
           </Box>
         </LocalizationProvider>
-        <SmallButton variant="contained">Zapisz</SmallButton>
+
+        {/* <SmallButton variant="contained">Zapisz</SmallButton> */}
       </Box>
     </Popover>
   );

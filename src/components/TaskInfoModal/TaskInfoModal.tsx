@@ -44,17 +44,18 @@ const taskValidationSchema = Yup.object({
     .required("Task title is required."),
 });
 
+function formatDate(date: dayjs.Dayjs | null) {
+  if (!date) return null;
+  const dateObj = dayjs(date);
+  return dateObj.isValid() ? dateObj.format("YYYY-MM-DDTHH:mm:ss") : null;
+}
+
 const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
   const { addTask, updateTask, getTaskById } = useTaskStore();
   const task = getTaskById(taskId || "");
-
+  const theme = useTheme();
   const [selectedMembers, setSelectedMembers] = useState<UsersList[]>([]);
-  const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(
-    task ? dayjs(task.startDate) : null
-  );
-  const [dueDate, setdueDate] = useState<dayjs.Dayjs | null>(
-    task ? dayjs(task.dueDate) : null
-  );
+  const isEditMode = !!taskId;
 
   const handleMemberSelect = (selectedMember: UsersList) => {
     const isAlreadySelected = selectedMembers.some(
@@ -70,20 +71,6 @@ const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
       console.log("User is already added");
     }
   };
-
-  const isEditMode = !!taskId;
-
-  useEffect(() => {
-    if (task) {
-      setStartDate(task.startDate ? dayjs(task.startDate) : null);
-      setdueDate(task.dueDate ? dayjs(task.dueDate) : null);
-      // setSelectedMembers(task.assignedMemberIds ?? []);
-    } else {
-      setStartDate(null);
-      setdueDate(null);
-      setSelectedMembers([]);
-    }
-  }, [task]);
 
   const formik = useFormik({
     initialValues: {
@@ -101,12 +88,8 @@ const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
 
     validationSchema: taskValidationSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
-      const formattedStartDate = values.startDate
-        ? dayjs(values.startDate).format("YYYY-MM-DDTHH:mm:ss.SS")
-        : null;
-      const formattedDueDate = values.dueDate
-        ? dayjs(values.dueDate).format("YYYY-MM-DDTHH:mm:ss.SS")
-        : null;
+      const formattedStartDate = formatDate(values.startDate);
+      const formattedDueDate = formatDate(values.dueDate);
 
       const taskData = {
         ...task,
@@ -128,17 +111,24 @@ const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
 
       resetForm();
       setSubmitting(false);
+      handleClose();
     },
     enableReinitialize: true,
   });
 
-  const theme = useTheme();
-
-  // useEffect(() => {
-  //   console.log("Selected task from useEffect:", task);
-  // }, [task]);
-
-  console.log("Selected task:", task);
+  useEffect(() => {
+    if (task) {
+      formik.setValues({
+        ...formik.values,
+        startDate: task.startDate ? dayjs(task.startDate) : null,
+        dueDate: task.dueDate ? dayjs(task.dueDate) : null,
+      });
+      // setSelectedMembers(task.assignedMemberIds ?? []);
+    } else {
+      formik.resetForm();
+      setSelectedMembers([]);
+    }
+  }, [task, formik]);
 
   return (
     <Dialog
@@ -179,7 +169,6 @@ const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "flex-start",
-
                 gap: 1,
               }}
             >
@@ -188,7 +177,7 @@ const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
                 onTextChange={(newValue) =>
                   formik.setFieldValue("title", newValue)
                 }
-                placeholder="Wpisz nazwe zadania"
+                placeholder="Wpisz nazwę zadania"
               />
 
               <CloseButton onClick={handleClose} right={20} top={20} />
@@ -202,7 +191,7 @@ const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
             )}
 
             <Box sx={{ display: "flex", alignItems: "center" }}>
-              {startDate && (
+              {formik.values.startDate && (
                 <Stack spacing={2}>
                   <Typography variant="subtitle1">Data rozpoczęcia</Typography>
                   <Box
@@ -218,15 +207,17 @@ const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
                     >
                       <DateTimePicker
                         sx={{ width: "80%" }}
-                        value={startDate}
-                        onChange={(newValue) => setStartDate(newValue)}
+                        value={formik.values.startDate}
+                        onChange={(newValue) =>
+                          formik.setFieldValue("startDate", newValue)
+                        }
                       />
                     </LocalizationProvider>
                   </Box>
                 </Stack>
               )}
 
-              {dueDate && (
+              {formik.values.dueDate && (
                 <Stack spacing={2}>
                   <Typography variant="subtitle1">Data zakończenia</Typography>
                   <Box
@@ -242,8 +233,10 @@ const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
                     >
                       <DateTimePicker
                         sx={{ width: "80%" }}
-                        value={dueDate}
-                        onChange={(newValue) => setdueDate(newValue)}
+                        value={formik.values.dueDate}
+                        onChange={(newValue) =>
+                          formik.setFieldValue("dueDate", newValue)
+                        }
                       />
                     </LocalizationProvider>
                   </Box>
@@ -293,10 +286,14 @@ const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
           <Box sx={{ flex: "0 1 auto", mt: 6 }}>
             <TaskInfoSidebarButtons
               onMemberSelect={handleMemberSelect}
-              startDate={startDate}
-              dueDate={dueDate}
-              onStartDateChange={setStartDate}
-              ondueDateChange={setdueDate}
+              startDate={formik.values.startDate}
+              dueDate={formik.values.dueDate}
+              onStartDateChange={(newValue) =>
+                formik.setFieldValue("startDate", newValue)
+              }
+              onDueDateChange={(newValue) =>
+                formik.setFieldValue("dueDate", newValue)
+              }
             />
           </Box>
         </DialogContent>
@@ -315,7 +312,6 @@ const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
             type="submit"
             variant="contained"
             sx={{ marginRight: 2 }}
-            onClick={handleClose}
           >
             Zapisz
           </SmallButton>
