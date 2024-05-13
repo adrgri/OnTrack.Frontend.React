@@ -44,18 +44,25 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     setIsOptionsPopupOpen(true);
   };
 
-  const handleDelete = useCallback(() => {
-    if (project) {
-      requestDelete(
-        { id: project.id, type: "project" },
-        useProjectStore.getState().deleteProject
-      );
-    }
-  }, [project, requestDelete]);
+  const handleDelete = useCallback(
+    (event: React.MouseEvent<HTMLElement>) => {
+      event.stopPropagation();
+      setIsOptionsPopupOpen(false);
 
-  const handleEdit = useCallback(() => {
-    setIsFormOpen(true);
+      if (project) {
+        requestDelete(
+          { id: project.id, type: "project" },
+          useProjectStore.getState().deleteProject
+        );
+      }
+    },
+    [project, requestDelete]
+  );
+
+  const handleEdit = useCallback((event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
     setIsOptionsPopupOpen(false);
+    setIsFormOpen(true);
   }, []);
 
   const handleFormClose = () => {
@@ -75,7 +82,10 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
         <IconButton
           aria-label="more options"
           sx={{ position: "absolute", top: 8, right: 8 }}
-          onClick={isEditClicked ? handleDelete : handleOpenOptionsPopup}
+          onClick={(event) => {
+            event.stopPropagation();
+            isEditClicked ? handleDelete(event) : handleOpenOptionsPopup(event);
+          }}
         >
           {isEditClicked ? (
             <img src={CloseIcon} alt="Usuń" />
@@ -159,7 +169,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           open={isOptionsPopupOpen}
           anchorEl={anchorEl}
           onClose={() => setIsOptionsPopupOpen(false)}
-          onEdit={handleEdit}
+          onEdit={(event) => handleEdit(event)}
           onDelete={handleDelete}
         />
         <ConfirmDeleteModal

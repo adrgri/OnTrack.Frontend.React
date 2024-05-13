@@ -12,7 +12,7 @@ interface OptionsPopupProps {
   open: boolean;
   anchorEl: HTMLButtonElement | null;
   onClose: () => void;
-  onEdit: () => void;
+  onEdit: (event: React.MouseEvent<HTMLElement>) => void;
   onDelete: (event: React.MouseEvent<HTMLElement>) => void;
 }
 
