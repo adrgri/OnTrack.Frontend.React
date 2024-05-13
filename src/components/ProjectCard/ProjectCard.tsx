@@ -34,6 +34,8 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const { requestDelete, confirmDelete, isConfirmOpen, closeModal } =
     useDeletion();
 
+  const tasksAmount = project?.taskIds?.length ?? 0;
+
   const handleOpenOptionsPopup = (
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
@@ -145,9 +147,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             >
               <img src={TasksIcon} alt="Tasks" />
               <Typography variant="subtitle2" color="text.secondary" ml={1}>
-                {/* {`${project?.tasksAmount ?? 0} ${
-                  project?.tasksAmount === 1 ? "zadanie" : "zadań"
-                }`} */}
+                {`${tasksAmount ?? 0} ${
+                  tasksAmount === 1 ? "zadanie" : "zadań"
+                }`}
               </Typography>
             </Grid>
           </Grid>
