@@ -157,6 +157,7 @@ const TaskInfoSidebarButtons = ({
             anchorEl={anchorEl}
             onClose={handleCloseModal}
             onIconSelect={() => console.log("Not implemented yet")}
+            selectedIcon={undefined}
           />
         );
       case "attachment":

@@ -69,7 +69,7 @@ export type StatusOptions = "todo" | "inProgress" | "done";
 export type Status = {
   id: string;
   name: string;
-  order: number;
+  order?: number;
 };
 
 // export type Task = {
@@ -137,4 +137,5 @@ export type Project = {
   description?: string;
   memberIds?: string[] | undefined;
   taskIds?: string[] | undefined;
+  dueDate?: Date;
 };

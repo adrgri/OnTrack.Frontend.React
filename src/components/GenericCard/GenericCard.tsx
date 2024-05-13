@@ -1,7 +1,7 @@
 import { Card, CardContent } from "@mui/material";
 
 interface GenericCardProps {
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLElement>) => void;
   children: React.ReactNode;
   sx?: object;
 }

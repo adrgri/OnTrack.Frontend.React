@@ -3,8 +3,8 @@ import { Typography, Grid, Stack, IconButton } from "@mui/material";
 import { useProjectStore } from "../../store/ProjectStore";
 import TasksIcon from "../../assets/icons/TasksIcon.svg";
 import DateChip from "../CardComponents/DateChip";
-import CircularProgressWithLabel from "../CardComponents/CircularProgressWithLabel";
-import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
+// import CircularProgressWithLabel from "../CardComponents/CircularProgressWithLabel";
+// import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
 import GenericCard from "../GenericCard/GenericCard";
 import MenuDotsVertical from "../../assets/icons/MenuDotsVertical.svg";
 import CloseIcon from "../../assets/icons/CloseIcon.svg";
@@ -25,7 +25,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   project,
   isEditClicked,
 }) => {
-  const progress = project?.progress ?? 0;
+  // const progress = project?.progress ?? 0;
   const [isOptionsPopupOpen, setIsOptionsPopupOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -105,7 +105,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                   },
                 }}
               >
-                {project?.membersIds && (
+                {/* {project?.membersIds && (
                   <>
                     {" "}
                     <Typography variant="subtitle2" color="text.secondary">
@@ -113,7 +113,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                     </Typography>
                     <MembersAvatarsRow members={project?.members ?? []} />{" "}
                   </>
-                )}
+                )} */}
               </Stack>
             </Grid>
 
@@ -132,7 +132,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             xs={4}
           >
             <Grid item xs={true} container justifyContent="center">
-              <CircularProgressWithLabel value={progress} />
+              {/* <CircularProgressWithLabel value={progress} /> */}
             </Grid>
 
             <Grid
@@ -145,9 +145,9 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             >
               <img src={TasksIcon} alt="Tasks" />
               <Typography variant="subtitle2" color="text.secondary" ml={1}>
-                {`${project?.tasksAmount ?? 0} ${
+                {/* {`${project?.tasksAmount ?? 0} ${
                   project?.tasksAmount === 1 ? "zadanie" : "zadań"
-                }`}
+                }`} */}
               </Typography>
             </Grid>
           </Grid>

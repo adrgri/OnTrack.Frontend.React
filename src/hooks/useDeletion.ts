@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 interface DeletableItem {
-  id: string;
+  id: string | undefined;
   type: "task" | "project";
 }
 
@@ -32,7 +32,7 @@ const useDeletion = (): DeletionState => {
 
   const confirmDelete = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
-    if (currentItem && deleteAction) {
+    if (currentItem && deleteAction && currentItem.id) {
       deleteAction(currentItem.id)
         .then(() => console.log(`${currentItem.type} deleted successfully`))
         .catch((error) =>

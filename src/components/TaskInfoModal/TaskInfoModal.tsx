@@ -28,7 +28,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 import * as Yup from "yup";
-import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
+// import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
 import { UsersList } from "../../types";
 
 type TaskInfoModelProps = {
@@ -46,7 +46,7 @@ const taskValidationSchema = Yup.object({
 
 const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
   const { addTask, updateTask, getTaskById } = useTaskStore();
-  const task = getTaskById(taskId);
+  const task = getTaskById(taskId || "");
 
   const [selectedMembers, setSelectedMembers] = useState<UsersList[]>([]);
   const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(
@@ -77,7 +77,7 @@ const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
     if (task) {
       setStartDate(task.startDate ? dayjs(task.startDate) : null);
       setdueDate(task.dueDate ? dayjs(task.dueDate) : null);
-      setSelectedMembers(task.assignedMemberIds ?? []);
+      // setSelectedMembers(task.assignedMemberIds ?? []);
     } else {
       setStartDate(null);
       setdueDate(null);
@@ -116,9 +116,21 @@ const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
       };
 
       if (isEditMode && task?.id) {
-        updateTask(task.id, taskData);
+        updateTask(task.id, {
+          ...taskData,
+          startDate: values.startDate
+            ? dayjs(values.startDate).toDate()
+            : undefined,
+          dueDate: values.dueDate ? dayjs(values.dueDate).toDate() : undefined,
+        });
       } else {
-        addTask(taskData);
+        addTask({
+          ...taskData,
+          startDate: values.startDate
+            ? dayjs(values.startDate).toDate()
+            : undefined,
+          dueDate: values.dueDate ? dayjs(values.dueDate).toDate() : undefined,
+        });
       }
 
       resetForm();
@@ -192,7 +204,7 @@ const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
             {selectedMembers.length > 0 && (
               <Stack spacing={2}>
                 <Typography variant="subtitle1">Członkowie</Typography>
-                <MembersAvatarsRow members={selectedMembers ?? []} />
+                {/* <MembersAvatarsRow members={selectedMembers ?? []} /> */}
               </Stack>
             )}
 

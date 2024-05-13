@@ -4,6 +4,7 @@ import TasksBoard from "../../components/TasksBoard/TasksBoard";
 
 function ProjectTasks() {
   const { projectId } = useParams();
+
   return (
     <div>
       <MainLayout>

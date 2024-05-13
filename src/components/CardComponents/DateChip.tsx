@@ -4,7 +4,7 @@ import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import dayjs from "dayjs";
 
 interface DateChipProps {
-  date: string | dayjs.Dayjs | null;
+  date: Date | null;
 }
 
 const DateChip: React.FC<DateChipProps> = ({ date }) => {

@@ -3,14 +3,12 @@ import BoardNavigation from "../BoardNavigation/BoardNavigation";
 import { Grid, useMediaQuery, useTheme } from "@mui/material";
 import ProjectCard from "../ProjectCard/ProjectCard";
 import { useProjectStore } from "../../store/ProjectStore";
-import ProjectInfoModal from "../ProjectInfoModal/ProjectInfoModal";
 import ActionButtons from "../UI/ActionButtons";
 import ProjectForm from "../ProjectForm/ProjectForm";
 
 export default function ProjectsBoard() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const [isProjectInfoModalOpen, setIsProjectInfoModalOpen] = useState(false);
   const [isEditClicked, setIsEditClicked] = useState(false);
   const [isAddProjectFormModalOpen, setIsAddProjectFormModalOpen] =
     useState(false);
@@ -27,10 +25,6 @@ export default function ProjectsBoard() {
     setIsEditClicked((prevIsEditClicked) => !prevIsEditClicked);
     console.log("Edit action triggered");
   };
-
-  function handleProjectInfoModalClose() {
-    setIsProjectInfoModalOpen(false);
-  }
 
   function handleAddProjectFormClose() {
     setIsAddProjectFormModalOpen(false);
@@ -89,7 +83,6 @@ export default function ProjectsBoard() {
         ))}
       </Grid>
 
-      <ProjectInfoModal isOpen={isProjectInfoModalOpen} />
       <ProjectForm
         isOpen={isAddProjectFormModalOpen}
         handleClose={handleAddProjectFormClose}

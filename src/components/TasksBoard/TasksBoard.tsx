@@ -9,6 +9,7 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import ActionButtons from "../UI/ActionButtons";
 import { useStatusStore } from "../../store/StatusStore";
+import { Status } from "../../types";
 
 const columnTitles: Record<string, string> = {
   "f75fd79b-8ed2-4533-8d08-306aeee7fccb": "Do zrobienia",
@@ -16,7 +17,7 @@ const columnTitles: Record<string, string> = {
   "a7c48d27-3d59-4425-b060-a754b0484826": "Gotowy",
 };
 
-const TasksBoard = ({ projectId = null }) => {
+const TasksBoard = ({ projectId }: { projectId?: string }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { tasks, fetchTasks, updateTaskStatus } = useTaskStore();
@@ -49,7 +50,11 @@ const TasksBoard = ({ projectId = null }) => {
     ) {
       const task = tasks.find((t) => t.id === result.draggableId);
       if (task?.id) {
-        updateTaskStatus(task.id, destination.droppableId);
+        const status: Status = {
+          id: destination.droppableId,
+          name: columnTitles[destination.droppableId],
+        };
+        updateTaskStatus(task.id, status);
       }
     }
   };

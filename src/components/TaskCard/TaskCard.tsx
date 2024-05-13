@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Typography, Grid, Box, IconButton } from "@mui/material";
 import { useTaskStore } from "../../store/TaskStore";
 import DateChip from "../CardComponents/DateChip";
-import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
+// import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
 import GenericCard from "../GenericCard/GenericCard";
-import EntityIcon from "../CardComponents/EntityIcon";
+// import EntityIcon from "../CardComponents/EntityIcon";
 import MenuDotsVertical from "../../assets/icons/MenuDotsVertical.svg";
 import CloseIcon from "../../assets/icons/CloseIcon.svg";
 import OptionsPopup from "../layout/OptionsPopup";
@@ -15,7 +15,7 @@ import { useProjectStore } from "../../store/ProjectStore";
 
 interface TaskCardProps {
   // task: Task;
-  taskId: string;
+  taskId: string | undefined;
   handleTaskClick: (
     taskId: string,
     event: React.MouseEvent<HTMLElement>
@@ -71,7 +71,11 @@ const TaskCard: React.FC<TaskCardProps> = ({
   );
 
   return (
-    <GenericCard onClick={() => handleTaskClick(taskId, event)}>
+    <GenericCard
+      onClick={(event: React.MouseEvent<HTMLElement>) =>
+        handleTaskClick(taskId ?? "", event)
+      }
+    >
       <Grid container direction="column" spacing={1}>
         <Grid item xs={12} mb={2} container alignItems="center">
           <Box
@@ -108,10 +112,10 @@ const TaskCard: React.FC<TaskCardProps> = ({
               )}
             </IconButton>
           </Box>
-          <EntityIcon
+          {/* <EntityIcon
             icon={task?.icon}
             style={{ width: "15px", height: "15px", marginLeft: "5px" }}
-          />
+          /> */}
         </Grid>
 
         <Grid item container xs={12} alignItems="center" spacing={2}>
@@ -119,7 +123,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
             <DateChip date={task?.dueDate ?? null} />
           </Grid>
           <Grid item xs={true} container justifyContent="flex-end">
-            <MembersAvatarsRow members={task?.members ?? []} />
+            {/* <MembersAvatarsRow members={task?.members ?? []} /> */}
           </Grid>
         </Grid>
       </Grid>

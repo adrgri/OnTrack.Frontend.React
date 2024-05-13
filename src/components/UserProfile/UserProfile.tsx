@@ -7,7 +7,8 @@ const emptyAvatar = "https://cdn-icons-png.flaticon.com/512/149/149071.png";
 
 const UserProfile = ({ name, avatar: initialAvatar }: UserProfileProps) => {
   const [avatar, setAvatar] = useState(initialAvatar);
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  // const [avatarFile, setAvatarFile] = useState<File | null>(null);
+  const [, setAvatarFile] = useState<File | null>(null);
 
   const handleAvatarChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
