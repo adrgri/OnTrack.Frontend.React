@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useFormik } from "formik";
 
 import {
@@ -36,12 +36,39 @@ type TaskInfoModelProps = {
   handleClose: () => void;
   taskId?: string | null;
 };
-
 const taskValidationSchema = Yup.object({
   title: Yup.string()
     .trim()
-    .min(1, "Task title must contain at least 1 character.")
-    .required("Task title is required."),
+    .min(1, "Tytuł zadania musi zawierać co najmniej 1 znak.")
+    .required("Tytuł zadania jest wymagany."),
+  startDate: Yup.date()
+    .nullable()
+    .test(
+      "is-valid-range",
+      "Data rozpoczęcia musi być przed datą zakończenia.",
+      function (value) {
+        const { dueDate } = this.parent;
+        return (
+          value === null ||
+          dueDate === null ||
+          dayjs(value).isBefore(dayjs(dueDate))
+        );
+      }
+    ),
+  dueDate: Yup.date()
+    .nullable()
+    .test(
+      "is-valid-range",
+      "Data zakończenia musi być po dacie rozpoczęcia.",
+      function (value) {
+        const { startDate } = this.parent;
+        return (
+          value === null ||
+          startDate === null ||
+          dayjs(value).isAfter(dayjs(startDate))
+        );
+      }
+    ),
 });
 
 function formatDate(date: dayjs.Dayjs | null) {
@@ -214,6 +241,11 @@ const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
                       />
                     </LocalizationProvider>
                   </Box>
+                  {formik.errors.startDate && formik.touched.startDate && (
+                    <Typography color="error" variant="caption">
+                      {formik.errors.startDate}
+                    </Typography>
+                  )}
                 </Stack>
               )}
 
@@ -240,6 +272,11 @@ const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
                       />
                     </LocalizationProvider>
                   </Box>
+                  {formik.errors.dueDate && formik.touched.dueDate && (
+                    <Typography color="error" variant="caption">
+                      {formik.errors.dueDate}
+                    </Typography>
+                  )}
                 </Stack>
               )}
             </Box>
