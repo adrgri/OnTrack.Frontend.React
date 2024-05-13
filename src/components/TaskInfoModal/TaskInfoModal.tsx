@@ -34,7 +34,6 @@ import { UsersList } from "../../types";
 type TaskInfoModelProps = {
   isOpen: boolean;
   handleClose: () => void;
-  onCancel: () => void;
   taskId?: string | null;
 };
 
@@ -45,16 +44,11 @@ const taskValidationSchema = Yup.object({
     .required("Task title is required."),
 });
 
-const TaskInfoModel = ({
-  isOpen,
-  handleClose,
-  onCancel,
-  taskId,
-}: TaskInfoModelProps) => {
-  const task = useTaskStore((state) => state.getTaskById(taskId ?? ""));
+const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
+  const { addTask, updateTask, getTaskById } = useTaskStore();
+  const task = getTaskById(taskId);
 
   const [selectedMembers, setSelectedMembers] = useState<UsersList[]>([]);
-  const { addTask, updateTask } = useTaskStore();
   const [startDate, setStartDate] = useState<dayjs.Dayjs | null>(
     task ? dayjs(task.startDate) : null
   );
@@ -323,7 +317,7 @@ const TaskInfoModel = ({
           <SmallButton
             variant="contained"
             sx={{ backgroundColor: "#5E5F7D" }}
-            onClick={onCancel}
+            onClick={handleClose}
           >
             Anuluj
           </SmallButton>

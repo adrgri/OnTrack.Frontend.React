@@ -75,10 +75,6 @@ const TasksBoard = ({ projectId = null }) => {
     setIsTaskInfoModelOpen(true);
   };
 
-  function handleCancel() {
-    setIsTaskInfoModelOpen(false);
-  }
-
   function handleTaskInfoModalClose() {
     setIsTaskInfoModelOpen(false);
   }
@@ -139,7 +135,6 @@ const TasksBoard = ({ projectId = null }) => {
       <TaskInfoModel
         isOpen={isTaskInfoModelOpen}
         handleClose={handleTaskInfoModalClose}
-        onCancel={handleCancel}
         taskId={selectedTaskId}
       />
     </>
