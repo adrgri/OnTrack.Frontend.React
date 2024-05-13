@@ -92,8 +92,8 @@ export type Task = {
   projectId?: string | null | undefined;
   title: string;
   description?: string;
-  startDate?: Date;
-  dueDate?: Date;
+  startDate?: string | null;
+  dueDate?: string | null;
   statusId?: string;
   iconId?: string;
   isCompleted: boolean;

@@ -101,36 +101,29 @@ const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
 
     validationSchema: taskValidationSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
+      const formattedStartDate = values.startDate
+        ? dayjs(values.startDate).format("YYYY-MM-DDTHH:mm:ss.SS")
+        : null;
+      const formattedDueDate = values.dueDate
+        ? dayjs(values.dueDate).format("YYYY-MM-DDTHH:mm:ss.SS")
+        : null;
+
       const taskData = {
         ...task,
         projectId: task?.projectId ?? "cea9bf77-c59f-4882-a3d1-c94525d8beca",
         title: values.title,
         description: values.description,
         assignedMemberIds: ["04c662ad-366c-418e-8119-35ec53d68305"],
-        startDate: values.startDate
-          ? dayjs(values.startDate).toISOString()
-          : null,
-        dueDate: values.dueDate ? dayjs(values.dueDate).toISOString() : null,
+        startDate: formattedStartDate,
+        dueDate: formattedDueDate,
         statusId: task?.statusId ?? "f75fd79b-8ed2-4533-8d08-306aeee7fccb",
         isCompleted: task?.isCompleted ?? false,
       };
 
       if (isEditMode && task?.id) {
-        updateTask(task.id, {
-          ...taskData,
-          startDate: values.startDate
-            ? dayjs(values.startDate).toDate()
-            : undefined,
-          dueDate: values.dueDate ? dayjs(values.dueDate).toDate() : undefined,
-        });
+        await updateTask(task.id, taskData);
       } else {
-        addTask({
-          ...taskData,
-          startDate: values.startDate
-            ? dayjs(values.startDate).toDate()
-            : undefined,
-          dueDate: values.dueDate ? dayjs(values.dueDate).toDate() : undefined,
-        });
+        await addTask(taskData);
       }
 
       resetForm();
@@ -141,9 +134,9 @@ const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
 
   const theme = useTheme();
 
-  useEffect(() => {
-    console.log("Selected task from useEffect:", task);
-  }, [task]);
+  // useEffect(() => {
+  //   console.log("Selected task from useEffect:", task);
+  // }, [task]);
 
   console.log("Selected task:", task);
 
