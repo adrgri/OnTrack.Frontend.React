@@ -1,7 +1,7 @@
 import MainLayout from "../../components/layout/MainLayout";
 import ProjectsBoard from "../../components/ProjectsBoard/ProjectsBoard";
 
-const Home = () => {
+const Projects = () => {
   return (
     <>
       <MainLayout>
@@ -11,4 +11,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default Projects;
