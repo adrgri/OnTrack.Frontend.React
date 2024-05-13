@@ -44,7 +44,7 @@ const TasksBoard = () => {
       source.index !== destination.index
     ) {
       const task = tasks.find((t) => t.id === result.draggableId);
-      if (task && task.id) {
+      if (task?.id) {
         updateTaskStatus(task.id, destination.droppableId);
       }
     }
@@ -62,7 +62,7 @@ const TasksBoard = () => {
 
   const handleEdit = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
-    setIsEditClicked(true);
+    setIsEditClicked((prevIsEditClicked) => !prevIsEditClicked);
     console.log("Edit action triggered");
   };
 
