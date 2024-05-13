@@ -116,19 +116,19 @@ const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
     enableReinitialize: true,
   });
 
-  useEffect(() => {
-    if (task) {
-      formik.setValues({
-        ...formik.values,
-        startDate: task.startDate ? dayjs(task.startDate) : null,
-        dueDate: task.dueDate ? dayjs(task.dueDate) : null,
-      });
-      // setSelectedMembers(task.assignedMemberIds ?? []);
-    } else {
-      formik.resetForm();
-      setSelectedMembers([]);
-    }
-  }, [task, formik]);
+  // useEffect(() => {
+  //   if (task) {
+  //     formik.setValues({
+  //       ...formik.values,
+  //       startDate: task.startDate ? dayjs(task.startDate) : null,
+  //       dueDate: task.dueDate ? dayjs(task.dueDate) : null,
+  //     });
+  //     // setSelectedMembers(task.assignedMemberIds ?? []);
+  //   } else {
+  //     formik.resetForm();
+  //     setSelectedMembers([]);
+  //   }
+  // }, [task, formik]);
 
   return (
     <Dialog
