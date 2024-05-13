@@ -6,12 +6,12 @@ import { MouseEventHandler, ReactNode } from "react";
 interface ActionButtonsProps {
   children: ReactNode;
   handleAdd: MouseEventHandler;
-  handleEdit: MouseEventHandler;
+  handleEditAll: MouseEventHandler;
 }
 
 function ActionButtons({
   children,
-  handleEdit,
+  handleEditAll,
   handleAdd,
 }: ActionButtonsProps) {
   return (
@@ -28,7 +28,7 @@ function ActionButtons({
               borderRadius: "5px",
               backgroundColor: "#50557F",
             }}
-            onClick={handleEdit}
+            onClick={handleEditAll}
           >
             Edytuj
           </Button>

@@ -20,7 +20,7 @@ export default function ProjectsBoard() {
     fetchProjects();
   }, [fetchProjects]);
 
-  const handleEdit = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+  const handleEditAll = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
     setIsEditClicked((prevIsEditClicked) => !prevIsEditClicked);
     console.log("Edit action triggered");
@@ -54,7 +54,10 @@ export default function ProjectsBoard() {
           />
         </Grid>
 
-        <ActionButtons handleAdd={handleAddProject} handleEdit={handleEdit}>
+        <ActionButtons
+          handleAdd={handleAddProject}
+          handleEditAll={handleEditAll}
+        >
           Projekt
         </ActionButtons>
       </Grid>

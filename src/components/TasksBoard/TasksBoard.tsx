@@ -69,7 +69,7 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
     console.log("Task clicked:", taskId);
   };
 
-  const handleEdit = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
+  const handleEditAll = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
     setIsEditClicked((prevIsEditClicked) => !prevIsEditClicked);
     console.log("Edit action triggered");
@@ -101,7 +101,7 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
           />
         </Grid>
 
-        <ActionButtons handleAdd={handleAddTask} handleEdit={handleEdit}>
+        <ActionButtons handleAdd={handleAddTask} handleEditAll={handleEditAll}>
           Zadanie
         </ActionButtons>
       </Grid>
