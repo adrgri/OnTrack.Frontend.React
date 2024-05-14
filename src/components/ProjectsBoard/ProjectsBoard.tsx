@@ -48,9 +48,9 @@ export default function ProjectsBoard() {
         <Grid item>
           <BoardNavigation
             leftButtonLabel="Projekty"
-            rightButtonLabel="Tablica"
+            rightButtonLabel="Wykres"
             leftButtonLink="/projects"
-            rightButtonLink="/tablica"
+            rightButtonLink="/wykres"
           />
         </Grid>
 

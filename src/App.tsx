@@ -18,7 +18,7 @@ dayjs.locale("pl");
 const Login = lazy(() => import("./pages/Login/Login"));
 const Register = lazy(() => import("./pages/Register/Register"));
 const Settings = lazy(() => import("./pages/Settings/Settings"));
-const Tablica = lazy(() => import("./pages/Tablica/Tablica"));
+const Wykres = lazy(() => import("./pages/Wykres/Wykres"));
 const Home = lazy(() => import("./pages/Home/Home"));
 const Projects = lazy(() => import("./pages/Projects/Projects"));
 const ProjectTasks = lazy(() => import("./pages/ProjectTasks/ProjectTasks"));
