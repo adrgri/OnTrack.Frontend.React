@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Gantt, {
   Tasks,
   // Dependencies,
@@ -9,28 +9,35 @@ import Gantt, {
   Validation,
 } from "devextreme-react/gantt";
 import BoardNavigation from "../BoardNavigation/BoardNavigation.tsx";
-import TaskTooltipTemplate from "./TaskTooltipTemplate.tsx";
 import { useTaskStore } from "../../store/TaskStore.ts";
 import { useProjectStore } from "../../store/ProjectStore.ts";
+import Loading from "../Loading/Loading.tsx";
 
 const GanttChart = () => {
   const { tasks, fetchTasks } = useTaskStore();
   const { projects, fetchProjects } = useProjectStore();
-  const [ganttTasks, setGanttTasks] = useState([]);
-  const [ganttProjects, setGanttProjects] = useState([]);
+  const [loadingTasks, setLoadingTasks] = useState(false);
+  const [loadingProjects, setLoadingProjects] = useState(false);
 
   useEffect(() => {
     const loadData = async () => {
-      await fetchTasks();
-      await fetchProjects();
+      setLoadingTasks(true);
+      setLoadingProjects(true);
+      try {
+        await fetchTasks();
+        await fetchProjects();
+      } finally {
+        setLoadingTasks(false);
+        setLoadingProjects(false);
+      }
     };
 
     loadData();
   }, [fetchTasks, fetchProjects]);
 
-  useEffect(() => {
-    const transformData = () => {
-      const transformedTasks = tasks.map((task) => ({
+  const transformedTasks = useMemo(
+    () =>
+      tasks.map((task) => ({
         id: task.id,
         parentId: task.projectId,
         title: task.title,
@@ -38,48 +45,60 @@ const GanttChart = () => {
         end: task.dueDate ? new Date(task.dueDate) : null,
         progress: task.isCompleted ? 100 : 0,
         includeInChart: !!(task.startDate && task.dueDate),
-      }));
+      })),
+    [tasks]
+  );
 
-      const calculateProjectDates = (tasks, projects) => {
-        return projects.map((project) => {
-          const projectTasks = tasks.filter(
-            (task) => task.parentId === project.id && task.start && task.end
-          );
+  const transformedProjects = useMemo(
+    () =>
+      projects.map((project) => {
+        if (typeof project.id === "undefined") {
+          throw new Error("Project id is undefined");
+        }
+        return {
+          id: project.id,
+          parentId: 0,
+          title: project.title,
+          start: null,
+          end: null,
+          progress: 0,
+          includeInChart: true,
+        };
+      }),
+    [projects]
+  );
 
-          if (projectTasks.length === 0)
-            return { ...project, startDate: null, dueDate: null };
+  const projectsWithDates = useMemo(
+    () =>
+      transformedProjects.map((project) => {
+        const projectTasks = transformedTasks.filter(
+          (task) => task.parentId === project.id && task.start && task.end
+        );
 
-          const startDate = new Date(
-            Math.min(...projectTasks.map((task) => task.start.getTime()))
-          );
-          const dueDate = new Date(
-            Math.max(...projectTasks.map((task) => task.end.getTime()))
-          );
+        if (projectTasks.length === 0)
+          return { ...project, start: null, end: null };
 
-          return { ...project, start: startDate, end: dueDate };
-        });
-      };
+        const startDate = new Date(
+          Math.min(
+            ...projectTasks.map((task) =>
+              task.start ? task.start.getTime() : Infinity
+            )
+          )
+        );
+        const endDate = new Date(
+          Math.max(
+            ...projectTasks.map((task) =>
+              task.end ? task.end.getTime() : -Infinity
+            )
+          )
+        );
 
-      const transformedProjects = calculateProjectDates(
-        transformedTasks,
-        projects
-      ).map((project) => ({
-        id: project.id,
-        parentId: 0,
-        title: project.title,
-        start: project.start,
-        end: project.end,
-        progress: 100,
-      }));
+        return { ...project, start: startDate, end: endDate };
+      }),
+    [transformedTasks, transformedProjects]
+  );
 
-      setGanttProjects(transformedProjects);
-      setGanttTasks(transformedTasks.filter((task) => task.includeInChart));
-    };
-
-    transformData();
-  }, [tasks, projects]);
-
-  const formatDate = (date) => {
+  const formatDate = (date: Date | null) => {
     if (!date) return "";
     const d = new Date(date);
     return `${d.getDate().toString().padStart(2, "0")}.${(d.getMonth() + 1)
@@ -95,33 +114,32 @@ const GanttChart = () => {
         leftButtonLink="/home"
         rightButtonLink="/wykres"
       />
-      <Gantt
-        taskListWidth={500}
-        scaleType="weeks"
-        height={600}
-        rootValue={0}
-        taskTooltipContentTemplate={TaskTooltipTemplate}
-      >
-        <Tasks dataSource={[...ganttProjects, ...ganttTasks]} />
-        {/* <Dependencies dataSource={dependencies} />
+
+      {loadingTasks || loadingProjects ? (
+        <Loading />
+      ) : (
+        <Gantt taskListWidth={500} scaleType="weeks" height={600} rootValue={0}>
+          <Tasks dataSource={[...projectsWithDates, ...transformedTasks]} />
+          {/* <Dependencies dataSource={dependencies} />
         <Resources dataSource={resources} />
         <ResourceAssignments dataSource={resourceAssignments} /> */}
 
-        <Column dataField="title" caption="Nazwa" width={200} />
-        <Column
-          dataField="start"
-          caption="Data rozpoczęcia"
-          cellRender={({ value }) => formatDate(value)}
-        />
-        <Column
-          dataField="end"
-          caption="Data zakończenia"
-          cellRender={({ value }) => formatDate(value)}
-        />
+          <Column dataField="title" caption="Nazwa" width={200} />
+          <Column
+            dataField="start"
+            caption="Data rozpoczęcia"
+            cellRender={({ value }) => formatDate(value)}
+          />
+          <Column
+            dataField="end"
+            caption="Data zakończenia"
+            cellRender={({ value }) => formatDate(value)}
+          />
 
-        <Validation autoUpdateParentTasks />
-        <Editing enabled={false} />
-      </Gantt>
+          <Validation autoUpdateParentTasks />
+          <Editing enabled={false} />
+        </Gantt>
+      )}
     </>
   );
 };
