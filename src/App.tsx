@@ -28,7 +28,7 @@ const routes = [
   { path: "/login", element: <Login /> },
   { path: "/register", element: <Register /> },
   { path: "/settings", element: <Settings />, protected: true },
-  { path: "/tablica", element: <Tablica />, protected: true },
+  { path: "/wykres", element: <Wykres />, protected: true },
   { path: "/home", element: <Home />, protected: true },
   { path: "/", element: <Home />, protected: true },
   {
