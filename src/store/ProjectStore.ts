@@ -1,7 +1,7 @@
 // src/store/useProjectStore.ts
 import { create } from "zustand";
-import axios from "axios";
 import { Project } from "../types";
+import { api } from "../api/api";
 
 interface ProjectState {
   projects: Project[];
@@ -24,7 +24,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
 
   fetchProjects: async () => {
     try {
-      const response = await axios.get(`${apiUrl}/project`);
+      const response = await api.get(`${apiUrl}/project`);
       set({ projects: response.data });
       console.log("Projects fetched successfully");
     } catch (error) {
@@ -34,7 +34,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
 
   addProject: async (newProjectData) => {
     try {
-      const response = await axios.post(`${apiUrl}/project`, newProjectData);
+      const response = await api.post(`${apiUrl}/project`, newProjectData);
       const newProject = response.data;
       set((state) => ({ projects: [...state.projects, newProject] }));
     } catch (error) {
@@ -44,7 +44,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
 
   updateProject: async (projectId, updates) => {
     try {
-      await axios.put(`${apiUrl}/project`, updates);
+      await api.put(`${apiUrl}/project`, updates);
       set((state) => ({
         projects: state.projects.map((project) =>
           project.id === projectId ? { ...project, ...updates } : project
@@ -57,7 +57,7 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
 
   deleteProject: async (projectId) => {
     try {
-      await axios.delete(`${apiUrl}/project/${projectId}`);
+      await api.delete(`${apiUrl}/project/${projectId}`);
       set((state) => ({
         projects: state.projects.filter((project) => project.id !== projectId),
       }));
