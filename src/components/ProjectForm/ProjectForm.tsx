@@ -58,6 +58,11 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
     enableReinitialize: true,
   });
 
+  const handleDialogClose = () => {
+    formik.resetForm(); // Reset the form to initial values
+    handleClose(); // Close the dialog
+  };
+
   return (
     <Dialog
       fullWidth
@@ -82,7 +87,7 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
       >
         {mode === "add" ? "Dodaj projekt" : "Edytuj projekt"}
       </DialogTitle>
-      <CloseButton onClick={handleClose} right={20} top={20} />
+      <CloseButton onClick={handleDialogClose} right={20} top={20} />
 
       <form onSubmit={formik.handleSubmit}>
         <DialogContent sx={{ paddingBottom: 12 }}>
@@ -144,7 +149,7 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
             type="button"
             variant="contained"
             sx={{ backgroundColor: "#5E5F7D" }}
-            onClick={handleClose}
+            onClick={handleDialogClose}
           >
             Anuluj
           </SmallButton>
