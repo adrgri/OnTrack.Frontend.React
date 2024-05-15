@@ -13,12 +13,12 @@ export default function ProjectsBoard() {
   const [isAddProjectFormModalOpen, setIsAddProjectFormModalOpen] =
     useState(false);
 
-  const { projects, fetchProjects } = useProjectStore();
+  const { projects, fetchUserProjects } = useProjectStore();
 
-  console.log("Projects:", projects);
+  console.log("User projects:", projects);
   useEffect(() => {
-    fetchProjects();
-  }, [fetchProjects]);
+    fetchUserProjects();
+  }, [fetchUserProjects]);
 
   const handleEditAll = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();

@@ -1,4 +1,3 @@
-// src/store/useProjectStore.ts
 import { create } from "zustand";
 import { Project } from "../types";
 import { api } from "../api/api";
@@ -6,6 +5,7 @@ import { api } from "../api/api";
 interface ProjectState {
   projects: Project[];
   fetchProjects: () => Promise<void>;
+  fetchUserProjects: () => Promise<void>;
   addProject: (newProjectData: Project) => Promise<void>;
   updateProject: (
     projectId: string,
@@ -15,7 +15,7 @@ interface ProjectState {
   getProjectById: (id: string) => Project | undefined;
 }
 
-const apiUrl = import.meta.env.VITE_API_URL; // Make sure you have your API base URL here
+const apiUrl = import.meta.env.VITE_API_URL;
 
 export const useProjectStore = create<ProjectState>((set, get) => ({
   projects: [],
@@ -29,6 +29,27 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
       console.log("Projects fetched successfully");
     } catch (error) {
       console.error("Failed to fetch projects:", error);
+    }
+  },
+
+  fetchUserProjects: async () => {
+    try {
+      const userResponse = await api.get(`${apiUrl}/user/me`);
+      const userProjectIds = userResponse.data.projectIds;
+
+      if (userProjectIds && userProjectIds.length > 0) {
+        const projectResponse = await api.get(`${apiUrl}/project`);
+        const allProjects = projectResponse.data;
+        const userProjects = allProjects.filter((project: Project) =>
+          userProjectIds.includes(project.id)
+        );
+        set({ projects: userProjects });
+        console.log("User projects fetched successfully");
+      } else {
+        set({ projects: [] });
+      }
+    } catch (error) {
+      console.error("Failed to fetch user projects:", error);
     }
   },
 

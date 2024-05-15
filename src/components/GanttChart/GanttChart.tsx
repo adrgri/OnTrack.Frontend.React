@@ -15,7 +15,7 @@ import Loading from "../Loading/Loading.tsx";
 
 const GanttChart = () => {
   const { tasks, fetchTasks } = useTaskStore();
-  const { projects, fetchProjects } = useProjectStore();
+  const { projects, fetchUserProjects } = useProjectStore();
   const [loadingTasks, setLoadingTasks] = useState(false);
   const [loadingProjects, setLoadingProjects] = useState(false);
 
@@ -25,7 +25,7 @@ const GanttChart = () => {
       setLoadingProjects(true);
       try {
         await fetchTasks();
-        await fetchProjects();
+        await fetchUserProjects();
       } finally {
         setLoadingTasks(false);
         setLoadingProjects(false);
@@ -33,7 +33,7 @@ const GanttChart = () => {
     };
 
     loadData();
-  }, [fetchTasks, fetchProjects]);
+  }, [fetchTasks, fetchUserProjects]);
 
   const transformedTasks = useMemo(
     () =>

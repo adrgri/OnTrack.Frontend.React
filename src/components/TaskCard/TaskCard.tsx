@@ -33,7 +33,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
   );
 
   useEffect(() => {
-    useProjectStore.getState().fetchProjects();
+    useProjectStore.getState().fetchUserProjects();
   }, []);
 
   const project = useProjectStore((state) => {
@@ -120,7 +120,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
 
         <Grid item container xs={12} alignItems="center" spacing={2}>
           <Grid item xs={true}>
-            <DateChip date={task?.dueDate ?? null} />
+            <DateChip date={task?.dueDate ? new Date(task.dueDate) : null} />
           </Grid>
           <Grid item xs={true} container justifyContent="flex-end">
             {/* <MembersAvatarsRow members={task?.members ?? []} /> */}
