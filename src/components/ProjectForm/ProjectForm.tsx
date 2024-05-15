@@ -116,13 +116,11 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
             onChange={formik.handleChange}
             placeholder="Wyszukaj członków"
             sx={{ width: 300 }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <img src={SearchIcon} alt="search" />
-                </InputAdornment>
-              ),
-            }}
+            endAdornment={
+              <InputAdornment position="end">
+                <img src={SearchIcon} alt="search" />
+              </InputAdornment>
+            }
           />
         </DialogContent>
         <Box
