@@ -9,18 +9,22 @@ export const api = axios.create({
     "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json",
   },
-  // withCredentials: true,
 });
 
-// api.interceptors.request.use((request) => {
-//   console.log("Starting Request", JSON.stringify(request, null, 2));
-//   return request;
-// });
+let isRefreshing = false;
+let refreshSubscribers: ((token: string) => void)[] = [];
+
+const onRrefreshed = (token: string) => {
+  refreshSubscribers.forEach((callback) => callback(token));
+};
+
+const addRefreshSubscriber = (callback: (token: string) => void) => {
+  refreshSubscribers.push(callback);
+};
 
 api.interceptors.request.use(
   (config) => {
     const token = Cookies.get("accessToken");
-    console.log("token", token);
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
@@ -34,37 +38,56 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   async (error) => {
-    if (error.response) {
-      // Add this check
-      const originalRequest = error.config;
-      if (error.response.status === 401 && !originalRequest._retry) {
-        originalRequest._retry = true;
-        try {
-          const storedRefreshToken = Cookies.get("refreshToken");
-          const response = await axios.post(
-            `${baseApiURL}identity/refresh-token`,
-            {
-              refreshToken: storedRefreshToken,
-            }
-          );
+    const { config, response } = error;
+    const originalRequest = config;
 
-          const { accessToken, refreshToken: newRefreshToken } = response.data;
-
-          Cookies.set("accessToken", accessToken);
-          Cookies.set("refreshToken", newRefreshToken);
-
-          originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
-
-          return api(originalRequest);
-        } catch (refreshError) {
-          console.error("Unable to refresh token:", refreshError);
-          return Promise.reject(refreshError);
-        }
+    if (response && response.status === 401 && !originalRequest._retry) {
+      if (isRefreshing) {
+        // If token refresh is in progress, queue the request
+        return new Promise((resolve) => {
+          addRefreshSubscriber((token) => {
+            originalRequest.headers["Authorization"] = `Bearer ${token}`;
+            resolve(api(originalRequest));
+          });
+        });
       }
-    } else {
-      console.error("Error without response:", error);
-      // Handle errors that don't have a response (e.g., network errors)
+
+      originalRequest._retry = true;
+      isRefreshing = true;
+
+      try {
+        const storedRefreshToken = Cookies.get("refreshToken");
+        if (!storedRefreshToken) {
+          console.error("Refresh token not available.");
+          return Promise.reject(error);
+        }
+
+        const response = await axios.post(`${baseApiURL}/identity/refresh`, {
+          refreshToken: storedRefreshToken,
+        });
+
+        const { accessToken, refreshToken: newRefreshToken } = response.data;
+
+        Cookies.set("accessToken", accessToken);
+        Cookies.set("refreshToken", newRefreshToken);
+
+        api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+        originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
+
+        isRefreshing = false;
+        onRrefreshed(accessToken);
+        refreshSubscribers = [];
+
+        return api(originalRequest);
+      } catch (refreshError) {
+        console.error("Unable to refresh token:", refreshError);
+        isRefreshing = false;
+        refreshSubscribers = [];
+        window.location.href = "/login";
+        return Promise.reject(refreshError);
+      }
     }
+
     return Promise.reject(error);
   }
 );
