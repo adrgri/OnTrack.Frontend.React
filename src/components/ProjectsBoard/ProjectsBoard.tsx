@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import BoardNavigation from "../BoardNavigation/BoardNavigation";
-import { Grid, useMediaQuery, useTheme } from "@mui/material";
+import { Grid, useMediaQuery, useTheme, Typography, Box } from "@mui/material";
 import ProjectCard from "../ProjectCard/ProjectCard";
 import { useProjectStore } from "../../store/ProjectStore";
 import ActionButtons from "../UI/ActionButtons";
 import ProjectForm from "../ProjectForm/ProjectForm";
+import Loading from "../Loading/Loading";
 
 export default function ProjectsBoard() {
   const theme = useTheme();
@@ -13,7 +14,7 @@ export default function ProjectsBoard() {
   const [isAddProjectFormModalOpen, setIsAddProjectFormModalOpen] =
     useState(false);
 
-  const { projects, fetchUserProjects } = useProjectStore();
+  const { projects, fetchUserProjects, loading, error } = useProjectStore();
 
   console.log("User projects:", projects);
   useEffect(() => {
@@ -62,29 +63,37 @@ export default function ProjectsBoard() {
         </ActionButtons>
       </Grid>
 
-      <Grid
-        container
-        justifyContent="space-between"
-        alignItems="center"
-        sx={{
-          flexDirection: isMobile ? "column" : "row",
-          [theme.breakpoints.up("md")]: {
-            alignItems: "flex-start",
-          },
-          [theme.breakpoints.down("md")]: {
-            alignItems: "center",
-          },
-        }}
-      >
-        {projects.map((project) => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-            handleTaskClick={() => {}}
-            isEditClicked={isEditClicked}
-          />
-        ))}
-      </Grid>
+      {loading ? (
+        <Loading />
+      ) : error ? (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+          <Typography color="error">{error}</Typography>
+        </Box>
+      ) : (
+        <Grid
+          container
+          justifyContent="space-between"
+          alignItems="center"
+          sx={{
+            flexDirection: isMobile ? "column" : "row",
+            [theme.breakpoints.up("md")]: {
+              alignItems: "flex-start",
+            },
+            [theme.breakpoints.down("md")]: {
+              alignItems: "center",
+            },
+          }}
+        >
+          {projects.map((project) => (
+            <ProjectCard
+              key={project.id}
+              project={project}
+              handleTaskClick={() => {}}
+              isEditClicked={isEditClicked}
+            />
+          ))}
+        </Grid>
+      )}
 
       <ProjectForm
         isOpen={isAddProjectFormModalOpen}
