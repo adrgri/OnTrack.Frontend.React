@@ -19,7 +19,7 @@ type AuthContextType = {
   user: User | null;
   isLoggedIn: boolean;
   login: (loginData: LoginData) => void;
-  register: (registrationData: RegistrationData) => void;
+  register: (registrationData: RegistrationData) => Promise<RegistrationResult>;
   logout: () => void;
   changePassword: (
     currentPassword: string,
@@ -52,7 +52,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(loadUserData());
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!user);
 
-  console.log("User:", user);
   useEffect(() => {
     const storedAccessToken = Cookies.get("accessToken");
     const storedRefreshToken = Cookies.get("refreshToken");
@@ -68,7 +67,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         `${VITE_API_URL}/identity/login`,
         loginData
       );
-      console.log(loginResponse.data);
       const { accessToken, refreshToken, expiresIn } = loginResponse.data;
 
       Cookies.set("accessToken", accessToken, { expires: expiresIn });
@@ -80,17 +78,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         })
         .catch((error) => {
           console.error("Failed to fetch user details:", error);
-          throw new Error("Failed to fetch user details"); // Re-throw or handle as needed
+          throw new Error("Failed to fetch user details");
         });
-
-      console.log("User response:", userResponse.data);
 
       setUser(userResponse.data);
       saveUserData(userResponse.data);
-      console.log("User logged in successfully:", userResponse.data);
-
       setIsLoggedIn(true);
-      console.log("Login successful");
     } catch (error) {
       console.error("Login failed:", error);
       setIsLoggedIn(false);
@@ -100,16 +93,40 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const register = useCallback(
     async (registrationData: RegistrationData): Promise<RegistrationResult> => {
       try {
+        // Register the user
         const response = await api.post(
           `${VITE_API_URL}/identity/register`,
           registrationData
         );
-        const newUser: User = response.data; // Assuming the server returns the new user details
+        const newUser: User = response.data;
 
-        console.log("User registered successfully:");
+        const loginResponse = await api.post(`${VITE_API_URL}/identity/login`, {
+          email: registrationData.email,
+          password: registrationData.password,
+        });
+        const { accessToken, refreshToken, expiresIn } = loginResponse.data;
 
-        setUser(newUser);
-        saveUserData(newUser);
+        Cookies.set("accessToken", accessToken, { expires: expiresIn });
+        Cookies.set("refreshToken", refreshToken);
+
+        // Update user profile
+        await api.put(
+          `${VITE_API_URL}/user/me`,
+          {
+            firstName: registrationData.firstName,
+            lastName: registrationData.lastName,
+          },
+          {
+            headers: { Authorization: `Bearer ${accessToken}` },
+          }
+        );
+
+        const userResponse = await api.get(`${VITE_API_URL}/user/me`, {
+          headers: { Authorization: `Bearer ${accessToken}` },
+        });
+
+        setUser(userResponse.data);
+        saveUserData(userResponse.data);
         setIsLoggedIn(true);
 
         return {
@@ -130,10 +147,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = useCallback(async () => {
     try {
-      // Retrieve the access token from cookies
       const accessToken = Cookies.get("accessToken");
 
-      // If there's an access token, attempt to notify the server about the logout
       if (accessToken) {
         await api.post(
           `${VITE_API_URL}/identity/logout`,
@@ -146,17 +161,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         );
       }
 
-      // Whether or not the above API call is successful, remove the cookies
       Cookies.remove("accessToken");
       Cookies.remove("refreshToken");
       localStorage.removeItem("userData");
-      // Update the application state
+
       setUser(null);
       setIsLoggedIn(false);
-      console.log("Logged out successfully!");
     } catch (error) {
       console.error("Logout failed:", error);
-      // Optionally, handle the logout error
     }
   }, []);
 
@@ -172,14 +184,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const changePassword = useCallback(
     async (currentPassword: string, newPassword: string) => {
-      console.log("Change password requested with", {
-        currentPassword,
-        newPassword,
-      });
-
       try {
         await new Promise((resolve) => setTimeout(resolve, 1000));
-        console.log("Password changed successfully");
       } catch (error) {
         console.error("Error changing password", error);
       }

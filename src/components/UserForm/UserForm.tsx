@@ -44,6 +44,7 @@ const UserForm = ({
 }: UserFormProps) => {
   const formik = useFormik({
     initialValues: initialValues,
+    validationSchema: validationSchema,
     onSubmit: (values) => {
       onSubmit(
         values.firstName,
@@ -52,7 +53,6 @@ const UserForm = ({
         values.password
       );
     },
-    validationSchema: validationSchema,
   });
 
   return (
