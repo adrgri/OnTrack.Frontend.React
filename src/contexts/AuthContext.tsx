@@ -18,6 +18,7 @@ import Cookies from "js-cookie";
 type AuthContextType = {
   user: User | null;
   isLoggedIn: boolean;
+  loading: boolean;
   login: (loginData: LoginData) => void;
   register: (registrationData: RegistrationData) => Promise<RegistrationResult>;
   logout: () => void;
@@ -51,18 +52,35 @@ const loadUserData = () => {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(loadUserData());
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!user);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const storedAccessToken = Cookies.get("accessToken");
-    const storedRefreshToken = Cookies.get("refreshToken");
+    const checkAuthStatus = async () => {
+      try {
+        const storedAccessToken = Cookies.get("accessToken");
+        const storedRefreshToken = Cookies.get("refreshToken");
 
-    if (storedAccessToken && storedRefreshToken) {
-      setIsLoggedIn(true);
-    }
+        if (storedAccessToken && storedRefreshToken) {
+          const userResponse = await api.get(`${VITE_API_URL}/user/me`, {
+            headers: { Authorization: `Bearer ${storedAccessToken}` },
+          });
+
+          setUser(userResponse.data);
+          setIsLoggedIn(true);
+        }
+      } catch (error) {
+        console.error("Failed to check auth status:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuthStatus();
   }, []);
 
   const login = useCallback(async (loginData: LoginData) => {
     try {
+      setLoading(true);
       const loginResponse = await api.post(
         `${VITE_API_URL}/identity/login`,
         loginData
@@ -72,14 +90,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       Cookies.set("accessToken", accessToken, { expires: expiresIn });
       Cookies.set("refreshToken", refreshToken);
 
-      const userResponse = await api
-        .get(`${VITE_API_URL}/user/me`, {
-          headers: { Authorization: `Bearer ${accessToken}` },
-        })
-        .catch((error) => {
-          console.error("Failed to fetch user details:", error);
-          throw new Error("Failed to fetch user details");
-        });
+      const userResponse = await api.get(`${VITE_API_URL}/user/me`, {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
 
       setUser(userResponse.data);
       saveUserData(userResponse.data);
@@ -87,13 +100,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error) {
       console.error("Login failed:", error);
       setIsLoggedIn(false);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   const register = useCallback(
     async (registrationData: RegistrationData): Promise<RegistrationResult> => {
       try {
-        // Register the user
+        setLoading(true);
         const response = await api.post(
           `${VITE_API_URL}/identity/register`,
           registrationData
@@ -109,7 +124,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         Cookies.set("accessToken", accessToken, { expires: expiresIn });
         Cookies.set("refreshToken", refreshToken);
 
-        // Update user profile
         await api.put(
           `${VITE_API_URL}/user/me`,
           {
@@ -140,6 +154,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           success: false,
           message: "Registration failed. Please try again.",
         };
+      } finally {
+        setLoading(false);
       }
     },
     []
@@ -147,6 +163,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const logout = useCallback(async () => {
     try {
+      setLoading(true);
       const accessToken = Cookies.get("accessToken");
 
       if (accessToken) {
@@ -169,16 +186,21 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsLoggedIn(false);
     } catch (error) {
       console.error("Logout failed:", error);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   const resetPassword = useCallback(async (email: string) => {
     try {
+      setLoading(true);
       await api.post(`${VITE_API_URL}/identity/forgotPassword`, { email });
 
       console.log("Password reset email sent to", email);
     } catch (error) {
       console.error("Failed to send password reset email", error);
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -197,13 +219,23 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     () => ({
       user,
       isLoggedIn,
+      loading,
       login,
       register,
       logout,
       changePassword,
       resetPassword,
     }),
-    [user, isLoggedIn, login, register, logout, changePassword, resetPassword]
+    [
+      user,
+      isLoggedIn,
+      loading,
+      login,
+      register,
+      logout,
+      changePassword,
+      resetPassword,
+    ]
   );
 
   return (
