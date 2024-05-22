@@ -205,6 +205,12 @@ const TaskInfoModal = ({
               />
             </Box>
 
+            {formik.errors.title && formik.touched.title && (
+              <Typography color="error" variant="caption">
+                {formik.errors.title}
+              </Typography>
+            )}
+
             {selectedMembers.length > 0 && (
               <Stack spacing={2}>
                 <Typography variant="subtitle1">Członkowie</Typography>
