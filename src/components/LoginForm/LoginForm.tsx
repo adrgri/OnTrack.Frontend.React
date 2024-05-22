@@ -5,7 +5,7 @@ import * as yup from "yup";
 import StyledLink from "../../styledComponents/StyledLink";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 type LoginFormProps = {
   onForgotPasswordClick?: () => void;
@@ -14,6 +14,7 @@ type LoginFormProps = {
 const LoginForm = ({ onForgotPasswordClick }: LoginFormProps) => {
   const { login, isLoggedIn } = useAuth();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const validationSchema = yup.object({
     email: yup
@@ -34,10 +35,17 @@ const LoginForm = ({ onForgotPasswordClick }: LoginFormProps) => {
       email: "coolcoder2000@gmail.com",
       password: "Otheridk1.",
     },
-    onSubmit: (values) => {
-      login(values);
-
-      formik.resetForm();
+    onSubmit: async (values) => {
+      setLoading(true);
+      try {
+        await login(values);
+        navigate("/home");
+      } catch (error) {
+        console.error("Login failed:", error);
+      } finally {
+        setLoading(false);
+        formik.resetForm();
+      }
     },
     validationSchema: validationSchema,
   });
@@ -88,8 +96,8 @@ const LoginForm = ({ onForgotPasswordClick }: LoginFormProps) => {
           </Link>
         </Typography>
       )}
-      <Button variant="contained" fullWidth type="submit">
-        Zaloguj się
+      <Button variant="contained" fullWidth type="submit" disabled={loading}>
+        {loading ? "Logowanie..." : "Zaloguj się"}
       </Button>
       <Typography fontSize={"1rem"}>
         Nie masz konta? <StyledLink to={"/register"}>Załóż konto</StyledLink>
