@@ -67,7 +67,9 @@ const SettingsForm = ({
         <Typography component="h1" variant="h5">
           {formTitle}
         </Typography>
-        {userProfile && <UserProfile avatar={userProfile.avatar} />}
+        {userProfile && (
+          <UserProfile name={userProfile.name} avatar={userProfile.avatar} />
+        )}
       </Grid>
       <TextField
         id="firstName"
