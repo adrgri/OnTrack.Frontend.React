@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Grid } from "@mui/material";
-import TaskInfoModel from "../TaskInfoModal/TaskInfoModal";
+import TaskInfoModal from "../TaskInfoModal/TaskInfoModal";
 import BoardNavigation from "../BoardNavigation/BoardNavigation";
 import { useTaskStore } from "../../store/TaskStore";
 import { DragDropContext, DropResult } from "react-beautiful-dnd";
@@ -21,7 +21,7 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { tasks, fetchTasks, updateTaskStatus } = useTaskStore();
-  const [isTaskInfoModelOpen, setIsTaskInfoModelOpen] = useState(false);
+  const [isTaskInfoModalOpen, setIsTaskInfoModalOpen] = useState(false);
   const [selectedTaskId, setSelectedTaskId] = useState<string | null>(null);
   const [isEditClicked, setIsEditClicked] = useState(false);
   const { statuses, fetchStatuses } = useStatusStore();
@@ -50,11 +50,12 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
     ) {
       const task = tasks.find((t) => t.id === result.draggableId);
       if (task?.id) {
-        const status: Status = {
-          id: destination.droppableId,
-          name: columnTitles[destination.droppableId],
-        };
-        updateTaskStatus(task.id, status);
+        // const status: Status = {
+        //   id: destination.droppableId,
+        //   name: columnTitles[destination.droppableId],
+        // };
+        // updateTaskStatus(task.id, status);
+        updateTaskStatus(task.id, destination.droppableId);
       }
     }
   };
@@ -65,8 +66,8 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
   ) => {
     event.stopPropagation();
     setSelectedTaskId(taskId);
-    setIsTaskInfoModelOpen(true);
-    console.log("Task clicked:", taskId);
+    setIsTaskInfoModalOpen(true);
+    // console.log("Task clicked:", taskId);
   };
 
   const handleEditAll = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
@@ -77,11 +78,11 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
 
   const handleAddTask = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
-    setIsTaskInfoModelOpen(true);
+    setIsTaskInfoModalOpen(true);
   };
 
   function handleTaskInfoModalClose() {
-    setIsTaskInfoModelOpen(false);
+    setIsTaskInfoModalOpen(false);
   }
 
   return (
@@ -137,8 +138,8 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
         </Grid>
       </DragDropContext>
 
-      <TaskInfoModel
-        isOpen={isTaskInfoModelOpen}
+      <TaskInfoModal
+        isOpen={isTaskInfoModalOpen}
         handleClose={handleTaskInfoModalClose}
         taskId={selectedTaskId}
       />

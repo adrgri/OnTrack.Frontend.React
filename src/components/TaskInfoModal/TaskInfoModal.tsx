@@ -31,7 +31,7 @@ import * as Yup from "yup";
 // import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
 import { UsersList } from "../../types";
 
-type TaskInfoModelProps = {
+type TaskInfoModalProps = {
   isOpen: boolean;
   handleClose: () => void;
   taskId?: string | null;
@@ -77,7 +77,7 @@ function formatDate(date: dayjs.Dayjs | null) {
   return dateObj.isValid() ? dateObj.format("YYYY-MM-DDTHH:mm:ss") : null;
 }
 
-const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
+const TaskInfoModal = ({ isOpen, handleClose, taskId }: TaskInfoModalProps) => {
   const { addTask, updateTask, getTaskById } = useTaskStore();
   const task = getTaskById(taskId || "");
   const theme = useTheme();
@@ -365,4 +365,4 @@ const TaskInfoModel = ({ isOpen, handleClose, taskId }: TaskInfoModelProps) => {
   );
 };
 
-export default TaskInfoModel;
+export default TaskInfoModal;
