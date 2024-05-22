@@ -22,15 +22,17 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
   return (
     <Dialog
       maxWidth="sm"
-      fullWidth
       open={isOpen}
       onClose={onClose}
       onClick={(event) => event.stopPropagation()}
     >
       <Box sx={{ position: "relative" }}>
         <CloseButton
-          onClick={(event) => onClose(event)}
-          sx={{ position: "absolute", top: 10, right: 10 }}
+          onClick={(event) => {
+            event.stopPropagation();
+            onClose(event);
+          }}
+          sx={{ position: "absolute", top: 10, right: 10, zIndex: 1000 }}
         />
         <DialogContent
           sx={{
@@ -39,15 +41,15 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            width: "100%",
+            maxWidth: "450px",
           }}
         >
           <Typography
             sx={{
               textAlign: "center",
-              mt: { xs: 3, sm: 5, md: 7 }, // Adjust margin top based on screen size
-              mb: { xs: 1, sm: 2, md: 3 },
-              fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" }, // Adjust font size based on screen size
+              mt: { xs: 3 }, // Adjust margin top based on screen size
+              mb: { xs: 1 },
+              fontSize: { xs: "1rem" }, // Adjust font size based on screen size
               px: { xs: 2, sm: 3, md: 4 }, // Adjust padding on horizontal axis based on screen size
               wordBreak: "break-word", // Ensure long text breaks properly
             }}
