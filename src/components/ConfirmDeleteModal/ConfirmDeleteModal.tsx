@@ -20,8 +20,14 @@ const ConfirmDeleteModal: React.FC<ConfirmDeleteModalProps> = ({
   const itemLabel = itemType === "task" ? "to zadanie" : "ten projekt";
 
   return (
-    <Dialog maxWidth="sm" fullWidth open={isOpen} onClose={onClose}>
-      <CloseButton onClick={onClose} right={10} top={10} />
+    <Dialog
+      maxWidth="sm"
+      fullWidth
+      open={isOpen}
+      onClose={onClose}
+      onClick={(event) => event.stopPropagation()}
+    >
+      <CloseButton onClick={(event) => onClose(event)} right={10} top={10} />
       <DialogContent
         sx={{
           padding: "0",
