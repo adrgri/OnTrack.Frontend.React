@@ -7,10 +7,6 @@ type ColumnProps = {
   columnId: string;
   title: string;
   tasks: Task[];
-  handleTaskClick: (
-    taskId: string,
-    event: React.MouseEvent<HTMLElement>
-  ) => void;
   isEditClicked: boolean;
 };
 
@@ -18,7 +14,6 @@ export const Column = ({
   columnId,
   title,
   tasks,
-  handleTaskClick,
   isEditClicked,
 }: ColumnProps) => {
   return (
@@ -60,9 +55,7 @@ export const Column = ({
                     <TaskCard
                       key={task.id}
                       taskId={task.id}
-                      handleTaskClick={handleTaskClick}
                       isEditClicked={isEditClicked}
-                      // handleTaskClick={() => console.log("Task clicked")}
                     />
                   </div>
                 )}

@@ -12,22 +12,15 @@ import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import useDeletion from "../../hooks/useDeletion";
 // import { Task } from "../../types";
 import { useProjectStore } from "../../store/ProjectStore";
+import TaskInfoModal from "../TaskInfoModal/TaskInfoModal";
 
 interface TaskCardProps {
   // task: Task;
   taskId: string | undefined;
-  handleTaskClick: (
-    taskId: string,
-    event: React.MouseEvent<HTMLElement>
-  ) => void;
   isEditClicked: boolean;
 }
 
-const TaskCard: React.FC<TaskCardProps> = ({
-  taskId,
-  handleTaskClick,
-  isEditClicked,
-}) => {
+const TaskCard: React.FC<TaskCardProps> = ({ taskId, isEditClicked }) => {
   const task = useTaskStore((state) =>
     state.tasks.find((t) => t.id === taskId)
   );
@@ -43,6 +36,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
   // console.log("project in TaskCard", project);
   const [isOptionsPopupOpen, setIsOptionsPopupOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
+  const [isTaskInfoModalOpen, setIsTaskInfoModalOpen] = useState(false);
 
   const { requestDelete, confirmDelete, isConfirmOpen, closeModal } =
     useDeletion();
@@ -53,9 +47,17 @@ const TaskCard: React.FC<TaskCardProps> = ({
     setIsOptionsPopupOpen(true);
   };
 
-  function handleEdit() {
-    console.log("Edit action triggered");
-  }
+  const handleEdit = useCallback((event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    setIsOptionsPopupOpen(false);
+    setIsTaskInfoModalOpen(true);
+  }, []);
+
+  const handleTaskInfoModalClose = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    setIsTaskInfoModalOpen(false);
+    console.log("Task info modal closed");
+  };
 
   const handleDelete = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
@@ -72,9 +74,7 @@ const TaskCard: React.FC<TaskCardProps> = ({
 
   return (
     <GenericCard
-      onClick={(event: React.MouseEvent<HTMLElement>) =>
-        handleTaskClick(taskId ?? "", event)
-      }
+      onClick={(event: React.MouseEvent<HTMLElement>) => handleEdit(event)}
     >
       <Grid container direction="column" spacing={1}>
         <Grid item xs={12} mb={2} container alignItems="center">
@@ -140,6 +140,12 @@ const TaskCard: React.FC<TaskCardProps> = ({
         onClose={closeModal}
         itemName={task?.title}
         itemType="task"
+      />
+      <TaskInfoModal
+        isOpen={isTaskInfoModalOpen}
+        onClose={handleTaskInfoModalClose}
+        taskId={taskId ?? null}
+        mode="edit"
       />
     </GenericCard>
   );

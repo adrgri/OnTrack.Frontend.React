@@ -33,8 +33,9 @@ import { UsersList } from "../../types";
 
 type TaskInfoModalProps = {
   isOpen: boolean;
-  handleClose: () => void;
+  onClose: (event: React.MouseEvent<HTMLElement>) => void;
   taskId?: string | null;
+  mode: "add" | "edit";
 };
 const taskValidationSchema = Yup.object({
   title: Yup.string()
@@ -77,12 +78,19 @@ function formatDate(date: dayjs.Dayjs | null) {
   return dateObj.isValid() ? dateObj.format("YYYY-MM-DDTHH:mm:ss") : null;
 }
 
-const TaskInfoModal = ({ isOpen, handleClose, taskId }: TaskInfoModalProps) => {
+const TaskInfoModal = ({
+  isOpen,
+  onClose,
+  taskId,
+  mode,
+}: TaskInfoModalProps) => {
   const { addTask, updateTask, getTaskById } = useTaskStore();
   const task = getTaskById(taskId || "");
   const theme = useTheme();
   const [selectedMembers, setSelectedMembers] = useState<UsersList[]>([]);
-  const isEditMode = !!taskId;
+  // const isEditMode = !!taskId;
+
+  console.log("TaskInfoModal isOpen:", isOpen);
 
   const handleMemberSelect = (selectedMember: UsersList) => {
     const isAlreadySelected = selectedMembers.some(
@@ -130,7 +138,7 @@ const TaskInfoModal = ({ isOpen, handleClose, taskId }: TaskInfoModalProps) => {
         isCompleted: task?.isCompleted ?? false,
       };
 
-      if (isEditMode && task?.id) {
+      if (mode === "edit" && task?.id) {
         await updateTask(task.id, taskData);
       } else {
         await addTask(taskData);
@@ -138,7 +146,7 @@ const TaskInfoModal = ({ isOpen, handleClose, taskId }: TaskInfoModalProps) => {
 
       resetForm();
       setSubmitting(false);
-      handleClose();
+      onClose(event);
     },
     enableReinitialize: true,
   });
@@ -162,7 +170,7 @@ const TaskInfoModal = ({ isOpen, handleClose, taskId }: TaskInfoModalProps) => {
       fullWidth
       maxWidth="md"
       open={isOpen}
-      onClose={handleClose}
+      onClose={(event) => onClose(event)}
       PaperProps={{
         sx: {
           height: "80vh",
@@ -207,7 +215,11 @@ const TaskInfoModal = ({ isOpen, handleClose, taskId }: TaskInfoModalProps) => {
                 placeholder="Wpisz nazwę zadania"
               />
 
-              <CloseButton onClick={handleClose} right={20} top={20} />
+              <CloseButton
+                onClick={(event) => onClose(event)}
+                right={20}
+                top={20}
+              />
             </Box>
 
             {selectedMembers.length > 0 && (
@@ -355,7 +367,7 @@ const TaskInfoModal = ({ isOpen, handleClose, taskId }: TaskInfoModalProps) => {
           <SmallButton
             variant="contained"
             sx={{ backgroundColor: "#5E5F7D" }}
-            onClick={handleClose}
+            onClick={(event) => onClose(event)}
           >
             Anuluj
           </SmallButton>
