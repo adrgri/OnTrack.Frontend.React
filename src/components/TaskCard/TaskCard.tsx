@@ -47,6 +47,12 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskId, isEditClicked }) => {
     setIsOptionsPopupOpen(true);
   };
 
+  const handleCloseOptionsPopup = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    setAnchorEl(null);
+    setIsOptionsPopupOpen(false);
+  };
+
   const handleEdit = useCallback((event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
     setIsOptionsPopupOpen(false);
@@ -61,6 +67,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskId, isEditClicked }) => {
   const handleDelete = useCallback(
     (event: React.MouseEvent<HTMLElement>) => {
       event.stopPropagation();
+      setIsOptionsPopupOpen(false);
       if (task) {
         requestDelete(
           { id: task.id, type: "task" },
@@ -129,7 +136,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskId, isEditClicked }) => {
       <OptionsPopup
         open={isOptionsPopupOpen}
         anchorEl={anchorEl}
-        onClose={() => setIsOptionsPopupOpen(false)}
+        onClose={handleCloseOptionsPopup}
         onEdit={handleEdit}
         onDelete={handleDelete}
       />

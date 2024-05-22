@@ -11,7 +11,7 @@ import EditIcon from "../../assets/icons/OptionsIcons/EditIcon.svg";
 interface OptionsPopupProps {
   open: boolean;
   anchorEl: HTMLButtonElement | null;
-  onClose: () => void;
+  onClose: (event: React.MouseEvent<HTMLElement>) => void;
   onEdit: (event: React.MouseEvent<HTMLElement>) => void;
   onDelete: (event: React.MouseEvent<HTMLElement>) => void;
 }
