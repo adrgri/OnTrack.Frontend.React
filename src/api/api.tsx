@@ -26,6 +26,7 @@ api.interceptors.request.use(
   (config) => {
     const token = Cookies.get("accessToken");
     if (token) {
+      console.log("Attaching token to request:", token);
       config.headers["Authorization"] = `Bearer ${token}`;
     }
     return config;
@@ -62,11 +63,15 @@ api.interceptors.response.use(
           return Promise.reject(error);
         }
 
+        console.log("Refreshing token with:", storedRefreshToken);
+
         const response = await axios.post(`${baseApiURL}/identity/refresh`, {
           refreshToken: storedRefreshToken,
         });
 
         const { accessToken, refreshToken: newRefreshToken } = response.data;
+
+        console.log("New tokens:", { accessToken, newRefreshToken });
 
         Cookies.set("accessToken", accessToken);
         Cookies.set("refreshToken", newRefreshToken);

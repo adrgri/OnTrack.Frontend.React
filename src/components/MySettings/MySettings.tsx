@@ -1,46 +1,38 @@
 import SettingsForm from "../SettingsForm/SettingsForm";
 import { baseValidationSchema } from "../schemas/baseValidationSchema";
 import { useAuth } from "../../contexts/AuthContext";
+import axios from "axios";
+
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const MySettings = () => {
-  // const user = {
-  //   firstName: "Iryna",
-  //   lastName: "Chuchvaha",
-  //   email: "chuchvahairyna@gmail.com",
-  //   // avatar: "/src/assets/Images/portrait.jpeg",
-  //   avatar: "https://i.pravatar.cc/150?img=51",
-  // };
-  // Using the useAuth hook to access user and isLoggedIn
-  const { user, isLoggedIn } = useAuth();
+  const { user, isLoggedIn, token } = useAuth();
   console.log("user in MySettings", user);
-  console.log("isLoggedIn in MySettings", isLoggedIn);
 
-  // If the user is not logged in, display a login prompt
   if (!isLoggedIn) {
     return <div>Please log in to edit your settings.</div>;
   }
 
-  console.log("user in MySettings", user);
-
-  // Handling update settings which will likely interact with an API
-  const handleUpdateSettings = async (
-    firstName: string,
-    lastName: string,
-    email: string,
-    password: string
-  ) => {
-    // Placeholder for actual update logic
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        console.log("User settings updated:", {
-          firstName,
-          lastName,
-          email,
-          password,
-        });
-        resolve("Settings updated successfully.");
-      }, 1000);
-    });
+  // Handling update settings which will interact with an API
+  const handleUpdateSettings = async (firstName: string, lastName: string) => {
+    try {
+      const response = await axios.put(
+        `${apiUrl}/user/me`,
+        { firstName, lastName },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log("User settings updated:", response.data);
+      // Optionally, update user in context if needed
+    } catch (error) {
+      console.error(
+        "Failed to update user settings:",
+        error.response?.data || error.message
+      );
+    }
   };
 
   return (
