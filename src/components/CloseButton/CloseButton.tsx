@@ -5,8 +5,14 @@ type CloseButtonProps = {
   onClick: React.MouseEventHandler<HTMLButtonElement>;
   right?: number | string;
   top?: number | string;
+  sx?: object;
 };
-const CloseButton = ({ onClick, right = 60, top = 32 }: CloseButtonProps) => {
+const CloseButton = ({
+  onClick,
+  right = 60,
+  top = 32,
+  sx,
+}: CloseButtonProps) => {
   return (
     <IconButton
       aria-label="close"
@@ -20,6 +26,7 @@ const CloseButton = ({ onClick, right = 60, top = 32 }: CloseButtonProps) => {
           right: 8,
           top: 22,
         },
+        ...sx,
       }}
     >
       <CloseIcon />
