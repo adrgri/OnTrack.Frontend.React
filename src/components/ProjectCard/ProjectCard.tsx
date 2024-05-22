@@ -17,7 +17,6 @@ import { useNavigate } from "react-router-dom";
 
 interface ProjectCardProps {
   project: Project;
-  handleTaskClick: () => void;
   isEditClicked: boolean;
 }
 
@@ -25,15 +24,16 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   project,
   isEditClicked,
 }) => {
-  const progress = project?.taskIds?.length ?? 0;
+  const navigate = useNavigate();
+  const { projectProgress } = useProjectStore();
+  const progress = project.id ? projectProgress[project.id] || 0 : 0;
+
   const [isOptionsPopupOpen, setIsOptionsPopupOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const navigate = useNavigate();
 
   const { requestDelete, confirmDelete, isConfirmOpen, closeModal } =
     useDeletion();
-
   const tasksAmount = project?.taskIds?.length ?? 0;
 
   const handleOpenOptionsPopup = (
