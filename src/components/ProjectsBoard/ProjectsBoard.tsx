@@ -4,22 +4,29 @@ import { Grid, useMediaQuery, useTheme, Typography, Box } from "@mui/material";
 import ProjectCard from "../ProjectCard/ProjectCard";
 import { useProjectStore } from "../../store/ProjectStore";
 import ActionButtons from "../UI/ActionButtons";
-import ProjectForm from "../ProjectForm/ProjectForm";
+import ProjectFormModal from "../ProjectFormModal/ProjectFormModal";
 import Loading from "../Loading/Loading";
 
 export default function ProjectsBoard() {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [isEditClicked, setIsEditClicked] = useState(false);
-  const [isAddProjectFormModalOpen, setIsAddProjectFormModalOpen] =
+  const [isAddProjectFormModalModalOpen, setIsAddProjectFormModalModalOpen] =
     useState(false);
 
-  const { projects, fetchUserProjects, loading, error } = useProjectStore();
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+  const { projects, fetchUserProjects, fetchProjects, loading, error } =
+    useProjectStore();
 
   console.log("User projects:", projects);
   useEffect(() => {
     fetchUserProjects();
   }, [fetchUserProjects]);
+
+  // console.log("All projects:", projects);
+  // useEffect(() => {
+  //   fetchProjects();
+  // }, [fetchProjects]);
 
   const handleEditAll = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
@@ -27,15 +34,15 @@ export default function ProjectsBoard() {
     console.log("Edit action triggered");
   };
 
-  function handleAddProjectFormClose() {
-    setIsAddProjectFormModalOpen(false);
+  function handleAddProjectFormModalClose() {
+    setIsAddProjectFormModalModalOpen(false);
   }
 
   const handleAddProject = (
     event: React.MouseEvent<HTMLElement, MouseEvent>
   ) => {
     event.stopPropagation();
-    setIsAddProjectFormModalOpen(true);
+    setIsAddProjectFormModalModalOpen(true);
   };
 
   return (
@@ -95,9 +102,9 @@ export default function ProjectsBoard() {
         </Grid>
       )}
 
-      <ProjectForm
-        isOpen={isAddProjectFormModalOpen}
-        handleClose={handleAddProjectFormClose}
+      <ProjectFormModal
+        isOpen={isAddProjectFormModalModalOpen}
+        handleClose={handleAddProjectFormModalClose}
         mode="add"
       />
     </>

@@ -3,7 +3,7 @@ import { Typography, Grid, Stack, IconButton } from "@mui/material";
 import { useProjectStore } from "../../store/ProjectStore";
 import TasksIcon from "../../assets/icons/TasksIcon.svg";
 import DateChip from "../CardComponents/DateChip";
-// import CircularProgressWithLabel from "../CardComponents/CircularProgressWithLabel";
+import CircularProgressWithLabel from "../CardComponents/CircularProgressWithLabel";
 // import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
 import GenericCard from "../GenericCard/GenericCard";
 import MenuDotsVertical from "../../assets/icons/MenuDotsVertical.svg";
@@ -11,7 +11,7 @@ import CloseIcon from "../../assets/icons/CloseIcon.svg";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import OptionsPopup from "../layout/OptionsPopup";
 import useDeletion from "../../hooks/useDeletion";
-import ProjectForm from "../ProjectForm/ProjectForm";
+import ProjectFormModal from "../ProjectFormModal/ProjectFormModal";
 import { Project } from "../../types";
 import { useNavigate } from "react-router-dom";
 
@@ -25,7 +25,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   project,
   isEditClicked,
 }) => {
-  // const progress = project?.progress ?? 0;
+  const progress = project?.taskIds?.length ?? 0;
   const [isOptionsPopupOpen, setIsOptionsPopupOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
@@ -144,7 +144,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
             xs={4}
           >
             <Grid item xs={true} container justifyContent="center">
-              {/* <CircularProgressWithLabel value={progress} /> */}
+              <CircularProgressWithLabel value={progress} />
             </Grid>
 
             <Grid
@@ -180,7 +180,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           itemType="project"
         />
       </GenericCard>
-      <ProjectForm
+      <ProjectFormModal
         isOpen={isFormOpen}
         handleClose={handleFormClose}
         project={project}

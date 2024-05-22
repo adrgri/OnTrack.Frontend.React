@@ -4,6 +4,7 @@ import {
   DialogContent,
   DialogTitle,
   InputAdornment,
+  TextField,
   Typography,
 } from "@mui/material";
 import SearchIcon from "../../assets/icons/SearchIcon.svg";
@@ -14,22 +15,28 @@ import { useFormik } from "formik";
 import { Project } from "../../types";
 import { useProjectStore } from "../../store/ProjectStore";
 
-interface ProjectFormProps {
+interface ProjectFormModalProps {
   isOpen: boolean;
   handleClose: () => void;
   project?: Project; // May be undefined for 'add' mode
   mode: "add" | "edit";
 }
 
-function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
+function ProjectFormModal({
+  isOpen,
+  handleClose,
+  project,
+  mode,
+}: ProjectFormModalProps) {
   const { addProject, updateProject } = useProjectStore();
 
   const formik = useFormik({
     initialValues: {
-      title: project?.title || "",
-      description: project?.description || "",
+      title: project?.title ?? "",
+      description: project?.description ?? "",
       // memberIds: project?.memberIds?.join(", ") || "",
-      memberIds: ["8ea90da1-7a64-4817-9208-45b5ad734bc3"],
+      // memberIds: ["8ea90da1-7a64-4817-9208-45b5ad734bc3"],
+      memberIds: [],
     },
     onSubmit: async (values, { setSubmitting }) => {
       const newProjectData = {
@@ -37,7 +44,9 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
         title: values.title,
         description: values.description,
         // members: values.members.split(",").map((member) => member.trim()),
-        memberIds: ["8ea90da1-7a64-4817-9208-45b5ad734bc3"],
+        // memberIds: ["8ea90da1-7a64-4817-9208-45b5ad734bc3"],
+        // memberIds: values.memberIds.split(",").map((member) => member.trim()),
+        memberIds: [],
       };
 
       try {
@@ -59,8 +68,8 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
   });
 
   const handleDialogClose = () => {
-    formik.resetForm(); // Reset the form to initial values
-    handleClose(); // Close the dialog
+    formik.resetForm();
+    handleClose();
   };
 
   return (
@@ -117,15 +126,16 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
             fullWidth
             variant="filled"
             name="memberIds"
+            // type="search"
             value={formik.values.memberIds}
             onChange={formik.handleChange}
             placeholder="Wyszukaj członków"
             sx={{ width: 300 }}
-            endAdornment={
-              <InputAdornment position="end">
-                <img src={SearchIcon} alt="search" />
-              </InputAdornment>
-            }
+            // endAdornment={
+            //   <InputAdornment position="end">
+            //     <img src={SearchIcon} alt="search" />
+            //   </InputAdornment>
+            // }
           />
         </DialogContent>
         <Box
@@ -159,4 +169,4 @@ function ProjectForm({ isOpen, handleClose, project, mode }: ProjectFormProps) {
   );
 }
 
-export default ProjectForm;
+export default ProjectFormModal;
