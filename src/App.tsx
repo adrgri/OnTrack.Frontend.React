@@ -31,11 +31,7 @@ const routes = [
   { path: "/wykres", element: <Wykres />, protected: true },
   { path: "/home", element: <Home />, protected: true },
   { path: "/", element: <Home />, protected: true },
-  {
-    path: "/projects",
-    element: <Projects />,
-    protected: true,
-  },
+  { path: "/projects", element: <Projects />, protected: true },
   {
     path: "/projects/:projectId/tasks",
     element: <ProjectTasks />,

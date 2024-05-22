@@ -15,8 +15,7 @@ export default function ProjectsBoard() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-  const { projects, fetchUserProjects, fetchProjects, loading, error } =
-    useProjectStore();
+  const { projects, fetchUserProjects, loading, error } = useProjectStore();
 
   console.log("User projects:", projects);
   useEffect(() => {
@@ -95,7 +94,6 @@ export default function ProjectsBoard() {
             <ProjectCard
               key={project.id}
               project={project}
-              handleTaskClick={() => {}}
               isEditClicked={isEditClicked}
             />
           ))}

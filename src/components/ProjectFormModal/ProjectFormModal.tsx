@@ -3,11 +3,11 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  InputAdornment,
-  TextField,
+  // InputAdornment,
+  // TextField,
   Typography,
 } from "@mui/material";
-import SearchIcon from "../../assets/icons/SearchIcon.svg";
+// import SearchIcon from "../../assets/icons/SearchIcon.svg";
 import CloseButton from "../CloseButton/CloseButton";
 import SmallButton from "../../styledComponents/SmallButton";
 import StyledSidebarModalInput from "../../styledComponents/StyledSidebarModalInput";

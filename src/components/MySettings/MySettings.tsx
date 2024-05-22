@@ -28,19 +28,20 @@ const MySettings = () => {
       console.log("User settings updated:", response.data);
       // Optionally, update user in context if needed
     } catch (error) {
-      console.error(
-        "Failed to update user settings:",
-        error.response?.data || error.message
-      );
+      let errorMessage = "Failed to update user settings: ";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      console.error(errorMessage);
     }
   };
 
   return (
     <SettingsForm
       initialValues={{
-        firstName: user?.firstName || "",
-        lastName: user?.lastName || "",
-        email: user?.email || "",
+        firstName: user?.firstName ?? "",
+        lastName: user?.lastName ?? "",
+        email: user?.email ?? "",
         oldPassword: "",
         newPassword: "",
         repeatPassword: "",
@@ -50,7 +51,7 @@ const MySettings = () => {
       submitButtonText="Zapisz zmiany"
       userProfile={{
         name: `${user?.firstName} ${user?.lastName}`,
-        avatar: user?.avatar || "",
+        avatar: user?.avatar ?? "",
       }}
       validationSchema={baseValidationSchema}
       passwordFieldProps={{

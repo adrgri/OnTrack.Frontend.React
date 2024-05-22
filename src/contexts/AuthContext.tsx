@@ -54,7 +54,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(loadUserData());
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(!!user);
   const [loading, setLoading] = useState(true);
-  const [token, setToken] = useState<string | null>(Cookies.get("accessToken"));
+  const [token, setToken] = useState<string | null>(
+    Cookies.get("accessToken") ?? null
+  );
 
   useEffect(() => {
     const checkAuthStatus = async () => {
@@ -124,6 +126,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           registrationData
         );
         const newUser: User = response.data;
+        console.log("New user:", newUser);
 
         const loginResponse = await api.post(`${VITE_API_URL}/identity/login`, {
           email: registrationData.email,
@@ -220,6 +223,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const changePassword = useCallback(
     async (currentPassword: string, newPassword: string) => {
+      console.log("Changing password", currentPassword, newPassword);
       try {
         await new Promise((resolve) => setTimeout(resolve, 1000));
       } catch (error) {

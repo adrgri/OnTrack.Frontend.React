@@ -53,10 +53,9 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskId, isEditClicked }) => {
     setIsTaskInfoModalOpen(true);
   }, []);
 
-  const handleTaskInfoModalClose = (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation();
+  const handleTaskInfoModalClose = (event?: React.MouseEvent<HTMLElement>) => {
+    event?.stopPropagation();
     setIsTaskInfoModalOpen(false);
-    console.log("Task info modal closed");
   };
 
   const handleDelete = useCallback(

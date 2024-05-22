@@ -25,10 +25,11 @@ export type UsersList = {
   firstName?: string;
   lastName?: string;
   bio?: string;
+  avatar?: string;
 };
 
 // Picking specific properties from User and making them optional
-export type Member = Omit<User, "password">;
+// export type Member = Omit<User, "password">;
 
 // export type Member = {
 //   id: string;
@@ -138,4 +139,12 @@ export type Project = {
   memberIds?: string[] | undefined;
   taskIds?: string[] | undefined;
   dueDate?: Date;
+};
+
+export type Member = {
+  id?: string;
+  firstName: string;
+  lastName: string;
+  bio?: string;
+  avatar?: string;
 };

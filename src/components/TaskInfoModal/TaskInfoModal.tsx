@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useFormik } from "formik";
-
 import {
   Dialog,
   DialogContent,
@@ -9,34 +8,29 @@ import {
   Box,
   Stack,
 } from "@mui/material";
-
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
-
 import TaskInfoSidebarButtons from "../TaskInfoSidebarButtons/TaskInfoSidebarButtons";
 import { useTheme } from "@mui/material/styles";
 import SmallButton from "../../styledComponents/SmallButton";
 import StyledDescriptionField from "../../styledComponents/StyledDescriptionField";
-
 import EditableText from "../EditableText/EditableText";
 import { useTaskStore } from "../../store/TaskStore";
 import CloseButton from "../CloseButton/CloseButton";
-
 import dayjs from "dayjs";
 import "dayjs/locale/pl";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-
 import * as Yup from "yup";
-// import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
 import { UsersList } from "../../types";
 
 type TaskInfoModalProps = {
   isOpen: boolean;
-  onClose: (event: React.MouseEvent<HTMLElement>) => void;
+  onClose: (event?: React.MouseEvent<HTMLElement>) => void;
   taskId?: string | null;
   mode: "add" | "edit";
 };
+
 const taskValidationSchema = Yup.object({
   title: Yup.string()
     .trim()
@@ -85,12 +79,9 @@ const TaskInfoModal = ({
   mode,
 }: TaskInfoModalProps) => {
   const { addTask, updateTask, getTaskById } = useTaskStore();
-  const task = getTaskById(taskId || "");
+  const task = getTaskById(taskId ?? "");
   const theme = useTheme();
   const [selectedMembers, setSelectedMembers] = useState<UsersList[]>([]);
-  // const isEditMode = !!taskId;
-
-  console.log("TaskInfoModal isOpen:", isOpen);
 
   const handleMemberSelect = (selectedMember: UsersList) => {
     const isAlreadySelected = selectedMembers.some(
@@ -146,31 +137,23 @@ const TaskInfoModal = ({
 
       resetForm();
       setSubmitting(false);
-      onClose(event);
+      onClose();
     },
     enableReinitialize: true,
   });
 
-  // useEffect(() => {
-  //   if (task) {
-  //     formik.setValues({
-  //       ...formik.values,
-  //       startDate: task.startDate ? dayjs(task.startDate) : null,
-  //       dueDate: task.dueDate ? dayjs(task.dueDate) : null,
-  //     });
-  //     // setSelectedMembers(task.assignedMemberIds ?? []);
-  //   } else {
-  //     formik.resetForm();
-  //     setSelectedMembers([]);
-  //   }
-  // }, [task, formik]);
+  const handleTaskInfoModalClose = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
+    formik.resetForm();
+    onClose(event);
+  };
 
   return (
     <Dialog
       fullWidth
       maxWidth="md"
       open={isOpen}
-      onClose={(event) => onClose(event)}
+      onClose={handleTaskInfoModalClose}
       PaperProps={{
         sx: {
           height: "80vh",
@@ -216,7 +199,7 @@ const TaskInfoModal = ({
               />
 
               <CloseButton
-                onClick={(event) => onClose(event)}
+                onClick={handleTaskInfoModalClose}
                 right={20}
                 top={20}
               />
@@ -367,7 +350,7 @@ const TaskInfoModal = ({
           <SmallButton
             variant="contained"
             sx={{ backgroundColor: "#5E5F7D" }}
-            onClick={(event) => onClose(event)}
+            onClick={handleTaskInfoModalClose}
           >
             Anuluj
           </SmallButton>
