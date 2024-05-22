@@ -1,9 +1,11 @@
 import { useFormik } from "formik";
 import * as yup from "yup";
-import UserForm from "../UserForm/UserForm";
 import { useAuth } from "../../contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import StyledForm from "../../styledComponents/StyledForm";
+import StyledLink from "../../styledComponents/StyledLink";
+import { Button, TextField, Typography } from "@mui/material";
 
 const validationSchema = yup.object({
   firstName: yup.string().required("To pole jest wymagane"),
@@ -21,6 +23,7 @@ const validationSchema = yup.object({
 const RegisterForm = () => {
   const { register, isLoggedIn } = useAuth();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const formik = useFormik({
     initialValues: {
@@ -31,13 +34,25 @@ const RegisterForm = () => {
     },
     validationSchema: validationSchema,
     onSubmit: async (values) => {
-      const result = await register(values);
+      setLoading(true);
+      console.log("Submitting values:", values); // Debugging line
 
-      if (result.success) {
-        formik.resetForm();
-        navigate("/home");
-      } else {
-        console.error(result.message);
+      try {
+        const result = await register(values);
+        if (result.success) {
+          formik.resetForm();
+          navigate("/home");
+        } else {
+          console.error("Registration failed:", result.message);
+        }
+      } catch (error) {
+        let errorMessage = "An error occurred while registering: ";
+        if (error instanceof Error) {
+          errorMessage = error.message;
+        }
+        console.error(errorMessage);
+      } finally {
+        setLoading(false);
       }
     },
   });
@@ -48,28 +63,70 @@ const RegisterForm = () => {
     }
   }, [isLoggedIn, navigate]);
 
-  // Custom onSubmit handler
-  const handleRegistration = (
-    firstName: string,
-    lastName: string,
-    email: string,
-    password: string
-  ) => {
-    formik.setValues({ firstName, lastName, email, password });
-    formik.handleSubmit();
-  };
-
   return (
-    <UserForm
-      initialValues={formik.initialValues}
-      onSubmit={handleRegistration}
-      formTitle="Jesteś tu pierwszy raz?"
-      submitButtonText="Załóż konto"
-      bottomText="Masz już konto?"
-      bottomLinkText="Zaloguj się"
-      bottomLinkHref="/login"
-      validationSchema={validationSchema}
-    />
+    <StyledForm onSubmit={formik.handleSubmit}>
+      <Typography component="h1" variant="h5">
+        Jesteś tu pierwszy raz?
+      </Typography>
+      <TextField
+        id="firstName"
+        name="firstName"
+        label="Imię"
+        type="text"
+        autoComplete="on"
+        variant="standard"
+        value={formik.values.firstName}
+        onChange={formik.handleChange}
+        error={formik.touched.firstName && Boolean(formik.errors.firstName)}
+        helperText={formik.touched.firstName && formik.errors.firstName}
+        fullWidth
+      />
+      <TextField
+        id="lastName"
+        name="lastName"
+        label="Nazwisko"
+        type="text"
+        autoComplete="on"
+        variant="standard"
+        value={formik.values.lastName}
+        onChange={formik.handleChange}
+        error={formik.touched.lastName && Boolean(formik.errors.lastName)}
+        helperText={formik.touched.lastName && formik.errors.lastName}
+        fullWidth
+      />
+      <TextField
+        id="email"
+        name="email"
+        label="Email"
+        type="email"
+        autoComplete="on"
+        variant="standard"
+        value={formik.values.email}
+        onChange={formik.handleChange}
+        error={formik.touched.email && Boolean(formik.errors.email)}
+        helperText={formik.touched.email && formik.errors.email}
+        fullWidth
+      />
+      <TextField
+        id="password"
+        name="password"
+        label="Hasło"
+        type="password"
+        autoComplete="new-password"
+        variant="standard"
+        value={formik.values.password}
+        onChange={formik.handleChange}
+        error={formik.touched.password && Boolean(formik.errors.password)}
+        helperText={formik.touched.password && formik.errors.password}
+        fullWidth
+      />
+      <Button variant="contained" fullWidth type="submit" disabled={loading}>
+        {loading ? "Rejestracja..." : "Załóż konto"}
+      </Button>
+      <Typography fontSize={"1rem"}>
+        Masz już konto? <StyledLink to={"/login"}>Zaloguj się</StyledLink>
+      </Typography>
+    </StyledForm>
   );
 };
 
