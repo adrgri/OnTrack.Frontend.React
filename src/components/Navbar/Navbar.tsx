@@ -11,7 +11,6 @@ import Avatar from "@mui/material/Avatar";
 import MenuItem from "@mui/material/MenuItem";
 import Logo from "../../assets/logos/Logo.svg";
 import { useTheme } from "@mui/material/styles";
-
 import ExitIcon from "../../assets/icons/NavbarIcons/ExitIcon.svg";
 import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../../contexts/AuthContext";
@@ -36,12 +35,12 @@ const navigationItems = [
   },
 ];
 
-function ResponsiveAppBar() {
+function Navbar() {
   const [anchorElNav, setAnchorElNav] = React.useState<null | HTMLElement>(
     null
   );
 
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
 
   const handleLogout = () => {
     logout();
@@ -56,6 +55,10 @@ function ResponsiveAppBar() {
   const handleCloseNavMenu = () => {
     setAnchorElNav(null);
   };
+
+  const firstLetter = user?.firstName
+    ? user.firstName.charAt(0).toUpperCase()
+    : "";
 
   return (
     <AppBar position="static" sx={{ bgcolor: theme.palette.secondary.main }}>
@@ -203,7 +206,9 @@ function ResponsiveAppBar() {
 
           <Box sx={{ flexGrow: 0 }}>
             <Link to="/settings" style={{ textDecoration: "none" }}>
-              <Avatar alt="R" src="https://i.pravatar.cc/150?img=51" />
+              <Avatar alt={firstLetter} src={user?.avatar ?? ""}>
+                {firstLetter}
+              </Avatar>
             </Link>
           </Box>
         </Toolbar>
@@ -211,4 +216,5 @@ function ResponsiveAppBar() {
     </AppBar>
   );
 }
-export default ResponsiveAppBar;
+
+export default Navbar;

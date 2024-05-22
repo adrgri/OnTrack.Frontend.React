@@ -49,7 +49,8 @@ const MySettings = () => {
       formTitle="Moje ustawienia"
       submitButtonText="Zapisz zmiany"
       userProfile={{
-        avatar: user?.avatar || "https://i.pravatar.cc/150?img=51",
+        name: `${user?.firstName} ${user?.lastName}`,
+        avatar: user?.avatar || "",
       }}
       validationSchema={baseValidationSchema}
       passwordFieldProps={{
