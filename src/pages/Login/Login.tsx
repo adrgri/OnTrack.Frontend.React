@@ -2,10 +2,9 @@ import { useState } from "react";
 import LoginForm from "../../components/LoginForm/LoginForm";
 import ForgotPasswordModal from "../../components/ForgotPasswordModal/ForgotPasswordModal";
 import ResetPasswordModal from "../../components/ResetPasswordModal/ResetpasswordModal";
-// import ResetPasswordModal from "../../components/ResetPasswordModal/ResetpasswordModal";
-// import { useAuth } from "../../contexts/AuthContext";
 import Logo from "../../assets/logos/Logo.svg";
 import { useAuth } from "../../contexts/AuthContext";
+import { Box, useMediaQuery } from "@mui/material";
 
 const Login = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -15,42 +14,46 @@ const Login = () => {
   const handleClickOpenModal = () => setIsModalOpen(true);
   const handleCloseModal = () => setIsModalOpen(false);
 
-  // Inside Login component
   const handleResetPassword = async (email: string) => {
     try {
       await resetPassword(email);
-      // Assuming resetPassword is a promise that resolves when successful
-      setIsModalOpen(false); // Close ForgotPasswordModal
-      setIsResetModalOpen(true); // Open ResetPasswordModal
+      setIsModalOpen(false);
+      setIsResetModalOpen(true);
     } catch (error) {
       console.error("Reset password failed:", error);
-      // Handle error, possibly staying on the same modal and showing an error message
     }
   };
 
+  const isSmallScreen = useMediaQuery("(max-width:400px)");
+
   return (
-    <div
+    <Box
       style={{
-        position: "relative",
-        maxHeight: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         height: "100vh",
+        position: "relative",
       }}
     >
       <img
         src={Logo}
         alt="OnTrack Logo"
         style={{
-          position: "absolute",
-          top: "50px",
           width: "240px",
-          left: "50%",
-          transform: "translateX(-50%)",
+          position: "absolute",
+          top: isSmallScreen ? "25px" : "50px",
         }}
       />
-      <LoginForm
-        // onSubmit={(email, password) => console.log(email, password)}
-        onForgotPasswordClick={handleClickOpenModal}
-      />
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <LoginForm onForgotPasswordClick={handleClickOpenModal} />
+      </div>
       <ForgotPasswordModal
         isOpen={isModalOpen}
         handleClose={handleCloseModal}
@@ -59,13 +62,12 @@ const Login = () => {
           setIsResetModalOpen(true);
         }}
       />
-
       <ResetPasswordModal
         isOpen={isResetModalOpen}
         handleClose={() => setIsResetModalOpen(false)}
         onResetSuccess={handleResetPassword}
       />
-    </div>
+    </Box>
   );
 };
 

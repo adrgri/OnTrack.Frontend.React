@@ -1,32 +1,44 @@
 import RegisterForm from "../../components/RegisterForm/RegisterForm";
 import Logo from "../../assets/logos/Logo.svg";
+import { Box, useMediaQuery } from "@mui/material";
 
 const Register = () => {
+  const isSmallScreen = useMediaQuery("(max-width:400px)");
+
   return (
-    <div
+    <Box
       style={{
-        position: "relative",
-        maxHeight: "100%",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
         height: "100vh",
+        position: "relative",
       }}
     >
       <img
         src={Logo}
         alt="OnTrack Logo"
         style={{
-          position: "absolute",
-          top: "50px",
           width: "240px",
-          left: "50%",
-          transform: "translateX(-50%)",
+          position: "absolute",
+          top: isSmallScreen ? "25px" : "50px",
         }}
       />
-      <RegisterForm
-      // onSubmit={(firstName, lastName, email, password) =>
-      //   console.log(firstName, lastName, email, password)
-      // }
-      />
-    </div>
+
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+        }}
+      >
+        <RegisterForm
+        // onSubmit={(firstName, lastName, email, password) =>
+        //   console.log(firstName, lastName, email, password)
+        // }
+        />
+      </div>
+    </Box>
   );
 };
 
