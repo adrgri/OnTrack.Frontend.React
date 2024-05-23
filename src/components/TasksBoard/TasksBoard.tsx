@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Grid, Box } from "@mui/material";
+import { Grid, Box, Typography } from "@mui/material";
 import TaskInfoModal from "../TaskInfoModal/TaskInfoModal";
 import BoardNavigation from "../BoardNavigation/BoardNavigation";
 import { useTaskStore } from "../../store/TaskStore";
@@ -14,6 +14,7 @@ import EditableText from "../EditableText/EditableText";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import NoContent from "../NoContent/NoContent";
+import Loading from "../Loading/Loading";
 
 const columnTitles: Record<string, string> = {
   "f75fd79b-8ed2-4533-8d08-306aeee7fccb": "Do zrobienia",
@@ -31,7 +32,7 @@ const projectValidationSchema = Yup.object({
 const TasksBoard = ({ projectId }: { projectId?: string }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const { tasks, fetchTasks, updateTask } = useTaskStore();
+  const { tasks, fetchTasks, updateTask, loading, error } = useTaskStore();
   const { statuses, fetchStatuses } = useStatusStore();
   const { projects, fetchProjects, updateProject } = useProjectStore();
   const [isTaskInfoModalOpen, setIsTaskInfoModalOpen] = useState(false);
@@ -158,7 +159,13 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
         </ActionButtons>
       </Grid>
 
-      {tasks.length === 0 ? (
+      {loading ? (
+        <Loading />
+      ) : error ? (
+        <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
+          <Typography color="error">{error}</Typography>
+        </Box>
+      ) : tasks.length === 0 ? (
         <NoContent type="task" />
       ) : (
         <DragDropContext onDragEnd={handleOnDragEnd}>
