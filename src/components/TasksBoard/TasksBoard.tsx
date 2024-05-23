@@ -95,7 +95,6 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
         console.log("Project title updated:", values.title);
       }
     },
-
     enableReinitialize: true,
   });
 
@@ -157,7 +156,7 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
         <ActionButtons
           handleAdd={handleAddTask}
           handleEditAll={handleEditAll}
-          showAddButton={Boolean(projectId)}
+          showAddButton={Boolean(projectId)} // Only show Edit button if projectId is provided
         >
           Zadanie
         </ActionButtons>
@@ -169,8 +168,12 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
         <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
           <Typography color="error">{error}</Typography>
         </Box>
-      ) : tasks.length === 0 ? (
-        <NoContent type="task" />
+      ) : filteredTasksByProject.length === 0 ? (
+        projectId ? (
+          <NoContent type="task" />
+        ) : (
+          <NoContent type="task" navigateTo="/projects" />
+        )
       ) : (
         <DragDropContext onDragEnd={handleOnDragEnd}>
           <Grid
