@@ -7,12 +7,14 @@ interface ActionButtonsProps {
   children: ReactNode;
   handleAdd: MouseEventHandler;
   handleEditAll: MouseEventHandler;
+  showAddButton?: boolean;
 }
 
 function ActionButtons({
   children,
   handleEditAll,
   handleAdd,
+  showAddButton = true,
 }: ActionButtonsProps) {
   return (
     <Grid item>
@@ -33,21 +35,24 @@ function ActionButtons({
             Edytuj
           </Button>
         </Grid>
-        <Grid item>
-          <Button
-            startIcon={<AddIcon />}
-            variant="contained"
-            sx={{
-              padding: "5px 20px",
-              fontSize: "14px",
-              zIndex: 2,
-              borderRadius: "5px",
-            }}
-            onClick={handleAdd}
-          >
-            {children}
-          </Button>
-        </Grid>
+
+        {showAddButton && (
+          <Grid item>
+            <Button
+              startIcon={<AddIcon />}
+              variant="contained"
+              sx={{
+                padding: "5px 20px",
+                fontSize: "14px",
+                zIndex: 2,
+                borderRadius: "5px",
+              }}
+              onClick={handleAdd}
+            >
+              {children}
+            </Button>
+          </Grid>
+        )}
       </Grid>
     </Grid>
   );

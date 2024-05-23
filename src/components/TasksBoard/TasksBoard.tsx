@@ -154,7 +154,11 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
           />
         </Grid>
 
-        <ActionButtons handleAdd={handleAddTask} handleEditAll={handleEditAll}>
+        <ActionButtons
+          handleAdd={handleAddTask}
+          handleEditAll={handleEditAll}
+          showAddButton={Boolean(projectId)}
+        >
           Zadanie
         </ActionButtons>
       </Grid>
