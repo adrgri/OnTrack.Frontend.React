@@ -6,6 +6,7 @@ import { useProjectStore } from "../../store/ProjectStore";
 import ActionButtons from "../UI/ActionButtons";
 import ProjectFormModal from "../ProjectFormModal/ProjectFormModal";
 import Loading from "../Loading/Loading";
+import NoContent from "../NoContent/NoContent";
 
 export default function ProjectsBoard() {
   const [isEditClicked, setIsEditClicked] = useState(false);
@@ -75,6 +76,8 @@ export default function ProjectsBoard() {
         <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
           <Typography color="error">{error}</Typography>
         </Box>
+      ) : projects.length === 0 ? (
+        <NoContent type="project" />
       ) : (
         <Grid
           container

@@ -13,6 +13,7 @@ import { useProjectStore } from "../../store/ProjectStore";
 import EditableText from "../EditableText/EditableText";
 import { useFormik } from "formik";
 import * as Yup from "yup";
+import NoContent from "../NoContent/NoContent";
 
 const columnTitles: Record<string, string> = {
   "f75fd79b-8ed2-4533-8d08-306aeee7fccb": "Do zrobienia",
@@ -157,36 +158,39 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
         </ActionButtons>
       </Grid>
 
-      <DragDropContext onDragEnd={handleOnDragEnd}>
-        <Grid
-          container
-          justifyContent="space-between"
-          alignItems="center"
-          sx={{
-            flexDirection: isMobile ? "column" : "row",
-            [theme.breakpoints.up("md")]: {
-              alignItems: "flex-start",
-            },
-            [theme.breakpoints.down("md")]: {
-              alignItems: "center",
-            },
-          }}
-        >
-          {statuses.map((status) => (
-            <Grid item sm={12} md={3} key={status.id}>
-              <Column
-                columnId={status.id}
-                title={columnTitles[status.id] || status.name}
-                tasks={filteredTasksByProject.filter(
-                  (task) => task.statusId === status.id
-                )}
-                isEditClicked={isEditClicked}
-              />
-            </Grid>
-          ))}
-        </Grid>
-      </DragDropContext>
-
+      {tasks.length === 0 ? (
+        <NoContent type="task" />
+      ) : (
+        <DragDropContext onDragEnd={handleOnDragEnd}>
+          <Grid
+            container
+            justifyContent="space-between"
+            alignItems="center"
+            sx={{
+              flexDirection: isMobile ? "column" : "row",
+              [theme.breakpoints.up("md")]: {
+                alignItems: "flex-start",
+              },
+              [theme.breakpoints.down("md")]: {
+                alignItems: "center",
+              },
+            }}
+          >
+            {statuses.map((status) => (
+              <Grid item sm={12} md={3} key={status.id}>
+                <Column
+                  columnId={status.id}
+                  title={columnTitles[status.id] || status.name}
+                  tasks={filteredTasksByProject.filter(
+                    (task) => task.statusId === status.id
+                  )}
+                  isEditClicked={isEditClicked}
+                />
+              </Grid>
+            ))}
+          </Grid>
+        </DragDropContext>
+      )}
       <TaskInfoModal
         isOpen={isTaskInfoModalOpen}
         onClose={handleTaskInfoModalClose}
