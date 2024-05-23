@@ -86,7 +86,10 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
     validationSchema: projectValidationSchema,
     onSubmit: async (values) => {
       if (selectedProject?.id) {
-        await updateProject(selectedProject.id, { title: values.title });
+        await updateProject(selectedProject.id, {
+          ...selectedProject,
+          title: values.title,
+        });
         console.log("Project title updated:", values.title);
       }
     },
