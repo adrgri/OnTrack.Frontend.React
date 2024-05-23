@@ -61,14 +61,6 @@ const TaskInfoSidebarButtons = ({
   const [openModal, setOpenModal] = useState<ModalName | null>(null);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
-  // const handleOpenModal = (
-  //   event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-  //   modalName: ModalName
-  // ) => {
-  //   setAnchorEl(event.currentTarget);
-  //   setOpenModal(modalName);
-  // };
-
   const handleOpenModal = (
     event: React.MouseEvent<HTMLElement, MouseEvent>,
     modalName: ModalName
@@ -217,6 +209,12 @@ const TaskInfoSidebarButtons = ({
               onClick={(event) =>
                 handleOpenModal(event, item.modal as ModalName)
               }
+              disabled={[
+                "taskList",
+                "icons",
+                "attachment",
+                "resources",
+              ].includes(item.modal)}
             >
               <Box sx={{ display: "flex", alignItems: "center" }}>
                 <ListItemIcon sx={{ minWidth: "auto", marginRight: "8px" }}>
