@@ -7,7 +7,7 @@ const StyledForm = styled("form")(({ theme }) => ({
   justifyContent: "center",
   gap: "0.3rem",
   margin: "auto",
-  height: "100%",
+  // height: "100%",
   maxHeight: "100vh",
   maxWidth: "30rem",
   padding: theme.spacing(2),
