@@ -8,13 +8,15 @@ export const api = axios.create({
   headers: {
     "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json",
+    withCredentials: true,
+    Authorization: `Bearer ${Cookies.get("accessToken")}`,
   },
 });
 
 let isRefreshing = false;
 let refreshSubscribers: ((token: string) => void)[] = [];
 
-const onRrefreshed = (token: string) => {
+const onRefreshed = (token: string) => {
   refreshSubscribers.forEach((callback) => callback(token));
 };
 
@@ -75,7 +77,7 @@ api.interceptors.response.use(
         originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
 
         isRefreshing = false;
-        onRrefreshed(accessToken);
+        onRefreshed(accessToken);
         refreshSubscribers = [];
 
         return api(originalRequest);

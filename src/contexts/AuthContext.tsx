@@ -42,11 +42,11 @@ type AuthProviderProps = {
 const { VITE_API_URL } = import.meta.env;
 
 const saveUserData = (user: User) => {
-  localStorage.setItem("userData", JSON.stringify(user));
+  Cookies.set("userData", JSON.stringify(user), { expires: 7 }); // Store for 7 days, adjust as needed
 };
 
-const loadUserData = () => {
-  const userData = localStorage.getItem("userData");
+const loadUserData = (): User | null => {
+  const userData = Cookies.get("userData");
   return userData ? JSON.parse(userData) : null;
 };
 
@@ -63,10 +63,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       try {
         const storedAccessToken = Cookies.get("accessToken");
         const storedRefreshToken = Cookies.get("refreshToken");
-        console.log("Stored tokens:", {
-          storedAccessToken,
-          storedRefreshToken,
-        });
 
         if (storedAccessToken && storedRefreshToken) {
           const userResponse = await api.get(`${VITE_API_URL}/user/me`, {
@@ -96,8 +92,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       );
       const { accessToken, refreshToken, expiresIn } = loginResponse.data;
 
-      console.log("Login tokens:", { accessToken, refreshToken });
-
       Cookies.set("accessToken", accessToken, { expires: expiresIn });
       Cookies.set("refreshToken", refreshToken);
       setToken(accessToken);
@@ -105,6 +99,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const userResponse = await api.get(`${VITE_API_URL}/user/me`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
+      console.log("User logged in:", userResponse.data);
 
       setUser(userResponse.data);
       saveUserData(userResponse.data);
@@ -126,15 +121,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           registrationData
         );
         const newUser: User = response.data;
-        console.log("New user:", newUser);
+        console.log("User registered:", newUser);
 
         const loginResponse = await api.post(`${VITE_API_URL}/identity/login`, {
           email: registrationData.email,
           password: registrationData.password,
         });
         const { accessToken, refreshToken, expiresIn } = loginResponse.data;
-
-        console.log("Register tokens:", { accessToken, refreshToken });
 
         Cookies.set("accessToken", accessToken, { expires: expiresIn });
         Cookies.set("refreshToken", refreshToken);
@@ -165,7 +158,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         };
       } catch (error) {
         console.error("Registration failed:", error);
-
         return {
           success: false,
           message: "Registration failed. Please try again.",
@@ -187,16 +179,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           `${VITE_API_URL}/identity/logout`,
           {},
           {
-            headers: {
-              Authorization: `Bearer ${accessToken}`,
-            },
+            headers: { Authorization: `Bearer ${accessToken}` },
           }
         );
       }
 
       Cookies.remove("accessToken");
       Cookies.remove("refreshToken");
-      localStorage.removeItem("userData");
+      Cookies.remove("userData");
 
       setUser(null);
       setIsLoggedIn(false);
