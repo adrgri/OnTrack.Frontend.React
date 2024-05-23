@@ -18,7 +18,7 @@ import { useAuth } from "../../contexts/AuthContext";
 const navigationItems = [
   {
     text: "Moje zadania",
-    to: "/home",
+    to: "/",
   },
   {
     text: "Projekty",

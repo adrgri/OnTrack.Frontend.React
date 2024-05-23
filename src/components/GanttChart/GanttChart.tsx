@@ -111,7 +111,7 @@ const GanttChart = () => {
       <BoardNavigation
         leftButtonLabel="Moje zadania"
         rightButtonLabel="Wykres"
-        leftButtonLink="/home"
+        leftButtonLink="/"
         rightButtonLink="/wykres"
       />
 

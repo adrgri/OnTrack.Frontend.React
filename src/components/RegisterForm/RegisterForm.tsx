@@ -41,7 +41,7 @@ const RegisterForm = () => {
         const result = await register(values);
         if (result.success) {
           formik.resetForm();
-          navigate("/home");
+          navigate("/");
         } else {
           console.error("Registration failed:", result.message);
         }
@@ -59,7 +59,7 @@ const RegisterForm = () => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate("/home");
+      navigate("/");
     }
   }, [isLoggedIn, navigate]);
 

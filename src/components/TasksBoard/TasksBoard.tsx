@@ -148,7 +148,7 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
           <BoardNavigation
             leftButtonLabel="Moje zadania"
             rightButtonLabel="Wykres"
-            leftButtonLink="/home"
+            leftButtonLink="/"
             rightButtonLink="/wykres"
           />
         </Grid>

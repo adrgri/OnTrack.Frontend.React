@@ -39,7 +39,7 @@ const LoginForm = ({ onForgotPasswordClick }: LoginFormProps) => {
       setLoading(true);
       try {
         await login(values);
-        navigate("/home");
+        navigate("/");
       } catch (error) {
         console.error("Login failed:", error);
       } finally {
@@ -52,7 +52,7 @@ const LoginForm = ({ onForgotPasswordClick }: LoginFormProps) => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      navigate("/home");
+      navigate("/");
     }
   });
 

@@ -1,5 +1,5 @@
 import "devextreme/dist/css/dx.light.css";
-import { Suspense, lazy, useEffect } from "react";
+import { Suspense, lazy } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@mui/material/styles";
 import { theme } from "./themes/theme";
@@ -30,7 +30,6 @@ const routes = [
   { path: "/register", element: <Register /> },
   { path: "/settings", element: <Settings />, protected: true },
   { path: "/wykres", element: <Wykres />, protected: true },
-  { path: "/home", element: <Home />, protected: true },
   { path: "/", element: <Home />, protected: true },
   { path: "/projects", element: <Projects />, protected: true },
   {
@@ -42,15 +41,15 @@ const routes = [
 ];
 
 function App() {
-  useEffect(() => {
-    // Check if the redirect sessionStorage item exists
-    const redirect = sessionStorage.redirect;
-    delete sessionStorage.redirect; // Clean up the redirect sessionStorage item
-    if (redirect && redirect !== window.location.href) {
-      // Use history to push the corrected path
-      window.history.pushState(null, "", redirect.split("/").pop());
-    }
-  }, []);
+  // useEffect(() => {
+  //   // Check if the redirect sessionStorage item exists
+  //   const redirect = sessionStorage.redirect;
+  //   delete sessionStorage.redirect; // Clean up the redirect sessionStorage item
+  //   if (redirect && redirect !== window.location.href) {
+  //     // Use history to push the corrected path
+  //     window.history.pushState(null, "", redirect.split("/").pop());
+  //   }
+  // }, []);
 
   return (
     <ThemeProvider theme={theme}>
