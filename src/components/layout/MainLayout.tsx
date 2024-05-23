@@ -21,8 +21,10 @@ const MainLayout = ({ children }: MainLayoutProps) => {
             sm: 3, // smaller padding on small screens
             lg: 10, // larger padding on small screens and above
           },
-          overflow: "auto",
+          overflowY: "auto",
+          overflowX: "hidden",
           width: "100%",
+          height: "calc(100vh - 64px)",
         }}
       >
         {children}

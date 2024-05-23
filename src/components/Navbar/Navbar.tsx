@@ -61,9 +61,12 @@ function Navbar() {
     : "";
 
   return (
-    <AppBar position="static" sx={{ bgcolor: theme.palette.secondary.main }}>
+    <AppBar
+      position="static"
+      sx={{ bgcolor: theme.palette.secondary.main, height: "64px" }}
+    >
       <Container maxWidth="xl">
-        <Toolbar disableGutters>
+        <Toolbar disableGutters sx={{ height: "64px" }}>
           <Typography
             variant="h6"
             noWrap
