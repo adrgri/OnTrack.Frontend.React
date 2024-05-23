@@ -22,6 +22,7 @@ const Wykres = lazy(() => import("./pages/Wykres/Wykres"));
 const Home = lazy(() => import("./pages/Home/Home"));
 const Projects = lazy(() => import("./pages/Projects/Projects"));
 const ProjectTasks = lazy(() => import("./pages/ProjectTasks/ProjectTasks"));
+const PageNotFound = lazy(() => import("./pages/PageNotFound/PageNotFound"));
 
 // Route configuration
 const routes = [
@@ -37,7 +38,7 @@ const routes = [
     element: <ProjectTasks />,
     protected: true,
   },
-  { path: "*", element: <div>404 Not Found</div> },
+  { path: "*", element: <PageNotFound /> },
 ];
 
 function App() {
