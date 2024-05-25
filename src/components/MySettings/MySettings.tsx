@@ -1,7 +1,7 @@
 import SettingsForm from "../SettingsForm/SettingsForm";
 import { baseValidationSchema } from "../schemas/baseValidationSchema";
 import { useAuth } from "../../contexts/AuthContext";
-import axios from "axios";
+import { api } from "../../api/api";
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -16,7 +16,7 @@ const MySettings = () => {
   // Handling update settings which will interact with an API
   const handleUpdateSettings = async (firstName: string, lastName: string) => {
     try {
-      const response = await axios.put(
+      const response = await api.put(
         `${apiUrl}/user/me`,
         { firstName, lastName },
         {

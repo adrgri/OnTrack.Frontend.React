@@ -18,6 +18,7 @@ export type User = {
   email: string;
   avatar: string;
   password?: string;
+  projectIds?: string[];
 };
 
 export type UsersList = {
@@ -136,7 +137,7 @@ export type Project = {
   id?: string;
   title: string;
   description?: string;
-  memberIds?: string[] | undefined;
+  memberIds?: string[];
   taskIds?: string[] | undefined;
   dueDate?: Date;
 };
@@ -146,5 +147,5 @@ export type Member = {
   firstName: string;
   lastName: string;
   bio?: string;
-  avatar?: string;
+  // avatar?: string;
 };

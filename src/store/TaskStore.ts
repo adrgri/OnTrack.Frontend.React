@@ -32,7 +32,10 @@ export const useTaskStore = create<TaskState>((set, get) => ({
       console.log("Tasks fetched successfully");
     } catch (error) {
       console.error("Failed to fetch tasks:", error);
-      set({ loading: false, error: "Failed to fetch tasks" });
+      set({
+        loading: false,
+        error: "Nie udało się wyświetlić zadań. Spróbuj ponownie później",
+      });
     }
   },
 
