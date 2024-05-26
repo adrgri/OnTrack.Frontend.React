@@ -1,5 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Typography, Grid, Stack, IconButton } from "@mui/material";
+import {
+  Typography,
+  Grid,
+  Stack,
+  IconButton,
+  CircularProgress,
+  Box,
+} from "@mui/material";
 import { useProjectStore } from "../../store/ProjectStore";
 import TasksIcon from "../../assets/icons/TasksIcon.svg";
 import DateChip from "../CardComponents/DateChip";
@@ -36,6 +43,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [members, setMembers] = useState<Member[]>([]);
+  const [isLoadingMembers, setIsLoadingMembers] = useState(false);
 
   const { requestDelete, confirmDelete, isConfirmOpen, closeModal } =
     useDeletion();
@@ -45,6 +53,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
   useEffect(() => {
     const fetchMembers = async () => {
+      setIsLoadingMembers(true);
       if (project?.memberIds?.length) {
         try {
           const response = await axios.get(
@@ -60,6 +69,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
           console.error("Error fetching project members:", error);
         }
       }
+      setIsLoadingMembers(false);
     };
 
     fetchMembers();
@@ -146,13 +156,19 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                   },
                 }}
               >
-                {members.length > 0 && (
-                  <>
-                    <Typography variant="subtitle2" color="text.secondary">
-                      Zespół
-                    </Typography>
-                    <MembersAvatarsRow members={members} />{" "}
-                  </>
+                {isLoadingMembers ? (
+                  <Box display="flex" justifyContent="center" mt={2}>
+                    <CircularProgress />
+                  </Box>
+                ) : (
+                  members.length > 0 && (
+                    <>
+                      <Typography variant="subtitle2" color="text.secondary">
+                        Zespół
+                      </Typography>
+                      <MembersAvatarsRow members={members} />{" "}
+                    </>
+                  )
                 )}
               </Stack>
             </Grid>

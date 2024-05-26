@@ -3,17 +3,24 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  // InputAdornment,
-  // TextField,
   Typography,
+  Avatar,
+  IconButton,
+  CircularProgress,
+  InputAdornment,
 } from "@mui/material";
-// import SearchIcon from "../../assets/icons/SearchIcon.svg";
+import SearchIcon from "@mui/icons-material/Search";
 import CloseButton from "../CloseButton/CloseButton";
 import SmallButton from "../../styledComponents/SmallButton";
 import StyledSidebarModalInput from "../../styledComponents/StyledSidebarModalInput";
 import { useFormik } from "formik";
-import { Project } from "../../types";
+import { Member, Project } from "../../types";
 import { useProjectStore } from "../../store/ProjectStore";
+import { useAuth } from "../../contexts/AuthContext";
+import { useState, useEffect, useRef } from "react";
+import axios from "axios";
+import CloseIcon from "@mui/icons-material/Close";
+import * as Yup from "yup";
 
 interface ProjectFormModalProps {
   isOpen: boolean;
@@ -22,6 +29,15 @@ interface ProjectFormModalProps {
   mode: "add" | "edit";
 }
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
+const projectValidationSchema = Yup.object({
+  title: Yup.string()
+    .trim()
+    .min(1, "Tytuł projektu musi zawierać co najmniej 1 znak.")
+    .required("Tytuł projektu jest wymagany."),
+});
+
 function ProjectFormModal({
   isOpen,
   handleClose,
@@ -29,34 +45,136 @@ function ProjectFormModal({
   mode,
 }: ProjectFormModalProps) {
   const { addProject, updateProject } = useProjectStore();
+  const { user, token } = useAuth();
+  const [members, setMembers] = useState<Member[]>([]);
+  const [selectedMembers, setSelectedMembers] = useState<Member[]>([]);
+  const [warningMessage, setWarningMessage] = useState<string | null>(null);
+  const [isLoadingMembers, setIsLoadingMembers] = useState(false);
+  const searchMemberRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const initializeMembers = async () => {
+      setIsLoadingMembers(true);
+      if (mode === "edit" && project?.memberIds?.length) {
+        try {
+          const response = await axios.get(
+            `${apiUrl}/user/by/ids/${project.memberIds.join(",")}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          setSelectedMembers(response.data);
+        } catch (error) {
+          console.error("Error fetching project members:", error);
+        }
+      } else {
+        setSelectedMembers([]);
+      }
+      setIsLoadingMembers(false);
+    };
+
+    if (isOpen) {
+      initializeMembers();
+    }
+  }, [isOpen, mode, project, token]);
+
+  const handleSearchChange = async () => {
+    const query = searchMemberRef.current?.value || "";
+    if (query) {
+      try {
+        const response = await axios.get(`${apiUrl}/user/search/${query}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        // Filter out the current user and already selected members from the search results
+        const filteredMembers = response.data.filter(
+          (member: Member) =>
+            member.id !== user?.id &&
+            !selectedMembers.some((selected) => selected.id === member.id)
+        );
+        setMembers(filteredMembers);
+        console.log("Members fetched successfully:", filteredMembers);
+      } catch (error) {
+        console.error("Error fetching members:", error);
+      }
+    } else {
+      setMembers([]);
+    }
+  };
+
+  const onMemberSelect = (member: Member) => {
+    if (!selectedMembers.find((m) => m.id === member.id)) {
+      const updatedMembers = [...selectedMembers, member];
+      setSelectedMembers(updatedMembers);
+      console.log("Selected members:", updatedMembers);
+      formik.setFieldValue(
+        "memberIds",
+        updatedMembers.map((m) => m.id)
+      );
+    }
+    // Clear the search input field and results
+    if (searchMemberRef.current) {
+      searchMemberRef.current.value = "";
+    }
+    setMembers([]);
+  };
+
+  const onMemberRemove = (memberId: string) => {
+    if (selectedMembers.length === 1) {
+      setWarningMessage("Projekt musi mieć co najmniej jednego członka.");
+      return;
+    }
+    const updatedMembers = selectedMembers.filter((m) => m.id !== memberId);
+    setSelectedMembers(updatedMembers);
+    formik.setFieldValue(
+      "memberIds",
+      updatedMembers.map((m) => m.id)
+    );
+  };
 
   const formik = useFormik({
     initialValues: {
       title: project?.title ?? "",
       description: project?.description ?? "",
-      // memberIds: project?.memberIds?.join(", ") || "",
-      // memberIds: ["8ea90da1-7a64-4817-9208-45b5ad734bc3"],
-      memberIds: [],
+      memberIds: mode === "edit" ? selectedMembers.map((m) => m.id) : [],
     },
-    onSubmit: async (values, { setSubmitting }) => {
+    validationSchema: projectValidationSchema,
+    onSubmit: async (values, { setSubmitting, resetForm }) => {
       const newProjectData = {
         ...project,
         title: values.title,
         description: values.description,
-        // members: values.members.split(",").map((member) => member.trim()),
-        // memberIds: ["8ea90da1-7a64-4817-9208-45b5ad734bc3"],
-        // memberIds: values.memberIds.split(",").map((member) => member.trim()),
-        memberIds: [],
+        memberIds: values.memberIds,
       };
+
+      console.log("Submitting data:", newProjectData);
 
       try {
         if (mode === "add") {
-          await addProject(newProjectData);
+          await addProject({
+            ...newProjectData,
+            memberIds: selectedMembers
+              .filter((m) => m.id !== undefined)
+              .map((m) => m.id!),
+          });
           console.log("Adding project:", newProjectData);
         } else if (mode === "edit" && project?.id) {
+          await updateProject(project.id, {
+            ...newProjectData,
+            memberIds: selectedMembers
+              .filter((m) => m.id !== undefined)
+              .map((m) => m.id!),
+          });
           console.log("Project updated:", newProjectData);
-          await updateProject(project.id, newProjectData);
         }
+        resetForm();
+        searchMemberRef.current!.value = ""; // Clear the search field
+        setMembers([]); // Clear the search results
+        setSelectedMembers([]); // Clear the selected members
+        setWarningMessage(null); // Clear the warning message
         handleClose();
       } catch (error) {
         console.error("Error submitting the project:", error);
@@ -69,6 +187,10 @@ function ProjectFormModal({
 
   const handleDialogClose = () => {
     formik.resetForm();
+    searchMemberRef.current!.value = ""; // Clear the search field
+    setMembers([]);
+    setSelectedMembers([]);
+    setWarningMessage(null);
     handleClose();
   };
 
@@ -77,7 +199,7 @@ function ProjectFormModal({
       fullWidth
       maxWidth="md"
       open={isOpen}
-      onClose={handleClose}
+      onClose={handleDialogClose}
       PaperProps={{
         sx: {
           overflowY: "auto",
@@ -112,9 +234,14 @@ function ProjectFormModal({
             name="title"
             value={formik.values.title}
             onChange={formik.handleChange}
-            placeholder="Wpisz nazwe projektu"
+            placeholder="Wpisz nazwę projektu"
             sx={{ width: 300 }}
           />
+          {formik.touched.title && formik.errors.title ? (
+            <Typography color="error" variant="caption">
+              {formik.errors.title}
+            </Typography>
+          ) : null}
           <Typography
             mt={2}
             variant="body1"
@@ -125,18 +252,97 @@ function ProjectFormModal({
           <StyledSidebarModalInput
             fullWidth
             variant="filled"
-            name="memberIds"
-            // type="search"
-            value={formik.values.memberIds}
-            onChange={formik.handleChange}
             placeholder="Wyszukaj członków"
             sx={{ width: 300 }}
-            // endAdornment={
-            //   <InputAdornment position="end">
-            //     <img src={SearchIcon} alt="search" />
-            //   </InputAdornment>
-            // }
+            inputRef={searchMemberRef}
+            onChange={handleSearchChange}
+            endAdornment={
+              <InputAdornment position="end">
+                <SearchIcon />
+              </InputAdornment>
+            }
           />
+
+          {searchMemberRef.current?.value &&
+            members.length === 0 &&
+            !isLoadingMembers && (
+              <Typography color="textSecondary" variant="body2">
+                Brak wyników
+              </Typography>
+            )}
+
+          {searchMemberRef.current?.value && isLoadingMembers && (
+            <Box display="flex" justifyContent="center" mt={2}>
+              <CircularProgress />
+            </Box>
+          )}
+
+          {!searchMemberRef.current?.value && isLoadingMembers && (
+            <Box display="flex" justifyContent="center" mt={2}>
+              <CircularProgress />
+            </Box>
+          )}
+
+          {!isLoadingMembers && (
+            <>
+              {searchMemberRef.current?.value &&
+                members.map((member) => (
+                  <Box
+                    key={member.id}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 2,
+                      mt: 2,
+                      borderRadius: "5px",
+                      transition: "background-color 0.4s ease-in-out",
+                      ":hover": {
+                        cursor: "pointer",
+                        backgroundColor: "#f0f0f0",
+                      },
+                    }}
+                    onClick={() => onMemberSelect(member)}
+                  >
+                    <Avatar alt={`${member.firstName} ${member.lastName}`} />
+                    <Typography>
+                      {member.firstName} {member.lastName}
+                    </Typography>
+                  </Box>
+                ))}
+
+              <Box mt={4}>
+                {selectedMembers.map((member) => (
+                  <Box
+                    key={member.id}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 2,
+                      mt: 2,
+                    }}
+                  >
+                    <Avatar alt={`${member.firstName} ${member.lastName}`} />
+                    <Typography>
+                      {member.firstName} {member.lastName}
+                    </Typography>
+                    {member.id !== user?.id && (
+                      <IconButton
+                        onClick={() => onMemberRemove(member.id ?? "")}
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    )}
+                  </Box>
+                ))}
+              </Box>
+            </>
+          )}
+
+          {warningMessage && (
+            <Typography color="error" variant="caption">
+              {warningMessage}
+            </Typography>
+          )}
         </DialogContent>
         <Box
           sx={{

@@ -18,7 +18,7 @@ const MembersAvatarsRow: React.FC<MembersAvatarsRowProps> = ({
       {members.map((member, index) => (
         <Avatar
           key={member.id ?? index}
-          src={member.avatar}
+          // src={member?.avatar}
           alt={`${member.firstName} ${member.lastName}`}
           sx={{ width: width, height: height }}
         />
