@@ -17,10 +17,11 @@ import { useFormik } from "formik";
 import { Member, Project } from "../../types";
 import { useProjectStore } from "../../store/ProjectStore";
 import { useAuth } from "../../contexts/AuthContext";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import CloseIcon from "@mui/icons-material/Close";
 import * as Yup from "yup";
+import { useMemberSearch } from "../../hooks/useMemberSearch";
 
 interface ProjectFormModalProps {
   isOpen: boolean;
@@ -46,15 +47,16 @@ function ProjectFormModal({
 }: ProjectFormModalProps) {
   const { addProject, updateProject } = useProjectStore();
   const { user, token } = useAuth();
-  const [members, setMembers] = useState<Member[]>([]);
   const [selectedMembers, setSelectedMembers] = useState<Member[]>([]);
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
-  const [isLoadingMembers, setIsLoadingMembers] = useState(false);
-  const searchMemberRef = useRef<HTMLInputElement>(null);
+  const [isLoadingSelectedMembers, setIsLoadingSelectedMembers] =
+    useState(false);
+  const { searchMemberRef, members, isLoadingMembers, handleSearchChange } =
+    useMemberSearch();
 
   useEffect(() => {
     const initializeMembers = async () => {
-      setIsLoadingMembers(true);
+      setIsLoadingSelectedMembers(true);
       if (mode === "edit" && project?.memberIds?.length) {
         try {
           const response = await axios.get(
@@ -72,38 +74,13 @@ function ProjectFormModal({
       } else {
         setSelectedMembers([]);
       }
-      setIsLoadingMembers(false);
+      setIsLoadingSelectedMembers(false);
     };
 
     if (isOpen) {
       initializeMembers();
     }
   }, [isOpen, mode, project, token]);
-
-  const handleSearchChange = async () => {
-    const query = searchMemberRef.current?.value || "";
-    if (query) {
-      try {
-        const response = await axios.get(`${apiUrl}/user/search/${query}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        // Filter out the current user and already selected members from the search results
-        const filteredMembers = response.data.filter(
-          (member: Member) =>
-            member.id !== user?.id &&
-            !selectedMembers.some((selected) => selected.id === member.id)
-        );
-        setMembers(filteredMembers);
-        console.log("Members fetched successfully:", filteredMembers);
-      } catch (error) {
-        console.error("Error fetching members:", error);
-      }
-    } else {
-      setMembers([]);
-    }
-  };
 
   const onMemberSelect = (member: Member) => {
     if (!selectedMembers.find((m) => m.id === member.id)) {
@@ -119,7 +96,6 @@ function ProjectFormModal({
     if (searchMemberRef.current) {
       searchMemberRef.current.value = "";
     }
-    setMembers([]);
   };
 
   const onMemberRemove = (memberId: string) => {
@@ -171,8 +147,9 @@ function ProjectFormModal({
           console.log("Project updated:", newProjectData);
         }
         resetForm();
-        searchMemberRef.current!.value = ""; // Clear the search field
-        setMembers([]); // Clear the search results
+        if (searchMemberRef.current) {
+          searchMemberRef.current.value = ""; // Clear the search field
+        }
         setSelectedMembers([]); // Clear the selected members
         setWarningMessage(null); // Clear the warning message
         handleClose();
@@ -188,7 +165,6 @@ function ProjectFormModal({
   const handleDialogClose = () => {
     formik.resetForm();
     searchMemberRef.current!.value = ""; // Clear the search field
-    setMembers([]);
     setSelectedMembers([]);
     setWarningMessage(null);
     handleClose();
@@ -310,37 +286,44 @@ function ProjectFormModal({
                   </Box>
                 ))}
 
-              <Box
-                mt={4}
-                sx={{
-                  maxHeight: "100px",
-                  overflowY: selectedMembers.length > 2 ? "scroll" : "visible",
-                }}
-              >
-                {selectedMembers.map((member) => (
-                  <Box
-                    key={member.id}
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: 2,
-                      mt: 1,
-                    }}
-                  >
-                    <Avatar alt={`${member.firstName} ${member.lastName}`} />
-                    <Typography>
-                      {member.firstName} {member.lastName}
-                    </Typography>
-                    {member.id !== user?.id && (
-                      <IconButton
-                        onClick={() => onMemberRemove(member.id ?? "")}
-                      >
-                        <CloseIcon />
-                      </IconButton>
-                    )}
-                  </Box>
-                ))}
-              </Box>
+              {isLoadingSelectedMembers ? (
+                <Box display="flex" justifyContent="center" mt={2}>
+                  <CircularProgress />
+                </Box>
+              ) : (
+                <Box
+                  mt={4}
+                  sx={{
+                    maxHeight: selectedMembers.length > 2 ? "100px" : "auto",
+                    overflowY:
+                      selectedMembers.length > 2 ? "scroll" : "visible",
+                  }}
+                >
+                  {selectedMembers.map((member) => (
+                    <Box
+                      key={member.id}
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        mt: 1,
+                      }}
+                    >
+                      <Avatar alt={`${member.firstName} ${member.lastName}`} />
+                      <Typography>
+                        {member.firstName} {member.lastName}
+                      </Typography>
+                      {member.id !== user?.id && (
+                        <IconButton
+                          onClick={() => onMemberRemove(member.id ?? "")}
+                        >
+                          <CloseIcon />
+                        </IconButton>
+                      )}
+                    </Box>
+                  ))}
+                </Box>
+              )}
             </>
           )}
 
