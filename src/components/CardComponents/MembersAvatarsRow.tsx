@@ -1,5 +1,5 @@
 import React from "react";
-import { Avatar, AvatarGroup } from "@mui/material";
+import { Avatar, AvatarGroup, Tooltip } from "@mui/material";
 import { Member } from "../../types";
 
 interface MembersAvatarsRowProps {
@@ -16,12 +16,17 @@ const MembersAvatarsRow: React.FC<MembersAvatarsRowProps> = ({
   return (
     <AvatarGroup max={3} sx={{ display: "flex", justifyContent: "flex-end" }}>
       {members.map((member, index) => (
-        <Avatar
+        <Tooltip
           key={member.id ?? index}
-          // src={member?.avatar}
-          alt={`${member.firstName} ${member.lastName}`}
-          sx={{ width: width, height: height }}
-        />
+          title={`${member.firstName} ${member.lastName}`}
+          arrow
+        >
+          <Avatar
+            // src={member?.avatar}
+            alt={`${member.firstName} ${member.lastName}`}
+            sx={{ width: width, height: height }}
+          />
+        </Tooltip>
       ))}
     </AvatarGroup>
   );
