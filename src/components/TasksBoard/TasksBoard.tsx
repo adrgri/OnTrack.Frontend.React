@@ -17,9 +17,9 @@ import NoContent from "../NoContent/NoContent";
 import Loading from "../Loading/Loading";
 
 const columnTitles: Record<string, string> = {
-  "f75fd79b-8ed2-4533-8d08-306aeee7fccb": "Do zrobienia",
-  "bfb843bf-f595-4741-a0e0-c1e311f54f8d": "W trakcie",
-  "a7c48d27-3d59-4425-b060-a754b0484826": "Gotowy",
+  "4b56b08b-0ffc-4abd-85a6-5f6a9c9a1a48": "Do zrobienia",
+  "48634561-9a5d-46d9-8afb-aad78a5dd625": "W trakcie",
+  "000930a4-77f3-4707-8e69-8b193b0ac673": "Gotowy",
 };
 
 const projectValidationSchema = Yup.object({
@@ -68,7 +68,7 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
       const task = tasks.find((t) => t.id === result.draggableId);
       if (task?.id) {
         const isCompleted =
-          destination.droppableId === "a7c48d27-3d59-4425-b060-a754b0484826";
+          destination.droppableId === "000930a4-77f3-4707-8e69-8b193b0ac673";
         const updatedTask = {
           ...task,
           statusId: destination.droppableId,

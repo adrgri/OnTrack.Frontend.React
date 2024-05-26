@@ -100,15 +100,15 @@ const TaskInfoModal = ({
 
   const formik = useFormik({
     initialValues: {
-      projectId: task?.projectId ?? "cea9bf77-c59f-4882-a3d1-c94525d8beca",
+      projectId: task?.projectId ?? "33003e72-48ea-4474-b955-06e6b4476ba3",
       title: task?.title ?? "",
       description: task?.description ?? "",
       assignedMemberIds: task?.assignedMemberIds || [
-        "04c662ad-366c-418e-8119-35ec53d68305",
+        "a116de65-4a82-4789-b699-f2ed67c64d73",
       ],
       startDate: task?.startDate ? dayjs(task.startDate) : null,
       dueDate: task?.dueDate ? dayjs(task.dueDate) : null,
-      statusId: task?.statusId ?? "f75fd79b-8ed2-4533-8d08-306aeee7fccb",
+      statusId: task?.statusId ?? "4b56b08b-0ffc-4abd-85a6-5f6a9c9a1a48",
       isCompleted: task?.isCompleted ?? false,
     },
 
@@ -119,13 +119,13 @@ const TaskInfoModal = ({
 
       const taskData = {
         ...task,
-        projectId: task?.projectId ?? "cea9bf77-c59f-4882-a3d1-c94525d8beca",
+        projectId: task?.projectId ?? "33003e72-48ea-4474-b955-06e6b4476ba3",
         title: values.title,
         description: values.description,
-        assignedMemberIds: ["04c662ad-366c-418e-8119-35ec53d68305"],
+        assignedMemberIds: ["a116de65-4a82-4789-b699-f2ed67c64d73"],
         startDate: formattedStartDate,
         dueDate: formattedDueDate,
-        statusId: task?.statusId ?? "f75fd79b-8ed2-4533-8d08-306aeee7fccb",
+        statusId: task?.statusId ?? "4b56b08b-0ffc-4abd-85a6-5f6a9c9a1a48",
         isCompleted: task?.isCompleted ?? false,
       };
 
