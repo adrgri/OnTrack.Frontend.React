@@ -310,7 +310,13 @@ function ProjectFormModal({
                   </Box>
                 ))}
 
-              <Box mt={4}>
+              <Box
+                mt={4}
+                sx={{
+                  maxHeight: "100px",
+                  overflowY: selectedMembers.length > 2 ? "scroll" : "visible",
+                }}
+              >
                 {selectedMembers.map((member) => (
                   <Box
                     key={member.id}
@@ -318,7 +324,7 @@ function ProjectFormModal({
                       display: "flex",
                       alignItems: "center",
                       gap: 2,
-                      mt: 2,
+                      mt: 1,
                     }}
                   >
                     <Avatar alt={`${member.firstName} ${member.lastName}`} />
