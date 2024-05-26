@@ -1,45 +1,79 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Typography, Grid, Box, IconButton } from "@mui/material";
+import {
+  Typography,
+  Grid,
+  Box,
+  IconButton,
+  CircularProgress,
+} from "@mui/material";
 import { useTaskStore } from "../../store/TaskStore";
 import DateChip from "../CardComponents/DateChip";
-// import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
+import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
 import GenericCard from "../GenericCard/GenericCard";
-// import EntityIcon from "../CardComponents/EntityIcon";
 import MenuDotsVertical from "../../assets/icons/MenuDotsVertical.svg";
 import CloseIcon from "../../assets/icons/CloseIcon.svg";
 import OptionsPopup from "../layout/OptionsPopup";
 import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import useDeletion from "../../hooks/useDeletion";
-// import { Task } from "../../types";
 import { useProjectStore } from "../../store/ProjectStore";
 import TaskInfoModal from "../TaskInfoModal/TaskInfoModal";
+import axios from "axios";
+import { useAuth } from "../../contexts/AuthContext";
+import { Member } from "../../types";
 
 interface TaskCardProps {
-  // task: Task;
   taskId: string | undefined;
   isEditClicked: boolean;
 }
 
+const apiUrl = import.meta.env.VITE_API_URL;
+
 const TaskCard: React.FC<TaskCardProps> = ({ taskId, isEditClicked }) => {
+  const { token } = useAuth();
   const task = useTaskStore((state) =>
     state.tasks.find((t) => t.id === taskId)
   );
-
-  useEffect(() => {
-    useProjectStore.getState().fetchUserProjects();
-  }, []);
 
   const project = useProjectStore((state) => {
     return state.projects.find((p) => p.id === task?.projectId);
   });
 
-  // console.log("project in TaskCard", project);
   const [isOptionsPopupOpen, setIsOptionsPopupOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [isTaskInfoModalOpen, setIsTaskInfoModalOpen] = useState(false);
+  const [members, setMembers] = useState<Member[]>([]);
+  const [isLoadingMembers, setIsLoadingMembers] = useState(false);
 
   const { requestDelete, confirmDelete, isConfirmOpen, closeModal } =
     useDeletion();
+
+  const fetchMembers = useCallback(
+    async (memberIds: string[]) => {
+      setIsLoadingMembers(true);
+      try {
+        const response = await axios.get(
+          `${apiUrl}/user/by/ids/${memberIds.join(",")}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        setMembers(response.data);
+      } catch (error) {
+        console.error("Error fetching task members:", error);
+      } finally {
+        setIsLoadingMembers(false);
+      }
+    },
+    [token]
+  );
+
+  useEffect(() => {
+    if (task?.assignedMemberIds?.length) {
+      fetchMembers(task.assignedMemberIds);
+    }
+  }, [task?.assignedMemberIds, fetchMembers]);
 
   const handleOpenOptionsPopup = (event: React.MouseEvent<HTMLElement>) => {
     event.stopPropagation();
@@ -118,10 +152,6 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskId, isEditClicked }) => {
               )}
             </IconButton>
           </Box>
-          {/* <EntityIcon
-            icon={task?.icon}
-            style={{ width: "15px", height: "15px", marginLeft: "5px" }}
-          /> */}
         </Grid>
 
         <Grid item container xs={12} alignItems="center" spacing={2}>
@@ -129,7 +159,11 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskId, isEditClicked }) => {
             <DateChip date={task?.dueDate ? new Date(task.dueDate) : null} />
           </Grid>
           <Grid item xs={true} container justifyContent="flex-end">
-            {/* <MembersAvatarsRow members={task?.members ?? []} /> */}
+            {isLoadingMembers ? (
+              <CircularProgress />
+            ) : (
+              <MembersAvatarsRow members={members} />
+            )}
           </Grid>
         </Grid>
       </Grid>

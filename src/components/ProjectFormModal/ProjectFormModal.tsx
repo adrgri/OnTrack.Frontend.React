@@ -52,7 +52,7 @@ function ProjectFormModal({
   const [isLoadingSelectedMembers, setIsLoadingSelectedMembers] =
     useState(false);
   const { searchMemberRef, members, isLoadingMembers, handleSearchChange } =
-    useMemberSearch();
+    useMemberSearch(true, selectedMembers);
 
   useEffect(() => {
     const initializeMembers = async () => {

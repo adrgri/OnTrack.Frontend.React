@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useFormik } from "formik";
 import {
   Dialog,
@@ -7,6 +7,9 @@ import {
   TextareaAutosize,
   Box,
   Stack,
+  Avatar,
+  Tooltip,
+  CircularProgress,
 } from "@mui/material";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import TaskInfoSidebarButtons from "../TaskInfoSidebarButtons/TaskInfoSidebarButtons";
@@ -23,6 +26,9 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import * as Yup from "yup";
 import { UsersList } from "../../types";
+import axios from "axios";
+import { useAuth } from "../../contexts/AuthContext";
+import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
 
 type TaskInfoModalProps = {
   isOpen: boolean;
@@ -30,6 +36,8 @@ type TaskInfoModalProps = {
   taskId?: string | null;
   mode: "add" | "edit";
 };
+
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const taskValidationSchema = Yup.object({
   title: Yup.string()
@@ -81,7 +89,37 @@ const TaskInfoModal = ({
   const { addTask, updateTask, getTaskById } = useTaskStore();
   const task = getTaskById(taskId ?? "");
   const theme = useTheme();
+  const { token } = useAuth();
   const [selectedMembers, setSelectedMembers] = useState<UsersList[]>([]);
+  const [isLoadingMembers, setIsLoadingMembers] = useState(false);
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      if (task?.assignedMemberIds?.length) {
+        setIsLoadingMembers(true);
+        try {
+          const response = await axios.get(
+            `${apiUrl}/user/by/ids/${task.assignedMemberIds.join(",")}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          setSelectedMembers(response.data);
+          console.log("Members fetched successfully:", response.data);
+        } catch (error) {
+          console.error("Error fetching members:", error);
+        } finally {
+          setIsLoadingMembers(false);
+        }
+      }
+    };
+
+    if (isOpen) {
+      fetchMembers();
+    }
+  }, [isOpen, task, token]);
 
   const handleMemberSelect = (selectedMember: UsersList) => {
     const isAlreadySelected = selectedMembers.some(
@@ -103,9 +141,7 @@ const TaskInfoModal = ({
       projectId: task?.projectId ?? "33003e72-48ea-4474-b955-06e6b4476ba3",
       title: task?.title ?? "",
       description: task?.description ?? "",
-      assignedMemberIds: task?.assignedMemberIds || [
-        "a116de65-4a82-4789-b699-f2ed67c64d73",
-      ],
+      assignedMemberIds: task?.assignedMemberIds || [],
       startDate: task?.startDate ? dayjs(task.startDate) : null,
       dueDate: task?.dueDate ? dayjs(task.dueDate) : null,
       statusId: task?.statusId ?? "4b56b08b-0ffc-4abd-85a6-5f6a9c9a1a48",
@@ -122,7 +158,7 @@ const TaskInfoModal = ({
         projectId: task?.projectId ?? "33003e72-48ea-4474-b955-06e6b4476ba3",
         title: values.title,
         description: values.description,
-        assignedMemberIds: ["a116de65-4a82-4789-b699-f2ed67c64d73"],
+        assignedMemberIds: selectedMembers.map((member) => member.id),
         startDate: formattedStartDate,
         dueDate: formattedDueDate,
         statusId: task?.statusId ?? "4b56b08b-0ffc-4abd-85a6-5f6a9c9a1a48",
@@ -211,11 +247,19 @@ const TaskInfoModal = ({
               </Typography>
             )}
 
-            {selectedMembers.length > 0 && (
-              <Stack spacing={2}>
-                <Typography variant="subtitle1">Członkowie</Typography>
-                {/* <MembersAvatarsRow members={selectedMembers ?? []} /> */}
-              </Stack>
+            {isLoadingMembers ? (
+              <Box display="flex" justifyContent="center" mt={2}>
+                <CircularProgress />
+              </Box>
+            ) : (
+              selectedMembers.length > 0 && (
+                <Stack spacing={2}>
+                  <Typography variant="subtitle1">Członkowie</Typography>
+                  <Box mt={4}>
+                    <MembersAvatarsRow members={selectedMembers} />
+                  </Box>
+                </Stack>
+              )
             )}
 
             <Box sx={{ display: "flex", alignItems: "center" }}>
@@ -332,6 +376,7 @@ const TaskInfoModal = ({
               onDueDateChange={(newValue) =>
                 formik.setFieldValue("dueDate", newValue)
               }
+              selectedMembers={selectedMembers}
             />
           </Box>
         </DialogContent>

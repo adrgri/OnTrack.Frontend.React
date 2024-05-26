@@ -39,6 +39,7 @@ type TaskInfoSidebarButtonsProps = {
   dueDate: dayjs.Dayjs | null;
   onStartDateChange: (date: dayjs.Dayjs | null) => void;
   onDueDateChange: (date: dayjs.Dayjs | null) => void;
+  selectedMembers: UsersList[];
 };
 
 const TaskInfoSidebarButtons = ({
@@ -47,6 +48,7 @@ const TaskInfoSidebarButtons = ({
   dueDate,
   onStartDateChange,
   onDueDateChange,
+  selectedMembers,
 }: TaskInfoSidebarButtonsProps) => {
   const resourcesItem = {
     text: "Dodaj zasoby",
@@ -118,6 +120,7 @@ const TaskInfoSidebarButtons = ({
             anchorEl={anchorEl}
             onClose={handleCloseModal}
             onMemberSelect={onMemberSelect}
+            selectedMembers={selectedMembers}
           />
         );
       case "startDate":

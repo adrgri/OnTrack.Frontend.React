@@ -144,8 +144,8 @@ export type Project = {
 
 export type Member = {
   id?: string;
-  firstName: string;
-  lastName: string;
+  firstName?: string;
+  lastName?: string;
   bio?: string;
   // avatar?: string;
 };

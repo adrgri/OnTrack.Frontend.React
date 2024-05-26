@@ -10,7 +10,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import PopupLayout from "../../layout/PopupLayout";
 import SmallButton from "../../../styledComponents/SmallButton";
 import StyledSidebarModalInput from "../../../styledComponents/StyledSidebarModalInput";
-import { Member } from "../../../types";
+import { Member, UsersList } from "../../../types";
 import { theme } from "../../../themes/theme";
 import { useMemberSearch } from "../../../hooks/useMemberSearch";
 
@@ -19,6 +19,7 @@ type MembersModalProps = {
   anchorEl: HTMLButtonElement | null;
   onClose: () => void;
   onMemberSelect: (member: Member) => void;
+  selectedMembers: UsersList[];
 };
 
 const MembersModal: React.FC<MembersModalProps> = ({
@@ -26,10 +27,10 @@ const MembersModal: React.FC<MembersModalProps> = ({
   anchorEl,
   onClose,
   onMemberSelect,
+  selectedMembers,
 }) => {
   const { searchMemberRef, members, isLoadingMembers, handleSearchChange } =
-    useMemberSearch();
-
+    useMemberSearch(false, selectedMembers);
   return (
     <PopupLayout
       title="Członkowie"
