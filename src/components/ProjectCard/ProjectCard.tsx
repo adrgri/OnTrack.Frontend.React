@@ -1,10 +1,10 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Typography, Grid, Stack, IconButton } from "@mui/material";
 import { useProjectStore } from "../../store/ProjectStore";
 import TasksIcon from "../../assets/icons/TasksIcon.svg";
 import DateChip from "../CardComponents/DateChip";
 import CircularProgressWithLabel from "../CardComponents/CircularProgressWithLabel";
-// import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
+import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
 import GenericCard from "../GenericCard/GenericCard";
 import MenuDotsVertical from "../../assets/icons/MenuDotsVertical.svg";
 import CloseIcon from "../../assets/icons/CloseIcon.svg";
@@ -12,13 +12,17 @@ import ConfirmDeleteModal from "../ConfirmDeleteModal/ConfirmDeleteModal";
 import OptionsPopup from "../layout/OptionsPopup";
 import useDeletion from "../../hooks/useDeletion";
 import ProjectFormModal from "../ProjectFormModal/ProjectFormModal";
-import { Project } from "../../types";
+import { Project, Member } from "../../types";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../../contexts/AuthContext";
 
 interface ProjectCardProps {
   project: Project;
   isEditClicked: boolean;
 }
+
+const apiUrl = import.meta.env.VITE_API_URL;
 
 const ProjectCard: React.FC<ProjectCardProps> = ({
   project,
@@ -31,10 +35,35 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
   const [isOptionsPopupOpen, setIsOptionsPopupOpen] = useState(false);
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [members, setMembers] = useState<Member[]>([]);
 
   const { requestDelete, confirmDelete, isConfirmOpen, closeModal } =
     useDeletion();
   const tasksAmount = project?.taskIds?.length ?? 0;
+
+  const { token } = useAuth();
+
+  useEffect(() => {
+    const fetchMembers = async () => {
+      if (project?.memberIds?.length) {
+        try {
+          const response = await axios.get(
+            `${apiUrl}/user/by/ids/${project.memberIds.join(",")}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+          setMembers(response.data);
+        } catch (error) {
+          console.error("Error fetching project members:", error);
+        }
+      }
+    };
+
+    fetchMembers();
+  }, [project, token]);
 
   const handleOpenOptionsPopup = (
     event: React.MouseEvent<HTMLElement, MouseEvent>
@@ -117,15 +146,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
                   },
                 }}
               >
-                {/* {project?.membersIds && (
+                {members.length > 0 && (
                   <>
-                    {" "}
                     <Typography variant="subtitle2" color="text.secondary">
                       Zespół
                     </Typography>
-                    <MembersAvatarsRow members={project?.members ?? []} />{" "}
+                    <MembersAvatarsRow members={members} />{" "}
                   </>
-                )} */}
+                )}
               </Stack>
             </Grid>
 
