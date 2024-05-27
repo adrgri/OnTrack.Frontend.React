@@ -7,8 +7,6 @@ import {
   TextareaAutosize,
   Box,
   Stack,
-  Avatar,
-  Tooltip,
   CircularProgress,
 } from "@mui/material";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";

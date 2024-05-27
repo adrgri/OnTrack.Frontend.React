@@ -11,7 +11,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import PopupLayout from "../../layout/PopupLayout";
 import StyledSidebarModalInput from "../../../styledComponents/StyledSidebarModalInput";
-import { Member, Member } from "../../../types";
+import { Member } from "../../../types";
 import { theme } from "../../../themes/theme";
 import { useMemberSearch } from "../../../hooks/useMemberSearch";
 
