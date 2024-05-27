@@ -5,10 +5,11 @@ import {
   Avatar,
   InputAdornment,
   CircularProgress,
+  IconButton,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
+import CloseIcon from "@mui/icons-material/Close";
 import PopupLayout from "../../layout/PopupLayout";
-import SmallButton from "../../../styledComponents/SmallButton";
 import StyledSidebarModalInput from "../../../styledComponents/StyledSidebarModalInput";
 import { Member, UsersList } from "../../../types";
 import { theme } from "../../../themes/theme";
@@ -20,6 +21,7 @@ type MembersModalProps = {
   onClose: () => void;
   onMemberSelect: (member: Member) => void;
   selectedMembers: UsersList[];
+  setSelectedMembers: React.Dispatch<React.SetStateAction<UsersList[]>>;
 };
 
 const MembersModal: React.FC<MembersModalProps> = ({
@@ -28,9 +30,30 @@ const MembersModal: React.FC<MembersModalProps> = ({
   onClose,
   onMemberSelect,
   selectedMembers,
+  setSelectedMembers,
 }) => {
   const { searchMemberRef, members, isLoadingMembers, handleSearchChange } =
     useMemberSearch(false, selectedMembers);
+
+  const onMemberRemove = (memberId: string) => {
+    const updatedMembers = selectedMembers.filter((m) => m.id !== memberId);
+    setSelectedMembers(updatedMembers);
+  };
+
+  const handleMemberSelect = (member: Member) => {
+    if (!selectedMembers.find((m) => m.id === member.id)) {
+      setSelectedMembers((prevSelectedMembers) => [
+        ...prevSelectedMembers,
+        member,
+      ]);
+      onMemberSelect(member);
+    }
+    // Clear the search input field and results
+    if (searchMemberRef.current) {
+      searchMemberRef.current.value = "";
+    }
+  };
+
   return (
     <PopupLayout
       title="Członkowie"
@@ -85,7 +108,7 @@ const MembersModal: React.FC<MembersModalProps> = ({
                     backgroundColor: theme.palette.background.default,
                   },
                 }}
-                onClick={() => onMemberSelect(member)}
+                onClick={() => handleMemberSelect(member)}
               >
                 <Avatar
                   // src={member.avatar}
@@ -96,10 +119,36 @@ const MembersModal: React.FC<MembersModalProps> = ({
                 </Typography>
               </Box>
             ))}
+
+          <Box
+            mt={4}
+            sx={{
+              maxHeight: selectedMembers.length > 2 ? "100px" : "auto",
+              overflowY: selectedMembers.length > 2 ? "scroll" : "visible",
+            }}
+          >
+            {selectedMembers.map((member) => (
+              <Box
+                key={member.id}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 2,
+                  mt: 1,
+                }}
+              >
+                <Avatar alt={`${member.firstName} ${member.lastName}`} />
+                <Typography>
+                  {member.firstName} {member.lastName}
+                </Typography>
+                <IconButton onClick={() => onMemberRemove(member.id ?? "")}>
+                  <CloseIcon />
+                </IconButton>
+              </Box>
+            ))}
+          </Box>
         </>
       )}
-
-      <SmallButton variant="contained">Dodaj</SmallButton>
     </PopupLayout>
   );
 };

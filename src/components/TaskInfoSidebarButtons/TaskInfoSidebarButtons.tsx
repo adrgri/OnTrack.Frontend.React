@@ -40,6 +40,7 @@ type TaskInfoSidebarButtonsProps = {
   onStartDateChange: (date: dayjs.Dayjs | null) => void;
   onDueDateChange: (date: dayjs.Dayjs | null) => void;
   selectedMembers: UsersList[];
+  setSelectedMembers: React.Dispatch<React.SetStateAction<UsersList[]>>;
 };
 
 const TaskInfoSidebarButtons = ({
@@ -49,6 +50,7 @@ const TaskInfoSidebarButtons = ({
   onStartDateChange,
   onDueDateChange,
   selectedMembers,
+  setSelectedMembers,
 }: TaskInfoSidebarButtonsProps) => {
   const resourcesItem = {
     text: "Dodaj zasoby",
@@ -121,6 +123,7 @@ const TaskInfoSidebarButtons = ({
             onClose={handleCloseModal}
             onMemberSelect={onMemberSelect}
             selectedMembers={selectedMembers}
+            setSelectedMembers={setSelectedMembers}
           />
         );
       case "startDate":

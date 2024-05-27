@@ -377,6 +377,7 @@ const TaskInfoModal = ({
                 formik.setFieldValue("dueDate", newValue)
               }
               selectedMembers={selectedMembers}
+              setSelectedMembers={setSelectedMembers}
             />
           </Box>
         </DialogContent>
