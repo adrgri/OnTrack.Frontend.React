@@ -21,7 +21,7 @@ import IconsIcon from "../../assets/icons/TaskIcons/IconsIcon.svg";
 import AttachmentIcon from "../../assets/icons/TaskIcons/AttachmentIcon.svg";
 import TaskListIcon from "../../assets/icons/TaskIcons/TaskslistIcon.svg";
 import ResourcesIcon from "../../assets/icons/TaskIcons/ResourcesIcon.svg";
-import { ListItemType, UsersList } from "../../types";
+import { ListItemType, Member } from "../../types";
 import dayjs from "dayjs";
 
 type ModalName =
@@ -34,13 +34,13 @@ type ModalName =
   | "resources";
 
 type TaskInfoSidebarButtonsProps = {
-  onMemberSelect: (member: UsersList) => void;
+  onMemberSelect: (member: Member) => void;
   startDate: dayjs.Dayjs | null;
   dueDate: dayjs.Dayjs | null;
   onStartDateChange: (date: dayjs.Dayjs | null) => void;
   onDueDateChange: (date: dayjs.Dayjs | null) => void;
-  selectedMembers: UsersList[];
-  setSelectedMembers: React.Dispatch<React.SetStateAction<UsersList[]>>;
+  selectedMembers: Member[];
+  setSelectedMembers: React.Dispatch<React.SetStateAction<Member[]>>;
 };
 
 const TaskInfoSidebarButtons = ({

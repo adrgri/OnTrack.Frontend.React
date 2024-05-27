@@ -11,7 +11,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import PopupLayout from "../../layout/PopupLayout";
 import StyledSidebarModalInput from "../../../styledComponents/StyledSidebarModalInput";
-import { Member, UsersList } from "../../../types";
+import { Member, Member } from "../../../types";
 import { theme } from "../../../themes/theme";
 import { useMemberSearch } from "../../../hooks/useMemberSearch";
 
@@ -20,8 +20,8 @@ type MembersModalProps = {
   anchorEl: HTMLButtonElement | null;
   onClose: () => void;
   onMemberSelect: (member: Member) => void;
-  selectedMembers: UsersList[];
-  setSelectedMembers: React.Dispatch<React.SetStateAction<UsersList[]>>;
+  selectedMembers: Member[];
+  setSelectedMembers: React.Dispatch<React.SetStateAction<Member[]>>;
 };
 
 const MembersModal: React.FC<MembersModalProps> = ({

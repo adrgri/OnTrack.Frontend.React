@@ -25,7 +25,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import * as Yup from "yup";
-import { UsersList } from "../../types";
+import { Member } from "../../types";
 import axios from "axios";
 import { useAuth } from "../../contexts/AuthContext";
 import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
@@ -90,7 +90,7 @@ const TaskInfoModal = ({
   const task = getTaskById(taskId ?? "");
   const theme = useTheme();
   const { token } = useAuth();
-  const [selectedMembers, setSelectedMembers] = useState<UsersList[]>([]);
+  const [selectedMembers, setSelectedMembers] = useState<Member[]>([]);
   const [isLoadingMembers, setIsLoadingMembers] = useState(false);
 
   useEffect(() => {
@@ -121,7 +121,7 @@ const TaskInfoModal = ({
     }
   }, [isOpen, task, token]);
 
-  const handleMemberSelect = (selectedMember: UsersList) => {
+  const handleMemberSelect = (selectedMember: Member) => {
     const isAlreadySelected = selectedMembers.some(
       (member) => member.id === selectedMember.id
     );
