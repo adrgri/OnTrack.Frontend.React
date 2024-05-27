@@ -33,6 +33,7 @@ type TaskInfoModalProps = {
   onClose: (event?: React.MouseEvent<HTMLElement>) => void;
   taskId?: string | null;
   mode: "add" | "edit";
+  projectId: string;
 };
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -83,6 +84,7 @@ const TaskInfoModal = ({
   onClose,
   taskId,
   mode,
+  projectId,
 }: TaskInfoModalProps) => {
   const { addTask, updateTask, getTaskById } = useTaskStore();
   const task = getTaskById(taskId ?? "");
@@ -136,7 +138,7 @@ const TaskInfoModal = ({
 
   const formik = useFormik({
     initialValues: {
-      projectId: task?.projectId ?? "33003e72-48ea-4474-b955-06e6b4476ba3",
+      projectId: projectId,
       title: task?.title ?? "",
       description: task?.description ?? "",
       assignedMemberIds: task?.assignedMemberIds || [],
@@ -153,7 +155,7 @@ const TaskInfoModal = ({
 
       const taskData = {
         ...task,
-        projectId: task?.projectId ?? "33003e72-48ea-4474-b955-06e6b4476ba3",
+        projectId: projectId,
         title: values.title,
         description: values.description,
         assignedMemberIds: selectedMembers.map((member) => member.id),
@@ -165,8 +167,10 @@ const TaskInfoModal = ({
 
       if (mode === "edit" && task?.id) {
         await updateTask(task.id, taskData);
+        console.log("Task updated successfully:", taskData);
       } else {
         await addTask(taskData);
+        console.log("Task added successfully:", taskData);
       }
 
       resetForm();

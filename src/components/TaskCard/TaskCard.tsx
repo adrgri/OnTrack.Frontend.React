@@ -186,6 +186,7 @@ const TaskCard: React.FC<TaskCardProps> = ({ taskId, isEditClicked }) => {
         onClose={handleTaskInfoModalClose}
         taskId={taskId ?? null}
         mode="edit"
+        projectId={project?.id ?? ""}
       />
     </GenericCard>
   );
