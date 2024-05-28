@@ -7,7 +7,6 @@ import {
   CircularProgress,
   IconButton,
 } from "@mui/material";
-import SearchIcon from "@mui/icons-material/Search";
 import CloseIcon from "@mui/icons-material/Close";
 import PopupLayout from "../../layout/PopupLayout";
 import StyledSidebarModalInput from "../../../styledComponents/StyledSidebarModalInput";
@@ -32,26 +31,22 @@ const MembersModal: React.FC<MembersModalProps> = ({
   selectedMembers,
   setSelectedMembers,
 }) => {
-  const { searchMemberRef, members, isLoadingMembers, handleSearchChange } =
-    useMemberSearch(false, selectedMembers);
+  const {
+    searchMemberRef,
+    members,
+    isLoadingMembers,
+    handleSearchChange,
+    clearSearchInput,
+  } = useMemberSearch(false, selectedMembers);
+
+  const handleMemberClick = (member: Member) => {
+    onMemberSelect(member);
+    clearSearchInput();
+  };
 
   const onMemberRemove = (memberId: string) => {
     const updatedMembers = selectedMembers.filter((m) => m.id !== memberId);
     setSelectedMembers(updatedMembers);
-  };
-
-  const handleMemberSelect = (member: Member) => {
-    if (!selectedMembers.find((m) => m.id === member.id)) {
-      setSelectedMembers((prevSelectedMembers) => [
-        ...prevSelectedMembers,
-        member,
-      ]);
-      onMemberSelect(member);
-    }
-    // Clear the search input field and results
-    if (searchMemberRef.current) {
-      searchMemberRef.current.value = "";
-    }
   };
 
   return (
@@ -70,7 +65,9 @@ const MembersModal: React.FC<MembersModalProps> = ({
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <SearchIcon />
+              <IconButton onClick={() => clearSearchInput()}>
+                <CloseIcon />
+              </IconButton>
             </InputAdornment>
           ),
         }}
@@ -108,7 +105,7 @@ const MembersModal: React.FC<MembersModalProps> = ({
                     backgroundColor: theme.palette.background.default,
                   },
                 }}
-                onClick={() => handleMemberSelect(member)}
+                onClick={() => handleMemberClick(member)}
               >
                 <Avatar
                   // src={member.avatar}

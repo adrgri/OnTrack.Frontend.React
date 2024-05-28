@@ -46,5 +46,17 @@ export const useMemberSearch = (
     }
   };
 
-  return { searchMemberRef, members, isLoadingMembers, handleSearchChange };
+  const clearSearchInput = () => {
+    if (searchMemberRef.current) {
+      searchMemberRef.current.value = "";
+      setMembers([]);
+    }
+  };
+  return {
+    searchMemberRef,
+    members,
+    isLoadingMembers,
+    handleSearchChange,
+    clearSearchInput,
+  };
 };
