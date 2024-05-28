@@ -153,12 +153,16 @@ const TaskInfoModal = ({
       const formattedStartDate = formatDate(values.startDate);
       const formattedDueDate = formatDate(values.dueDate);
 
+      const filteredAssignedMemberIds = selectedMembers
+        .map((member) => member.id)
+        .filter((id): id is string => id !== undefined);
+
       const taskData = {
         ...task,
         projectId: projectId,
         title: values.title,
         description: values.description,
-        assignedMemberIds: selectedMembers.map((member) => member.id),
+        assignedMemberIds: filteredAssignedMemberIds,
         startDate: formattedStartDate,
         dueDate: formattedDueDate,
         statusId: task?.statusId ?? "4b56b08b-0ffc-4abd-85a6-5f6a9c9a1a48",
