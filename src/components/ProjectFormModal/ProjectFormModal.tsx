@@ -51,8 +51,13 @@ function ProjectFormModal({
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
   const [isLoadingSelectedMembers, setIsLoadingSelectedMembers] =
     useState(false);
-  const { searchMemberRef, members, isLoadingMembers, handleSearchChange } =
-    useMemberSearch(true, selectedMembers);
+  const {
+    searchMemberRef,
+    members,
+    isLoadingMembers,
+    handleSearchChange,
+    clearSearchInput,
+  } = useMemberSearch(true, selectedMembers);
 
   useEffect(() => {
     const initializeMembers = async () => {
@@ -91,10 +96,7 @@ function ProjectFormModal({
         "memberIds",
         updatedMembers.map((m) => m.id)
       );
-    }
-    // Clear the search input field and results
-    if (searchMemberRef.current) {
-      searchMemberRef.current.value = "";
+      clearSearchInput(); // Clear the search input field and results
     }
   };
 
@@ -147,9 +149,7 @@ function ProjectFormModal({
           console.log("Project updated:", newProjectData);
         }
         resetForm();
-        if (searchMemberRef.current) {
-          searchMemberRef.current.value = ""; // Clear the search field
-        }
+        clearSearchInput(); // Clear the search field
         setSelectedMembers([]); // Clear the selected members
         setWarningMessage(null); // Clear the warning message
         handleClose();
@@ -164,7 +164,7 @@ function ProjectFormModal({
 
   const handleDialogClose = () => {
     formik.resetForm();
-    searchMemberRef.current!.value = ""; // Clear the search field
+    clearSearchInput(); // Clear the search field
     setSelectedMembers([]);
     setWarningMessage(null);
     handleClose();
