@@ -24,9 +24,9 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import * as Yup from "yup";
 import { Member } from "../../types";
-import axios from "axios";
 import { useAuth } from "../../contexts/AuthContext";
 import MembersAvatarsRow from "../CardComponents/MembersAvatarsRow";
+import { api } from "../../api/api";
 
 type TaskInfoModalProps = {
   isOpen: boolean;
@@ -98,7 +98,7 @@ const TaskInfoModal = ({
       if (task?.assignedMemberIds?.length) {
         setIsLoadingMembers(true);
         try {
-          const response = await axios.get(
+          const response = await api.get(
             `${apiUrl}/user/by/ids/${task.assignedMemberIds.join(",")}`,
             {
               headers: {
@@ -380,6 +380,7 @@ const TaskInfoModal = ({
               }
               selectedMembers={selectedMembers}
               setSelectedMembers={setSelectedMembers}
+              projectId={projectId}
             />
           </Box>
         </DialogContent>

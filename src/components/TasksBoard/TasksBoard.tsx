@@ -209,7 +209,7 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
         isOpen={isTaskInfoModalOpen}
         onClose={handleTaskInfoModalClose}
         mode="add"
-        projectId={projectId}
+        projectId={projectId ?? ""}
       />
     </>
   );

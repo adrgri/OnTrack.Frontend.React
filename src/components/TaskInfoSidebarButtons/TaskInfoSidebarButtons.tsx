@@ -41,6 +41,7 @@ type TaskInfoSidebarButtonsProps = {
   onDueDateChange: (date: dayjs.Dayjs | null) => void;
   selectedMembers: Member[];
   setSelectedMembers: React.Dispatch<React.SetStateAction<Member[]>>;
+  projectId?: string;
 };
 
 const TaskInfoSidebarButtons = ({
@@ -51,6 +52,7 @@ const TaskInfoSidebarButtons = ({
   onDueDateChange,
   selectedMembers,
   setSelectedMembers,
+  projectId,
 }: TaskInfoSidebarButtonsProps) => {
   const resourcesItem = {
     text: "Dodaj zasoby",
@@ -124,6 +126,7 @@ const TaskInfoSidebarButtons = ({
             onMemberSelect={onMemberSelect}
             selectedMembers={selectedMembers}
             setSelectedMembers={setSelectedMembers}
+            projectId={projectId}
           />
         );
       case "startDate":

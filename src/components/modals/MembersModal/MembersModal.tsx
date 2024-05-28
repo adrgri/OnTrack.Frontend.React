@@ -21,6 +21,7 @@ type MembersModalProps = {
   onMemberSelect: (member: Member) => void;
   selectedMembers: Member[];
   setSelectedMembers: React.Dispatch<React.SetStateAction<Member[]>>;
+  projectId?: string;
 };
 
 const MembersModal: React.FC<MembersModalProps> = ({
@@ -30,6 +31,7 @@ const MembersModal: React.FC<MembersModalProps> = ({
   onMemberSelect,
   selectedMembers,
   setSelectedMembers,
+  projectId,
 }) => {
   const {
     searchMemberRef,
@@ -37,7 +39,7 @@ const MembersModal: React.FC<MembersModalProps> = ({
     isLoadingMembers,
     handleSearchChange,
     clearSearchInput,
-  } = useMemberSearch(false, selectedMembers);
+  } = useMemberSearch(false, selectedMembers, true, projectId);
 
   const handleMemberClick = (member: Member) => {
     onMemberSelect(member);
