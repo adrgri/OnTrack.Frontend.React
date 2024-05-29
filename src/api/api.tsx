@@ -6,10 +6,8 @@ const baseApiURL = import.meta.env.VITE_API_URL;
 export const api = axios.create({
   baseURL: baseApiURL,
   headers: {
-    "Access-Control-Allow-Origin": "*",
     "Content-Type": "application/json",
     withCredentials: true,
-    Authorization: `Bearer ${Cookies.get("accessToken")}`,
   },
 });
 
@@ -18,6 +16,7 @@ let refreshSubscribers: ((token: string) => void)[] = [];
 
 const onRefreshed = (token: string) => {
   refreshSubscribers.forEach((callback) => callback(token));
+  refreshSubscribers = [];
 };
 
 const addRefreshSubscriber = (callback: (token: string) => void) => {
@@ -32,9 +31,7 @@ api.interceptors.request.use(
     }
     return config;
   },
-  (error) => {
-    return Promise.reject(error);
-  }
+  (error) => Promise.reject(error)
 );
 
 api.interceptors.response.use(
@@ -45,7 +42,6 @@ api.interceptors.response.use(
 
     if (response && response.status === 401 && !originalRequest._retry) {
       if (isRefreshing) {
-        // If token refresh is in progress, queue the request
         return new Promise((resolve) => {
           addRefreshSubscriber((token) => {
             originalRequest.headers["Authorization"] = `Bearer ${token}`;
@@ -61,31 +57,39 @@ api.interceptors.response.use(
         const storedRefreshToken = Cookies.get("refreshToken");
         if (!storedRefreshToken) {
           console.error("Refresh token not available.");
+          window.location.href = "/login"; // Redirect to login
           return Promise.reject(error);
         }
 
-        const response = await axios.post(`${baseApiURL}/identity/refresh`, {
-          refreshToken: storedRefreshToken,
-        });
+        console.log("Sending refresh token request...");
+        const response = await axios.post(
+          `${baseApiURL}/identity/refresh`,
+          { refreshToken: storedRefreshToken },
+          { withCredentials: true }
+        );
 
         const { accessToken, refreshToken: newRefreshToken } = response.data;
 
+        // Store the new tokens
         Cookies.set("accessToken", accessToken);
         Cookies.set("refreshToken", newRefreshToken);
 
-        api.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+        // Update the headers for the original request
         originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
 
+        // Notify all subscribers about the new token
         isRefreshing = false;
         onRefreshed(accessToken);
-        refreshSubscribers = [];
 
+        // Retry the original request with the new token
         return api(originalRequest);
       } catch (refreshError) {
         console.error("Unable to refresh token:", refreshError);
         isRefreshing = false;
         refreshSubscribers = [];
-        window.location.href = "/login";
+        Cookies.remove("accessToken");
+        Cookies.remove("refreshToken");
+        window.location.href = "/login"; // Redirect to login
         return Promise.reject(refreshError);
       }
     }
@@ -93,3 +97,5 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+export default api;
