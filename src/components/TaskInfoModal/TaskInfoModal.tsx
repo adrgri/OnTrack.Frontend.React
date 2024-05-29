@@ -95,7 +95,7 @@ const TaskInfoModal = ({
 
   useEffect(() => {
     const fetchMembers = async () => {
-      if (task?.assignedMemberIds?.length) {
+      if (mode === "edit" && task?.assignedMemberIds?.length) {
         setIsLoadingMembers(true);
         try {
           const response = await api.get(
@@ -113,13 +113,15 @@ const TaskInfoModal = ({
         } finally {
           setIsLoadingMembers(false);
         }
+      } else if (mode === "add") {
+        setSelectedMembers([]);
       }
     };
 
     if (isOpen) {
       fetchMembers();
     }
-  }, [isOpen, task, token]);
+  }, [isOpen, task, token, mode]);
 
   const handleMemberSelect = (selectedMember: Member) => {
     const isAlreadySelected = selectedMembers.some(
