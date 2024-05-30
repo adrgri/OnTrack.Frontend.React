@@ -5,7 +5,9 @@ export type FormValues = {
   firstName: string | undefined;
   lastName: string | undefined;
   email: string | undefined;
-  password: string | undefined;
+  oldPassword: string | undefined;
+  newPassword: string | undefined;
+  repeatPassword: string | undefined;
 };
 
 export const baseValidationSchema: ObjectSchema<FormValues> = yup
@@ -14,5 +16,9 @@ export const baseValidationSchema: ObjectSchema<FormValues> = yup
     firstName: yup.string().min(2, "Za krótkie imię"),
     lastName: yup.string().min(2, "Za krótkie nazwisko"),
     email: yup.string().email("Nieprawidłowy adres email"),
-    password: yup.string().min(8, "Min 8 znaków"),
+    oldPassword: yup.string().min(8, "Min 8 znaków"),
+    newPassword: yup.string().min(8, "Min 8 znaków"),
+    repeatPassword: yup
+      .string()
+      .oneOf([yup.ref("newPassword")], "Hasła nie pasują"),
   });

@@ -1,29 +1,15 @@
-import { TextField, Button, Typography, Grid } from "@mui/material";
+import { TextField, Button, Typography, Grid, Box } from "@mui/material";
 import StyledForm from "../../styledComponents/StyledForm";
 import { useFormik } from "formik";
 import { ObjectSchema } from "yup";
 import StyledLink from "../../styledComponents/StyledLink";
 import UserProfile from "../UserProfile/UserProfile";
 import { UserProfileProps } from "../../types";
-import { FormValues } from "../schemas/baseValidationSchema";
+import { FormValues } from "../schemas/baseValidationSchema"; // Ensure this path is correct
 
 type SettingsFormProps = {
-  initialValues: {
-    firstName: string;
-    lastName: string;
-    email: string;
-    oldPassword: string;
-    newPassword: string;
-    repeatPassword: string;
-  };
-  onSubmit: (
-    firstName: string,
-    lastName: string,
-    email: string,
-    oldPassword: string,
-    newPassword: string,
-    repeatPassword: string
-  ) => void;
+  initialValues: FormValues;
+  onSubmit: (values: FormValues) => void;
   formTitle: string;
   submitButtonText: string;
   userProfile?: UserProfileProps;
@@ -32,6 +18,7 @@ type SettingsFormProps = {
   bottomLinkHref?: string;
   validationSchema: ObjectSchema<FormValues>;
   passwordFieldProps?: Partial<React.ComponentProps<typeof TextField>>;
+  apiError?: string | null;
 };
 
 const SettingsForm = ({
@@ -45,18 +32,12 @@ const SettingsForm = ({
   bottomLinkHref = "/",
   validationSchema,
   passwordFieldProps,
+  apiError,
 }: SettingsFormProps) => {
   const formik = useFormik({
     initialValues: initialValues,
     onSubmit: (values) => {
-      onSubmit(
-        values.firstName,
-        values.lastName,
-        values.email,
-        values.oldPassword,
-        values.newPassword,
-        values.repeatPassword
-      );
+      onSubmit(values);
     },
     validationSchema: validationSchema,
   });
@@ -71,6 +52,11 @@ const SettingsForm = ({
           <UserProfile name={userProfile.name} avatar={userProfile.avatar} />
         )}
       </Grid>
+      {apiError && (
+        <Box sx={{ mt: 2, mb: 2 }}>
+          <Typography color="error">{apiError}</Typography>
+        </Box>
+      )}
       <TextField
         id="firstName"
         name="firstName"
@@ -78,7 +64,7 @@ const SettingsForm = ({
         type="text"
         autoComplete="on"
         variant="standard"
-        value={formik.values.firstName}
+        value={formik.values.firstName || ""}
         onChange={formik.handleChange}
         error={formik.touched.firstName && Boolean(formik.errors.firstName)}
         helperText={formik.touched.firstName && formik.errors.firstName}
@@ -91,7 +77,7 @@ const SettingsForm = ({
         type="text"
         autoComplete="on"
         variant="standard"
-        value={formik.values.lastName}
+        value={formik.values.lastName || ""}
         onChange={formik.handleChange}
         error={formik.touched.lastName && Boolean(formik.errors.lastName)}
         helperText={formik.touched.lastName && formik.errors.lastName}
@@ -104,12 +90,11 @@ const SettingsForm = ({
         type="email"
         autoComplete="on"
         variant="standard"
-        value={formik.values.email}
+        value={formik.values.email || ""}
         onChange={formik.handleChange}
         error={formik.touched.email && Boolean(formik.errors.email)}
         helperText={formik.touched.email && formik.errors.email}
         fullWidth
-        disabled
       />
       <TextField
         id="oldPassword"
@@ -118,7 +103,7 @@ const SettingsForm = ({
         type="password"
         autoComplete="old-password"
         variant="standard"
-        value={formik.values.oldPassword}
+        value={formik.values.oldPassword || ""}
         onChange={formik.handleChange}
         error={formik.touched.oldPassword && Boolean(formik.errors.oldPassword)}
         helperText={formik.touched.oldPassword && formik.errors.oldPassword}
@@ -132,7 +117,7 @@ const SettingsForm = ({
         type="password"
         autoComplete="new-password"
         variant="standard"
-        value={formik.values.newPassword}
+        value={formik.values.newPassword || ""}
         onChange={formik.handleChange}
         error={formik.touched.newPassword && Boolean(formik.errors.newPassword)}
         helperText={formik.touched.newPassword && formik.errors.newPassword}
@@ -146,7 +131,7 @@ const SettingsForm = ({
         type="password"
         autoComplete="repeat-password"
         variant="standard"
-        value={formik.values.repeatPassword}
+        value={formik.values.repeatPassword || ""}
         onChange={formik.handleChange}
         error={
           formik.touched.repeatPassword && Boolean(formik.errors.repeatPassword)
