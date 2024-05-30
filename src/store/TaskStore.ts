@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import axios from "axios";
-import { Task } from "../types";
+import { Project, Task } from "../types";
 import { api } from "../api/api";
 
 interface TaskState {
@@ -8,7 +8,7 @@ interface TaskState {
   loading: boolean;
   error: string | null;
   fetchTasks: () => Promise<void>;
-  fetchUserTasks: () => Promise<void>;
+  fetchUserTasks: (projectId?: string) => Promise<void>;
   addTask: (newTaskData: Task) => Promise<void>;
   updateTask: (taskId: string, updates: Partial<Task>) => Promise<void>;
   deleteTask: (taskId: string) => Promise<void>;
@@ -39,30 +39,39 @@ export const useTaskStore = create<TaskState>((set, get) => ({
     }
   },
 
-  fetchUserTasks: async () => {
+  fetchUserTasks: async (projectId) => {
     set({ loading: true, error: null });
     try {
       const userResponse = await api.get(`${apiUrl}/user/me`);
       const userTaskIds = userResponse.data.taskIds;
-      console.log("User Task IDs:", userTaskIds);
 
-      if (userTaskIds && userTaskIds.length > 0) {
-        const taskResponse = await axios.get(`${apiUrl}/task`);
-        const allTasks = taskResponse.data;
-        const userTasks = allTasks.filter((task: Task) =>
-          userTaskIds.includes(task.id)
+      let tasks = [];
+      if (projectId) {
+        const projectResponse = await api.get(`${apiUrl}/project/${projectId}`);
+        const taskIds = projectResponse.data.map(
+          (project: Project) => project.taskIds
         );
-        set({ tasks: userTasks, loading: false });
-        console.log("User tasks fetched successfully:", userTasks);
+
+        if (taskIds.length > 0) {
+          const taskResponse = await api.get(`${apiUrl}/task/${taskIds}`);
+          tasks = taskResponse.data;
+        }
       } else {
-        set({ tasks: [], loading: false });
-        console.log("No tasks found for user.");
+        if (userTaskIds.length > 0) {
+          const taskResponse = await api.get(`${apiUrl}/task`);
+          tasks = taskResponse.data.filter((task: Task) =>
+            userTaskIds.includes(task.id)
+          );
+        }
       }
+
+      set({ tasks, loading: false });
+      console.log("Tasks fetched successfully");
     } catch (error) {
-      console.error("Failed to fetch user tasks:", error);
+      console.error("Failed to fetch tasks:", error);
       set({
         loading: false,
-        error: "Failed to fetch user tasks. Please try again later.",
+        error: "Nie udało się wyświetlić zadań. Spróbuj ponownie później",
       });
     }
   },

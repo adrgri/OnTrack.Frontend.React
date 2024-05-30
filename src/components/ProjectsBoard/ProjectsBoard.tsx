@@ -18,20 +18,15 @@ export default function ProjectsBoard() {
 
   const { projects, fetchUserProjects, loading, error } = useProjectStore();
 
-  console.log("User projects:", projects);
+  // console.log("User projects:", projects);
   useEffect(() => {
     fetchUserProjects();
   }, [fetchUserProjects]);
 
-  // console.log("All projects:", projects);
-  // useEffect(() => {
-  //   fetchProjects();
-  // }, [fetchProjects]);
-
   const handleEditAll = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
     setIsEditClicked((prevIsEditClicked) => !prevIsEditClicked);
-    console.log("Edit action triggered");
+    // console.log("Edit action triggered");
   };
 
   function handleAddProjectFormModalClose() {

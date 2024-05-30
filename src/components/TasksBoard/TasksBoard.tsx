@@ -32,19 +32,19 @@ const projectValidationSchema = Yup.object({
 const TasksBoard = ({ projectId }: { projectId?: string }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-  const { tasks, fetchTasks, updateTask, loading, error } = useTaskStore();
+  const { tasks, fetchUserTasks, updateTask, loading, error } = useTaskStore();
   const { statuses, fetchStatuses } = useStatusStore();
   const { projects, fetchProjects, updateProject } = useProjectStore();
   const [isTaskInfoModalOpen, setIsTaskInfoModalOpen] = useState(false);
   const [isEditClicked, setIsEditClicked] = useState(false);
 
   useEffect(() => {
-    fetchTasks();
+    fetchUserTasks(projectId);
     fetchStatuses();
     if (projectId) {
       fetchProjects();
     }
-  }, [fetchTasks, fetchStatuses, fetchProjects, projectId]);
+  }, [fetchUserTasks, fetchStatuses, fetchProjects, projectId]);
 
   const filteredTasksByProject = projectId
     ? tasks.filter((task) => task.projectId === projectId)
