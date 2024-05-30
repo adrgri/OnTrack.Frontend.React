@@ -162,19 +162,22 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
         </ActionButtons>
       </Grid>
 
-      {loading ? (
-        <Loading />
-      ) : error ? (
+      {loading && <Loading />}
+
+      {error && (
         <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
           <Typography color="error">{error}</Typography>
         </Box>
-      ) : filteredTasksByProject.length === 0 ? (
-        projectId ? (
-          <NoContent type="task" />
-        ) : (
-          <NoContent type="task" navigateTo="/projects" />
-        )
-      ) : (
+      )}
+
+      {!loading && !error && filteredTasksByProject.length === 0 && (
+        <NoContent
+          type="task"
+          navigateTo={projectId ? undefined : "/projects"}
+        />
+      )}
+
+      {!loading && !error && filteredTasksByProject.length > 0 && (
         <DragDropContext onDragEnd={handleOnDragEnd}>
           <Grid
             container

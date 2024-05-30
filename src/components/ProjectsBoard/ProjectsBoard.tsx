@@ -18,7 +18,6 @@ export default function ProjectsBoard() {
 
   const { projects, fetchUserProjects, loading, error } = useProjectStore();
 
-  // console.log("User projects:", projects);
   useEffect(() => {
     fetchUserProjects();
   }, [fetchUserProjects]);
@@ -26,7 +25,6 @@ export default function ProjectsBoard() {
   const handleEditAll = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
     setIsEditClicked((prevIsEditClicked) => !prevIsEditClicked);
-    // console.log("Edit action triggered");
   };
 
   function handleAddProjectFormModalClose() {
@@ -65,15 +63,19 @@ export default function ProjectsBoard() {
         </ActionButtons>
       </Grid>
 
-      {loading ? (
-        <Loading />
-      ) : error ? (
+      {loading && <Loading />}
+
+      {error && (
         <Box sx={{ display: "flex", justifyContent: "center", mt: 4 }}>
           <Typography color="error">{error}</Typography>
         </Box>
-      ) : projects.length === 0 ? (
+      )}
+
+      {!loading && !error && projects.length === 0 && (
         <NoContent type="project" />
-      ) : (
+      )}
+
+      {!loading && !error && projects.length > 0 && (
         <Grid
           container
           justifyContent="space-between"
