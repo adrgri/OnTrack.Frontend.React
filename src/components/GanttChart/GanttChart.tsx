@@ -7,12 +7,12 @@ import Gantt, {
   Column,
   Editing,
   Validation,
-  GanttTaskDblClickEvent, // Import the type for the double-click event
 } from "devextreme-react/gantt";
 import BoardNavigation from "../BoardNavigation/BoardNavigation.tsx";
 import { useTaskStore } from "../../store/TaskStore.ts";
 import { useProjectStore } from "../../store/ProjectStore.ts";
 import Loading from "../Loading/Loading.tsx";
+import { TaskDblClickEvent } from "devextreme/ui/gantt"; // Import the type for the double-click event
 
 const GanttChart = () => {
   const { tasks, fetchTasks } = useTaskStore();
@@ -107,7 +107,7 @@ const GanttChart = () => {
       .padStart(2, "0")}.${d.getFullYear()}`;
   };
 
-  const handleTaskDblClick = (e: GanttTaskDblClickEvent) => {
+  const handleTaskDblClick = (e: TaskDblClickEvent) => {
     e.cancel = true;
   };
 
