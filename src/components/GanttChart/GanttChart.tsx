@@ -7,6 +7,7 @@ import Gantt, {
   Column,
   Editing,
   Validation,
+  GanttTaskDblClickEvent, // Import the type for the double-click event
 } from "devextreme-react/gantt";
 import BoardNavigation from "../BoardNavigation/BoardNavigation.tsx";
 import { useTaskStore } from "../../store/TaskStore.ts";
@@ -106,6 +107,10 @@ const GanttChart = () => {
       .padStart(2, "0")}.${d.getFullYear()}`;
   };
 
+  const handleTaskDblClick = (e: GanttTaskDblClickEvent) => {
+    e.cancel = true;
+  };
+
   return (
     <>
       <BoardNavigation
@@ -118,7 +123,13 @@ const GanttChart = () => {
       {loadingTasks || loadingProjects ? (
         <Loading />
       ) : (
-        <Gantt taskListWidth={500} scaleType="weeks" height={600} rootValue={0}>
+        <Gantt
+          taskListWidth={500}
+          scaleType="weeks"
+          height={600}
+          rootValue={0}
+          onTaskDblClick={handleTaskDblClick} // Handle double-click event to prevent editing window
+        >
           <Tasks dataSource={[...projectsWithDates, ...transformedTasks]} />
           {/* <Dependencies dataSource={dependencies} />
         <Resources dataSource={resources} />
