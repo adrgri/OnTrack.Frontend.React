@@ -202,6 +202,7 @@ function ProjectFormModal({
           >
             Nazwa projektu
           </Typography>
+
           <StyledSidebarModalInput
             fullWidth
             variant="filled"
@@ -209,7 +210,7 @@ function ProjectFormModal({
             value={formik.values.title}
             onChange={formik.handleChange}
             placeholder="Wpisz nazwę projektu"
-            sx={{ width: 300 }}
+            sx={{ width: { xs: "100%", sm: 300 } }}
           />
           {formik.touched.title && formik.errors.title ? (
             <Typography color="error" variant="caption">
@@ -227,7 +228,7 @@ function ProjectFormModal({
             fullWidth
             variant="filled"
             placeholder="Wyszukaj członków"
-            sx={{ width: 300 }}
+            sx={{ width: { xs: "100%", sm: 300 } }}
             inputRef={searchMemberRef}
             onChange={handleSearchChange}
             endAdornment={
