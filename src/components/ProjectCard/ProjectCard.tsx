@@ -116,7 +116,14 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
     <>
       <GenericCard
         onClick={handleProjectCardClick}
-        sx={{ width: "400px", position: "relative" }}
+        sx={{
+          width: {
+            xs: "100%",
+            sm: "90%",
+            md: "400px",
+          },
+          position: "relative",
+        }}
       >
         <IconButton
           aria-label="more options"
