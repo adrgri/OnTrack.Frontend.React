@@ -92,6 +92,7 @@ const TaskInfoModal = ({
   const { token } = useAuth();
   const [selectedMembers, setSelectedMembers] = useState<Member[]>([]);
   const [isLoadingMembers, setIsLoadingMembers] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     const fetchMembers = async () => {
@@ -151,6 +152,7 @@ const TaskInfoModal = ({
 
     validationSchema: taskValidationSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
+      setLoading(true);
       const formattedStartDate = formatDate(values.startDate);
       const formattedDueDate = formatDate(values.dueDate);
 
@@ -178,6 +180,7 @@ const TaskInfoModal = ({
 
       resetForm();
       setSubmitting(false);
+      setLoading(false);
       onClose();
     },
     enableReinitialize: true,
@@ -402,8 +405,9 @@ const TaskInfoModal = ({
             type="submit"
             variant="contained"
             sx={{ marginRight: 2 }}
+            disabled={loading}
           >
-            Zapisz
+            {loading ? "Zapisywanie..." : "Zapisz"}
           </SmallButton>
           <SmallButton
             variant="contained"
