@@ -22,13 +22,12 @@ const ResourcesModal: React.FC<ResourcesModalProps> = ({
 }) => {
   const formik = useFormik({
     initialValues: {
-      id: Date.now(),
-      resourceName: "",
+      name: "",
       quantity: "",
       unit: "",
     },
     onSubmit: (values) => {
-      handleAddResource({ ...values, id: Date.now().toString() });
+      handleAddResource({ ...values });
 
       onClose();
     },
@@ -50,7 +49,7 @@ const ResourcesModal: React.FC<ResourcesModalProps> = ({
           id="resourceName"
           name="resourceName"
           placeholder="Wpisz nazwe zasobu"
-          value={formik.values.resourceName}
+          value={formik.values.name}
           onChange={formik.handleChange}
           autoComplete="off"
         />
