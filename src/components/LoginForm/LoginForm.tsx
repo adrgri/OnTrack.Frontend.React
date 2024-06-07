@@ -54,7 +54,7 @@ const LoginForm = ({ onForgotPasswordClick }: LoginFormProps) => {
     if (isLoggedIn) {
       navigate("/");
     }
-  });
+  }, [isLoggedIn, navigate]);
 
   return (
     <StyledForm onSubmit={formik.handleSubmit}>
@@ -91,7 +91,17 @@ const LoginForm = ({ onForgotPasswordClick }: LoginFormProps) => {
       />
       {onForgotPasswordClick && (
         <Typography alignSelf={"flex-end"}>
-          <Link href="#" onClick={onForgotPasswordClick}>
+          {/* <Link href="#" onClick={onForgotPasswordClick}></Link> */}
+          <Link
+            href="#"
+            onClick={(event) => event.preventDefault()}
+            sx={{
+              pointerEvents: "none",
+              color: "grey",
+              textDecoration: "none",
+              cursor: "default",
+            }}
+          >
             Nie pamiętam hasła
           </Link>
         </Typography>
