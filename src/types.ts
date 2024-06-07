@@ -1,5 +1,3 @@
-// import dayjs from "dayjs";
-
 export type UserProfileProps = {
   name?: string;
   avatar: string;
@@ -21,17 +19,6 @@ export type User = {
   projectIds?: string[];
 };
 
-// Picking specific properties from User and making them optional
-// export type Member = Omit<User, "password">;
-
-// export type Member = {
-//   id: string;
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-//   avatar: string;
-// };
-
 export interface Attachment extends File {
   id?: string;
   url: string;
@@ -45,10 +32,11 @@ export type TaskListItem = {
 };
 
 export type Resource = {
-  id: string;
-  resourceName: string;
+  id?: string;
+  name: string;
   quantity: string;
   unit: string;
+  taskId?: string;
 };
 
 export type ListItemType = {
@@ -66,24 +54,9 @@ export type Status = {
   order?: number;
 };
 
-// export type Task = {
-//   id: string;
-//   name: string;
-//   description?: string;
-//   members?: User[];
-//   startDate?: dayjs.Dayjs | null | undefined | string;
-//   dueDate?: dayjs.Dayjs | null | undefined | string;
-//   icon?: Icon | null;
-//   attachments?: Attachment[];
-//   taskList?: TaskListItem[];
-//   resources?: Resource[];
-//   status: Status;
-//   projectId?: string | undefined;
-// };
-
 export type Task = {
   id?: string;
-  projectId?: string | null | undefined;
+  projectId: string | null | undefined;
   title: string;
   description?: string;
   startDate?: string | null;
@@ -114,17 +87,6 @@ export type RegistrationResult = {
   message?: string;
 };
 
-// export type Project = {
-//   id?: string | undefined;
-//   title: string;
-//   description?: string;
-//   members?: string[];
-//   dueDate?: dayjs.Dayjs | null | undefined | string;
-//   tasksAmount?: number | undefined;
-//   progress?: number | undefined;
-//   membersIds?: string[] | undefined;
-// };
-
 export type Project = {
   id?: string;
   title: string;
@@ -133,14 +95,6 @@ export type Project = {
   taskIds?: string[] | undefined;
   dueDate?: Date;
 };
-
-// export type Member = {
-//   id?: string;
-//   firstName?: string;
-//   lastName?: string;
-//   bio?: string;
-//   avatar?: string;
-// };
 
 export type Member = {
   id?: string;

@@ -32,8 +32,8 @@ const LoginForm = ({ onForgotPasswordClick }: LoginFormProps) => {
 
   const formik = useFormik({
     initialValues: {
-      email: "coolcoder2000@gmail.com",
-      password: "Otheridk1.",
+      email: "",
+      password: "",
     },
     onSubmit: async (values) => {
       setLoading(true);

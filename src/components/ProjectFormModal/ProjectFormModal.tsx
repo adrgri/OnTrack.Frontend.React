@@ -91,7 +91,6 @@ function ProjectFormModal({
     if (!selectedMembers.find((m) => m.id === member.id)) {
       const updatedMembers = [...selectedMembers, member];
       setSelectedMembers(updatedMembers);
-      console.log("Selected members:", updatedMembers);
       formik.setFieldValue(
         "memberIds",
         updatedMembers.map((m) => m.id)
@@ -128,8 +127,6 @@ function ProjectFormModal({
         memberIds: values.memberIds,
       };
 
-      console.log("Submitting data:", newProjectData);
-
       try {
         if (mode === "add") {
           await addProject({
@@ -138,7 +135,6 @@ function ProjectFormModal({
               .filter((m) => m.id !== undefined)
               .map((m) => m.id!),
           });
-          console.log("Adding project:", newProjectData);
         } else if (mode === "edit" && project?.id) {
           await updateProject(project.id, {
             ...newProjectData,
@@ -146,12 +142,11 @@ function ProjectFormModal({
               .filter((m) => m.id !== undefined)
               .map((m) => m.id!),
           });
-          console.log("Project updated:", newProjectData);
         }
         resetForm();
-        clearSearchInput(); // Clear the search field
-        setSelectedMembers([]); // Clear the selected members
-        setWarningMessage(null); // Clear the warning message
+        clearSearchInput();
+        setSelectedMembers([]);
+        setWarningMessage(null);
         handleClose();
       } catch (error) {
         console.error("Error submitting the project:", error);
@@ -164,7 +159,7 @@ function ProjectFormModal({
 
   const handleDialogClose = () => {
     formik.resetForm();
-    clearSearchInput(); // Clear the search field
+    clearSearchInput();
     setSelectedMembers([]);
     setWarningMessage(null);
     handleClose();

@@ -76,7 +76,6 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
         };
 
         await updateTask(task.id, updatedTask);
-        console.log("Task status updated:", updatedTask);
       }
     }
   };
@@ -92,7 +91,6 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
           ...selectedProject,
           title: values.title,
         });
-        console.log("Project title updated:", values.title);
       }
     },
     enableReinitialize: true,
@@ -101,7 +99,6 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
   const handleEditAll = (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
     event.stopPropagation();
     setIsEditClicked((prevIsEditClicked) => !prevIsEditClicked);
-    console.log("Edit action triggered");
   };
 
   const handleAddTask = () => {

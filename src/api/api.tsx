@@ -61,7 +61,6 @@ api.interceptors.response.use(
           return Promise.reject(error);
         }
 
-        console.log("Sending refresh token request...");
         const response = await axios.post(
           `${baseApiURL}/identity/refresh`,
           { refreshToken: storedRefreshToken },

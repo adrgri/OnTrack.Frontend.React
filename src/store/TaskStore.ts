@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import axios from "axios";
 import { Project, Task } from "../types";
 import { api } from "../api/api";
 
@@ -27,9 +26,8 @@ export const useTaskStore = create<TaskState>((set, get) => ({
   fetchTasks: async () => {
     set({ loading: true, error: null });
     try {
-      const response = await axios.get(`${apiUrl}/task`);
+      const response = await api.get(`${apiUrl}/task`);
       set({ tasks: response.data, loading: false });
-      console.log("Tasks fetched successfully");
     } catch (error) {
       console.error("Failed to fetch tasks:", error);
       set({
@@ -62,11 +60,12 @@ export const useTaskStore = create<TaskState>((set, get) => ({
           tasks = taskResponse.data.filter((task: Task) =>
             userTaskIds.includes(task.id)
           );
+        } else {
+          console.log("No user task IDs found.");
         }
       }
 
       set({ tasks, loading: false });
-      console.log("Tasks fetched successfully");
     } catch (error) {
       console.error("Failed to fetch tasks:", error);
       set({
@@ -78,7 +77,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
   addTask: async (newTaskData) => {
     try {
-      const response = await axios.post(`${apiUrl}/task`, newTaskData);
+      const response = await api.post(`${apiUrl}/task`, newTaskData);
       const newTask = response.data;
       set((state) => ({ tasks: [...state.tasks, newTask] }));
     } catch (error) {
@@ -88,7 +87,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
   updateTask: async (taskId, updates) => {
     try {
-      await axios.put(`${apiUrl}/task`, updates);
+      await api.put(`${apiUrl}/task`, updates);
       set((state) => ({
         tasks: state.tasks.map((task) =>
           task.id === taskId ? { ...task, ...updates } : task
@@ -101,7 +100,7 @@ export const useTaskStore = create<TaskState>((set, get) => ({
 
   deleteTask: async (taskId) => {
     try {
-      await axios.delete(`${apiUrl}/task/${taskId}`);
+      await api.delete(`${apiUrl}/task/${taskId}`);
       set((state) => ({
         tasks: state.tasks.filter((task) => task.id !== taskId),
       }));

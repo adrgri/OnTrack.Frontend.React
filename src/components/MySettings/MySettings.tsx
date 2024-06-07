@@ -19,13 +19,10 @@ const MySettings = () => {
   const { user, isLoggedIn, token } = useAuth();
   const [apiError, setApiError] = useState<string | null>(null);
 
-  console.log("user in MySettings", user);
-
   if (!isLoggedIn) {
     return <div>Please log in to edit your settings.</div>;
   }
 
-  // Handling update settings for name
   const handleUpdateName = async (firstName?: string, lastName?: string) => {
     try {
       const response = await api.put(
@@ -38,7 +35,6 @@ const MySettings = () => {
         }
       );
       console.log("User name updated:", response.data);
-      // Optionally, update user in context if needed
     } catch (error) {
       let errorMessage = "Failed to update user name: ";
       if (error instanceof Error) {
@@ -48,10 +44,9 @@ const MySettings = () => {
     }
   };
 
-  // Handling update settings for email and password
   const handleUpdateEmailAndPassword = async (values: FormValues) => {
     try {
-      setApiError(null); // Reset API error state before making the request
+      setApiError(null);
       const payload: {
         newEmail?: string;
         newPassword?: string;
@@ -67,7 +62,7 @@ const MySettings = () => {
       }
 
       if (Object.keys(payload).length === 0) {
-        return; // No changes to be made
+        return;
       }
 
       const response = await api.post(
@@ -80,7 +75,6 @@ const MySettings = () => {
         }
       );
       console.log("User email and/or password updated:", response.data);
-      // Optionally, update user in context if needed
     } catch (error) {
       let errorMessage = "Nie udało się zaktualizować hasła: ";
 
@@ -100,7 +94,6 @@ const MySettings = () => {
   };
 
   const handleUpdateSettings = (values: FormValues) => {
-    // Check if the name has changed
     if (
       values.firstName !== user?.firstName ||
       values.lastName !== user?.lastName
@@ -108,7 +101,6 @@ const MySettings = () => {
       handleUpdateName(values.firstName, values.lastName);
     }
 
-    // Check if the email or password fields have been filled out
     if (
       values.email !== user?.email ||
       (values.oldPassword && values.newPassword)

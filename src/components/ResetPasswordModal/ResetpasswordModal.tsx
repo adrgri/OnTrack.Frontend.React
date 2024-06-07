@@ -64,15 +64,12 @@ const ResetPasswordModal: FC<ResetPasswordModalProps> = ({
     },
   });
 
-  // Effect to auto-fill reset code from clipboard when modal opens
   useEffect(() => {
     if (isOpen) {
       navigator.clipboard
         .readText()
         .then((text) => {
-          // Only update if the clipboard text could be a reset code
           if (text && text.length === 6) {
-            // Assuming reset codes are 6 characters long
             formik.setFieldValue("resetCode", text);
           }
         })

@@ -107,7 +107,6 @@ const TaskInfoModal = ({
             }
           );
           setSelectedMembers(response.data);
-          console.log("Members fetched successfully:", response.data);
         } catch (error) {
           console.error("Error fetching members:", error);
         } finally {
@@ -173,10 +172,8 @@ const TaskInfoModal = ({
 
       if (mode === "edit" && task?.id) {
         await updateTask(task.id, taskData);
-        console.log("Task updated successfully:", taskData);
       } else {
         await addTask(taskData);
-        console.log("Task added successfully:", taskData);
       }
 
       resetForm();

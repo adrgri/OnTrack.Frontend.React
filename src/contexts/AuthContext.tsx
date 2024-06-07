@@ -99,7 +99,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const userResponse = await api.get(`${VITE_API_URL}/user/me`, {
         headers: { Authorization: `Bearer ${accessToken}` },
       });
-      console.log("User logged in:", userResponse.data);
 
       setUser(userResponse.data);
       saveUserData(userResponse.data);
@@ -202,8 +201,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     try {
       setLoading(true);
       await api.post(`${VITE_API_URL}/identity/forgotPassword`, { email });
-
-      console.log("Password reset email sent to", email);
     } catch (error) {
       console.error("Failed to send password reset email", error);
     } finally {

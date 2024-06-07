@@ -35,7 +35,6 @@ const RegisterForm = () => {
     validationSchema: validationSchema,
     onSubmit: async (values) => {
       setLoading(true);
-      console.log("Submitting values:", values); // Debugging line
 
       try {
         const result = await register(values);

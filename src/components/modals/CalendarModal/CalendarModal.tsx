@@ -36,30 +36,25 @@ const CalendarModal: React.FC<CalendarModalProps> = ({
       return;
     }
 
-    // Preserve existing time
     const combinedDateTime = selectedDate
       ? newDate.hour(selectedDate.hour()).minute(selectedDate.minute())
       : newDate;
-    console.log("Combined date:", combinedDateTime);
 
     setSelectedDate(combinedDateTime);
-    onChange(combinedDateTime); // Update parent component
+    onChange(combinedDateTime);
   };
 
   const handleTimeChange = (newTime: dayjs.Dayjs | null) => {
     if (!newTime) {
-      // If clearing the time, you might want to handle differently
       return;
     }
 
-    // Update only the time of the selectedDate
     const combinedDateTime = selectedDate
       ? selectedDate.hour(newTime.hour()).minute(newTime.minute())
-      : dayjs().hour(newTime.hour()).minute(newTime.minute()); // Assume today if no date is set
-    console.log("Combined date and time:", combinedDateTime);
+      : dayjs().hour(newTime.hour()).minute(newTime.minute());
 
     setSelectedDate(combinedDateTime);
-    onChange(combinedDateTime); // Update parent component
+    onChange(combinedDateTime);
   };
 
   return (

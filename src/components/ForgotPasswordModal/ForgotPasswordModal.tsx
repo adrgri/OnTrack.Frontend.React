@@ -41,18 +41,13 @@ const ForgotPasswordModal: FC<ForgotPasswordModalProps> = ({
       setSubmitting(true); // Set the submitting state to true
 
       try {
-        // Call the forgotPassword function with the email value
         await resetPassword(values.forgotPasswordEmail);
-        console.log(values.forgotPasswordEmail);
-        // Handle success, such as showing a success message or closing the modal
-        console.log("Password reset email sent to", values.forgotPasswordEmail);
         handleClose();
         onResetSuccess(values.forgotPasswordEmail);
       } catch (error) {
         console.error("Failed to send password reset email", error);
-        // Here you can handle errors, such as displaying an error message to the user
       } finally {
-        setSubmitting(false); // Reset the submitting state
+        setSubmitting(false);
       }
     },
   });

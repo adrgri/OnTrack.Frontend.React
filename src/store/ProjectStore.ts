@@ -1,4 +1,3 @@
-// TaskStore.js
 import { create } from "zustand";
 import { Project, Task } from "../types";
 import { api } from "../api/api";
@@ -57,8 +56,6 @@ export const useProjectStore = create<ProjectState>((set, get) => ({
           userProjectIds.includes(project.id)
         );
         set({ projects: userProjects, loading: false });
-        console.log("User projects fetched successfully");
-        // Fetch project progress for the user's projects
         get().fetchProjectProgress(userProjectIds);
       } else {
         set({ projects: [], loading: false });

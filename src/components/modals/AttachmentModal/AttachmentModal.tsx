@@ -42,7 +42,6 @@ const AttachmentModal: React.FC<AttachmentModalProps> = ({
     if (files.length > 0) {
       onAttachmentSelect(files);
       onClose();
-      console.log("Selected files:", files);
     }
   };
 
