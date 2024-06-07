@@ -51,6 +51,7 @@ function ProjectFormModal({
   const [warningMessage, setWarningMessage] = useState<string | null>(null);
   const [isLoadingSelectedMembers, setIsLoadingSelectedMembers] =
     useState(false);
+  const [loading, setLoading] = useState(false);
   const {
     searchMemberRef,
     members,
@@ -95,7 +96,7 @@ function ProjectFormModal({
         "memberIds",
         updatedMembers.map((m) => m.id)
       );
-      clearSearchInput(); // Clear the search input field and results
+      clearSearchInput();
     }
   };
 
@@ -120,6 +121,7 @@ function ProjectFormModal({
     },
     validationSchema: projectValidationSchema,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
+      setLoading(true);
       const newProjectData = {
         ...project,
         title: values.title,
@@ -152,6 +154,7 @@ function ProjectFormModal({
         console.error("Error submitting the project:", error);
       } finally {
         setSubmitting(false);
+        setLoading(false);
       }
     },
     enableReinitialize: true,
@@ -342,8 +345,9 @@ function ProjectFormModal({
             type="submit"
             variant="contained"
             sx={{ marginRight: 2 }}
+            disabled={loading}
           >
-            Zapisz
+            {loading ? "Zapisywanie..." : "Zapisz"}
           </SmallButton>
           <SmallButton
             type="button"
