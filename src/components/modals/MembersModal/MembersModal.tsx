@@ -8,6 +8,7 @@ import {
   IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
 import PopupLayout from "../../layout/PopupLayout";
 import StyledSidebarModalInput from "../../../styledComponents/StyledSidebarModalInput";
 import { Member } from "../../../types";
@@ -64,15 +65,11 @@ const MembersModal: React.FC<MembersModalProps> = ({
         placeholder="Wyszukaj członków"
         inputRef={searchMemberRef}
         onChange={handleSearchChange}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={() => clearSearchInput()}>
-                <CloseIcon />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
+        endAdornment={
+          <InputAdornment position="end">
+            <SearchIcon />
+          </InputAdornment>
+        }
       />
 
       {searchMemberRef.current?.value && isLoadingMembers && (
