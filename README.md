@@ -1,11 +1,11 @@
-# OnTrack - Investment Management Web Application
+# OnTrack - project Management Web Application
 
-OnTrack is a web application designed to streamline enterprise project management across various industries. This application addresses the need for reliable digital tools to replace traditional paper-based or verbal project planning methods, which often lead to conflicts and miscommunications. OnTrack aims to provide tools that facilitate investment management and synchronize the efforts of all team members.
+OnTrack is a web application designed to streamline enterprise project management across various industries. This application addresses the need for reliable digital tools to replace traditional paper-based or verbal project planning methods, which often lead to conflicts and miscommunications. OnTrack aims to provide tools that facilitate project management and synchronize the efforts of all team members.
 
 ## Key Features
 
 - **Intuitive User Interface**: Designed to be user-friendly and visually appealing, ensuring ease of use.
-- **Investment Management**: Tools to plan, manage, monitor, account for, and archive investments effectively.
+- **Project Management**: Tools to plan, manage, monitor, account for, and archive projects effectively.
 - **Responsive Design**: Utilizes the React framework to create responsive user interfaces that adapt to different screen sizes and devices.
 
 ## Functions and Pages
@@ -115,7 +115,7 @@ Use the following login credentials:
 - **Password**: Test1234.
 
 ## Thesis Project
-This project is part of a thesis project dedicated to exploring software engineering topics such as developing user-friendly, efficient, and easy-to-use web applications. It aims to provide theoretical and practical knowledge in creating investment management software, contributing to the academic and professional growth of the authors.
+This project is part of a thesis project dedicated to exploring software engineering topics such as developing user-friendly, efficient, and easy-to-use web applications. It aims to provide theoretical and practical knowledge in creating project management software, contributing to the academic and professional growth of the authors.
 
 ## License
 This project is licensed under the MIT License - see the LICENSE file for details.
