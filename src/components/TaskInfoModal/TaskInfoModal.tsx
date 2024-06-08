@@ -8,10 +8,11 @@ import {
   Box,
   Stack,
   CircularProgress,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material";
 import FormatListBulletedIcon from "@mui/icons-material/FormatListBulleted";
 import TaskInfoSidebarButtons from "../TaskInfoSidebarButtons/TaskInfoSidebarButtons";
-import { useTheme } from "@mui/material/styles";
 import SmallButton from "../../styledComponents/SmallButton";
 import StyledDescriptionField from "../../styledComponents/StyledDescriptionField";
 import EditableText from "../EditableText/EditableText";
@@ -89,6 +90,7 @@ const TaskInfoModal = ({
   const { addTask, updateTask, getTaskById } = useTaskStore();
   const task = getTaskById(taskId ?? "");
   const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"));
   const { token } = useAuth();
   const [selectedMembers, setSelectedMembers] = useState<Member[]>([]);
   const [isLoadingMembers, setIsLoadingMembers] = useState(false);
@@ -202,21 +204,24 @@ const TaskInfoModal = ({
         sx: {
           height: "80vh",
           maxHeight: "80vh",
+          display: "flex",
+          flexDirection: "column",
         },
       }}
     >
-      <form onSubmit={formik.handleSubmit}>
+      <form
+        onSubmit={formik.handleSubmit}
+        style={{ display: "flex", flexDirection: "column", height: "100%" }}
+      >
         <DialogContent
           sx={{
-            position: "relative",
+            flex: 1,
+            overflowY: isSmallScreen ? "auto" : "unset",
             display: "flex",
-            flexDirection: { xs: "column", sm: "row" },
+            flexDirection: isSmallScreen ? "column" : "row",
             justifyContent: "space-between",
             padding: 4,
             paddingTop: "16px",
-            [theme.breakpoints.down("sm")]: {
-              flexDirection: "column",
-            },
           }}
         >
           <Box
@@ -309,7 +314,6 @@ const TaskInfoModal = ({
                     sx={{
                       display: "flex",
                       alignItems: "center",
-                      // position: "relative",
                     }}
                   >
                     <LocalizationProvider
@@ -395,10 +399,10 @@ const TaskInfoModal = ({
           sx={{
             display: "flex",
             justifyContent: "flex-end",
-            mt: 2,
-            position: "absolute",
-            bottom: 36,
-            right: 26,
+            padding: 2,
+            position: isSmallScreen ? "static" : "absolute",
+            bottom: isSmallScreen ? "auto" : 36,
+            right: isSmallScreen ? "auto" : 26,
           }}
         >
           <SmallButton

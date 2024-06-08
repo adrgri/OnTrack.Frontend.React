@@ -17,7 +17,7 @@ const EditableText: React.FC<EditableTextProps> = ({
   placeholder,
   sxInput,
   sxTypography,
-  onBlur, // Accept onBlur prop
+  onBlur, 
 }) => {
   const [isEditing, setIsEditing] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
