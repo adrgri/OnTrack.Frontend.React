@@ -40,7 +40,7 @@ OnTrack is a web application designed to streamline enterprise project managemen
   - **Edit**: Modify task details.
   - **Delete**: Remove tasks.
   
- <img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/2adb43ce-0b7f-4c68-90bf-c68d3d83d0b2">
+  <img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/2adb43ce-0b7f-4c68-90bf-c68d3d83d0b2">
 
 ### Projects Page
 
