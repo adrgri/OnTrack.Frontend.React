@@ -19,6 +19,9 @@ OnTrack is a web application designed to streamline enterprise project managemen
 <img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/53b378e1-358a-40eb-bd0d-c2cf539207d3">
 
 - **Editing**: Modify tasks as needed.
+
+<img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/b95ab48e-c742-4589-811d-f21a4f4bc812">
+
 - **Gantt Chart**: Visualize task schedules and dependencies.
 
 <img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/ba8915ca-fa47-4953-acda-1ac0ff3f8e22">
