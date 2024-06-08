@@ -12,7 +12,13 @@ OnTrack is a web application designed to streamline enterprise project managemen
 
 ### User Authentication
 - **Login Page**: Secure login for users.
+
+<img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/53d07413-b423-4ab8-bf69-152946df3aa5">
+
 - **Registration Page**: User registration with necessary details.
+
+<img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/af35257a-3e6e-476b-9c3e-d149283c49a2">
+
 
 ### My Tasks Page
 
