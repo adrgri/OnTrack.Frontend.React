@@ -13,11 +13,11 @@ OnTrack is a web application designed to streamline enterprise project managemen
 ### User Authentication
 - **Login Page**: Secure login for users.
 
-<img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/53d07413-b423-4ab8-bf69-152946df3aa5">
+  <img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/53d07413-b423-4ab8-bf69-152946df3aa5">
 
 - **Registration Page**: User registration with necessary details.
 
-<img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/af35257a-3e6e-476b-9c3e-d149283c49a2">
+  <img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/af35257a-3e6e-476b-9c3e-d149283c49a2">
 
 
 ### My Tasks Page
@@ -26,11 +26,11 @@ OnTrack is a web application designed to streamline enterprise project managemen
 
 - **Editing**: Modify tasks as needed.
 
-<img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/b95ab48e-c742-4589-811d-f21a4f4bc812">
+  <img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/b95ab48e-c742-4589-811d-f21a4f4bc812">
 
 - **Gantt Chart**: Visualize task schedules and dependencies.
 
-<img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/ba8915ca-fa47-4953-acda-1ac0ff3f8e22">
+  <img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/ba8915ca-fa47-4953-acda-1ac0ff3f8e22">
 
 - **Drag and Drop**: Organize tasks by status.
   
@@ -50,13 +50,13 @@ OnTrack is a web application designed to streamline enterprise project managemen
   - **Project Name**: Change the project name.
   - **Members**: Manage project members.
 
-<img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/77fc4831-959e-45e0-b36e-9ec021770d76">
+  <img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/77fc4831-959e-45e0-b36e-9ec021770d76">
 
 - **Add Project**: Create new projects.
   - **Project Name**: Set a project title.
   - **Members**: Add team members.
  
-<img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/1b95bbf1-92c6-404e-86a7-74cce512c040">
+  <img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/1b95bbf1-92c6-404e-86a7-74cce512c040">
 
 - **Gantt Chart**: Track project timelines and progress.
 - **Progress Status**: Monitor the current status of projects.
@@ -70,7 +70,7 @@ OnTrack is a web application designed to streamline enterprise project managemen
   - **Add Start Date**: Set the task start date.
   - **Add End Date**: Set the task end date.
  
-<img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/15957e92-f8fb-4bf1-90f3-a6dbb0983f75">
+  <img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/15957e92-f8fb-4bf1-90f3-a6dbb0983f75">
 
 
 ### Settings Page
@@ -78,7 +78,7 @@ OnTrack is a web application designed to streamline enterprise project managemen
 - **Change Last Name**: Update your last name.
 - **Change Password**: Update your password.
 
-<img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/e52cc978-da40-42b6-b4a6-edc011dfbf80">
+  <img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/e52cc978-da40-42b6-b4a6-edc011dfbf80">
 
 
 ## Technologies Used
