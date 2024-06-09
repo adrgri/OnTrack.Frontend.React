@@ -124,7 +124,7 @@ To run the application locally, follow these steps:
 ### Online
 You can also access the application via the following link: [OnTrack Web Application](https://adrgri.github.io/OnTrack.Frontend.React)
 
-Use the following login credentials:
+Create your own account or use the following login credentials:
 - **Email**: test@test.com
 - **Password**: Test1234.
 
