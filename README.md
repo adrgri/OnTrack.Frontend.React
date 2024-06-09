@@ -22,6 +22,8 @@ OnTrack is a web application designed to streamline enterprise project managemen
 
 ### My Tasks Page
 
+The "My Tasks" page is a dedicated section within the application where users can view all the tasks assigned to them across all projects they are a part of. 
+
 <img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/53b378e1-358a-40eb-bd0d-c2cf539207d3">
 
 - **Editing**: modify tasks as needed.
@@ -63,12 +65,10 @@ OnTrack is a web application designed to streamline enterprise project managemen
 - **Three Dots Menu**: access additional options.
   - **Edit**: modify project details.
   - **Delete**: remove projects.
-- **Create Task**: add new tasks within a project.
-  - **Add Title**: set a task title.
-  - **Add Description**: provide task details.
-  - **Add Participants**: assign team members to tasks.
-  - **Add Start Date**: set the task start date.
-  - **Add End Date**: set the task end date.
+ 
+### Project-Specific Tasks Page
+
+When a user clicks on a specific project from the project list or any other navigation element, the application navigates to a project-specific task dashboard.
  
   <img width="1440" alt="image" src="https://github.com/adrgri/OnTrack.Frontend.React/assets/37264241/15957e92-f8fb-4bf1-90f3-a6dbb0983f75">
 
