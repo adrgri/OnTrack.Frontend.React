@@ -132,4 +132,4 @@ Use the following login credentials:
 This thesis project explores software engineering topics such as developing user-friendly, efficient, and easy-to-use web applications. It aims to provide theoretical and practical knowledge in creating project management software, contributing to the academic and professional growth of the authors.
 
 ## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License.
