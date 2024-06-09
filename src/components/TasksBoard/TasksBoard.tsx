@@ -34,17 +34,15 @@ const TasksBoard = ({ projectId }: { projectId?: string }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const { tasks, fetchUserTasks, updateTask, loading, error } = useTaskStore();
   const { statuses, fetchStatuses } = useStatusStore();
-  const { projects, fetchProjects, updateProject } = useProjectStore();
+  const { projects, fetchUserProjects, updateProject } = useProjectStore();
   const [isTaskInfoModalOpen, setIsTaskInfoModalOpen] = useState(false);
   const [isEditClicked, setIsEditClicked] = useState(false);
 
   useEffect(() => {
     fetchUserTasks(projectId);
     fetchStatuses();
-    if (projectId) {
-      fetchProjects();
-    }
-  }, [fetchUserTasks, fetchStatuses, fetchProjects, projectId]);
+    fetchUserProjects();
+  }, [fetchUserTasks, fetchStatuses, fetchUserProjects, projectId]);
 
   const filteredTasksByProject = projectId
     ? tasks.filter((task) => task.projectId === projectId)
